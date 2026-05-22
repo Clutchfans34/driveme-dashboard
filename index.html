@@ -1,0 +1,2770 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DriveMe — Command Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --bg:      #0D0D0D;
+      --bg2:     #141414;
+      --bg3:     #1C1C1C;
+      --bg4:     #222222;
+      --accent:  #F07000;
+      --accent2: #FF8C2A;
+      --text:    #FFFFFF;
+      --muted:   #666666;
+      --muted2:  #444444;
+      --border:  rgba(255,255,255,0.07);
+      --green:   #22c55e;
+      --yellow:  #f59e0b;
+      --red:     #ef4444;
+      --r:       14px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 40%, transparent 100%);
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(240,112,0,.10) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 15% 60%, rgba(240,112,0,.06) 0%, transparent 65%);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-mark {
+      width: 38px;
+      height: 38px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -1px;
+    }
+
+    .logo-name {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-sub {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .logo-motto {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      font-style: italic;
+      padding-left: 20px;
+      border-left: 1px solid rgba(240,112,0,0.3);
+      margin-left: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(240,112,0,0.1);
+      border: 1px solid rgba(240,112,0,0.25);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    .header-date {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    .nav-tasks-btn {
+      position: absolute;
+      right: 32px;
+      padding: 7px 18px;
+      margin: 6px 0;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 7px;
+      border: 1.5px solid var(--accent);
+      background: rgba(240,112,0,0.12);
+      color: var(--accent);
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .nav-tasks-btn:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ── TASKS SIDEBAR ── */
+    .tasks-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      backdrop-filter: blur(4px);
+    }
+
+    .tasks-overlay.open { display: block; }
+
+    .tasks-sidebar {
+      position: fixed;
+      top: 0;
+      right: -560px;
+      width: 540px;
+      height: 100vh;
+      background: var(--bg2);
+      border-left: 1px solid var(--border);
+      z-index: 201;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .tasks-sidebar.open { right: 0; }
+
+    .tasks-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tasks-title {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .tasks-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .tasks-close:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    .tasks-add {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .tasks-input {
+      flex: 1;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .tasks-input:focus { border-color: var(--accent); }
+    .tasks-input::placeholder { color: var(--muted); }
+
+    .tasks-add-btn {
+      padding: 10px 16px;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+      line-height: 1;
+    }
+
+    .tasks-add-btn:hover { background: var(--accent2); }
+
+    .tasks-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tasks-list::-webkit-scrollbar { width: 4px; }
+    .tasks-list::-webkit-scrollbar-track { background: transparent; }
+    .tasks-list::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .task-item:hover { border-color: rgba(240,112,0,0.3); }
+    .task-item.done { opacity: 0.4; }
+
+    .task-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--muted2);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      margin-top: 1px;
+      font-size: 12px;
+    }
+
+    .task-item.done .task-check {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .task-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .task-text {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .task-time {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .task-item.done .task-text {
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+
+    .task-item.done .task-time { opacity: 0.5; }
+
+    .task-del {
+      color: var(--muted2);
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      cursor: pointer;
+      padding: 0 2px;
+    }
+
+    .task-item:hover .task-del { opacity: 1; }
+    .task-del:hover { color: var(--red); }
+
+    .tasks-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tasks-count { font-size: 12px; color: var(--muted); }
+    .tasks-clear { font-size: 12px; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; transition: color 0.2s; }
+    .tasks-clear:hover { color: var(--red); }
+
+    .nav::-webkit-scrollbar { display: none; }
+
+    .nav-tab {
+      padding: 7px 16px;
+      margin: 6px 3px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      transition: all 0.2s;
+      white-space: nowrap;
+      letter-spacing: 0.2px;
+    }
+
+    .nav-tab:hover { color: var(--text); border-color: rgba(240,112,0,0.2); }
+    .nav-tab.active { color: var(--accent); border-color: var(--accent); }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 28px 32px;
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    /* ── PERIOD ── */
+    .period-btns {
+      display: flex;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 2px;
+    }
+
+    .period-btn {
+      padding: 7px 16px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--muted);
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      font-family: inherit;
+    }
+
+    .period-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .period-btn:hover:not(.active) { color: var(--text); }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px 22px 18px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .kpi-card:hover { border-color: rgba(240,112,0,0.3); }
+
+    .kpi-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .kpi-tag {
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: none;
+      color: var(--muted);
+    }
+
+    .kpi-icon { display: none; }
+
+    .kpi-num {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .kpi-num .unit {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0;
+    }
+
+    .kpi-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .badge.up   { background: rgba(34,197,94,0.12);  color: var(--green); }
+    .badge.down { background: rgba(239,68,68,0.12);  color: var(--red); }
+    .badge.warn { background: rgba(245,158,11,0.12); color: var(--yellow); }
+    .badge.neu  { background: rgba(255,255,255,0.06); color: var(--muted); }
+
+    .kpi-desc { font-size: 12px; color: var(--muted); }
+
+    .kpi-bar {
+      height: 3px;
+      background: var(--bg3);
+      border-radius: 2px;
+      margin-top: 14px;
+    }
+
+    .kpi-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--accent);
+      transition: width 1.2s ease;
+    }
+
+    .kpi-bar-fill.green  { background: var(--green); }
+    .kpi-bar-fill.yellow { background: var(--yellow); }
+    .kpi-bar-fill.red    { background: var(--red); }
+
+    /* ── MAIN GRID ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 16px 22px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--bg3);
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    /* ── TABLE ── */
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      padding: 9px 22px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(240,112,0,0.04); }
+
+    tbody td { padding: 13px 22px; font-size: 13px; }
+
+    .branch-name { font-weight: 800; font-size: 13px; letter-spacing: -0.2px; }
+    .branch-brand { font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; margin-top: 1px; }
+
+    .load-wrap { display: flex; align-items: center; gap: 8px; }
+    .load-track { flex: 1; height: 4px; background: var(--bg3); border-radius: 2px; max-width: 70px; }
+    .load-fill  { height: 100%; border-radius: 2px; }
+    .load-fill.g { background: var(--green); }
+    .load-fill.y { background: var(--yellow); }
+    .load-fill.r { background: var(--red); }
+
+    .status-row { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .dot.g { background: var(--green); }
+    .dot.y { background: var(--yellow); }
+    .dot.r { background: var(--red); }
+
+    /* Plan execution cells */
+    .pc-row        { display:flex; align-items:center; gap:8px; margin-bottom:3px; white-space:nowrap; }
+    .plan-fact-val { font-size:14px; font-weight:800; letter-spacing:-0.3px; white-space:nowrap; }
+    .plan-ref      { font-size:10px; color:var(--muted); margin:2px 0 3px; white-space:nowrap; }
+    .plan-bar      { height:3px; background:var(--bg3); border-radius:2px; width:90px; margin-bottom:4px; }
+    .plan-bar-fill { height:100%; border-radius:2px; }
+    .pct-pill      { display:inline-block; font-size:11px; font-weight:700; padding:2px 7px; border-radius:4px; }
+    .pct-g { background:rgba(34,197,94,.15);  color:var(--green); }
+    .pct-y { background:rgba(245,158,11,.15); color:var(--yellow); }
+    .pct-r { background:rgba(239,68,68,.15);  color:var(--red); }
+    .prognoz-val { font-size:13px; font-weight:700; color:#94a3b8; }
+    .prognoz-sub { font-size:10px; color:var(--muted); opacity:0.6; margin-top:3px; }
+
+    .c-green  { color: var(--green); }
+    .c-yellow { color: var(--yellow); }
+    .c-red    { color: var(--red); }
+    .c-accent { color: var(--accent); }
+    .fw8 { font-weight: 800; }
+
+    /* ── ALERTS ── */
+    .alerts-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--muted2);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .alert.r { border-left-color: var(--red); }
+    .alert.y { border-left-color: var(--yellow); }
+    .alert.g { border-left-color: var(--green); }
+    .alert.o { border-left-color: var(--accent); }
+
+    .alert-ico { font-size: 15px; margin-top: 1px; }
+    .alert-title { font-size: 12px; font-weight: 800; margin-bottom: 3px; letter-spacing: -0.1px; }
+    .alert-text { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+    /* ── CHART ── */
+    .chart-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .chart-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    /* ── FOOTER GRID ── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stat-mini {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px 22px;
+    }
+
+    .stat-mini-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px; }
+    .stat-mini-value { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+    .stat-mini-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* ── DIVIDER ── */
+    .divider { height: 1px; background: var(--border); margin: 6px 0; }
+
+    /* ── AUTOPARK PANEL ── */
+    .ap-body { padding: 4px 0; overflow-y: auto; max-height: 620px; }
+    .ap-body::-webkit-scrollbar { width: 3px; }
+    .ap-body::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
+
+    .ap-section { padding: 10px 18px 6px; }
+    .ap-section-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 8px; opacity: 0.8;
+    }
+
+    .ap-row {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      gap: 8px;
+    }
+    .ap-row:last-child { border-bottom: none; }
+
+    .ap-label { font-size: 12px; color: var(--muted); flex: 1; }
+    .ap-val { font-size: 13px; font-weight: 700; text-align: right; }
+    .ap-sub { font-size: 10px; color: var(--muted); text-align: right; min-width: 46px; }
+
+    .ap-divider { height: 1px; background: var(--border); margin: 2px 18px; }
+
+    /* ── P&L ── */
+    .pl-page { padding: 28px 32px; max-width: 1600px; margin: 0 auto; position: relative; z-index: 1; }
+
+    /* MONTH SWITCHER */
+    .pl-month-switcher {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .pl-year-label {
+      font-size: 12px; font-weight: 800; color: var(--muted);
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-right: 4px; white-space: nowrap;
+    }
+    .pl-mon-btn {
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--bg3); color: var(--muted);
+      cursor: pointer; transition: all .18s;
+      white-space: nowrap;
+    }
+    .pl-mon-btn:hover:not(.disabled) {
+      border-color: rgba(240,112,0,.4); color: var(--text);
+    }
+    .pl-mon-btn.active {
+      background: var(--accent); color: #fff;
+      border-color: var(--accent);
+    }
+    .pl-mon-btn.current {
+      border-color: var(--green); color: var(--green);
+      background: rgba(34,197,94,.1);
+    }
+    .pl-mon-btn.current.active {
+      background: var(--green); color: #fff; border-color: var(--green);
+    }
+    .pl-mon-btn.disabled {
+      opacity: 0.3; cursor: not-allowed;
+    }
+    /* NO DATA PLACEHOLDER */
+    .pl-no-data {
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 20px; text-align: center;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--r); margin-top: 8px;
+    }
+    .pl-no-data.show { display: flex; }
+    .pl-no-data-icon { font-size: 40px; margin-bottom: 14px; opacity: .4; }
+    .pl-no-data-title { font-size: 16px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+    .pl-no-data-sub { font-size: 13px; color: var(--muted2); }
+    /* CONTENT TOGGLE */
+    .pl-content { display: none; }
+    .pl-content.show { display: block; }
+
+    .pl-kpi-row {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .pl-kpi {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+    }
+    .pl-kpi-label { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 5px; }
+    .pl-kpi-val   { font-size: 20px; font-weight: 900; line-height: 1.1; }
+    .pl-kpi-sub   { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+    .pl-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .pl-wrap-head {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pl-wrap-title { font-size: 13px; font-weight: 800; letter-spacing: .5px; }
+    .pl-month-badge {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: rgba(240,112,0,.12);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    .pl-table-scroll { overflow-x: auto; }
+    .pl-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+    .pl-table th {
+      font-size: 10px; font-weight: 700; letter-spacing: .5px; color: var(--muted);
+      text-transform: uppercase; padding: 14px 14px 12px;
+      text-align: right; white-space: nowrap;
+      border-bottom: 2px solid var(--border);
+      background: var(--bg3);
+      border-top-width: 3px;
+      border-top-style: solid;
+      border-top-color: transparent;
+    }
+    .pl-table th:first-child { text-align: left; min-width: 190px; border-top-color:transparent !important; }
+    .pl-th-dot { width:9px; height:9px; border-radius:50%; margin:0 0 7px auto; }
+    .pl-th-city { font-size:14px; font-weight:900; letter-spacing:-0.3px; color:#fff; text-transform:none; line-height:1.1; text-align:right; }
+    .pl-th-meta { font-size:9px; font-weight:600; color:var(--muted); letter-spacing:.6px; margin-top:4px; text-transform:uppercase; text-align:right; }
+    .pl-table td {
+      font-size: 12px; padding: 7px 14px;
+      text-align: right; border-top: 1px solid rgba(255,255,255,.04);
+      white-space: nowrap;
+    }
+    .pl-table td:first-child { text-align: left; color: #bbb; font-size: 12px; }
+
+    /* GROUP HEADERS */
+    .pl-group td {
+      font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); background: rgba(240,112,0,.06);
+      padding: 6px 14px; border-top: none;
+    }
+    /* TOTAL ROWS */
+    .pl-total td {
+      font-weight: 800; font-size: 13px;
+      background: rgba(255,255,255,.04);
+      border-top: 1px solid rgba(255,255,255,.1);
+      color: var(--text);
+    }
+    .pl-total td:first-child { color: var(--text); }
+    /* RESULT ROWS */
+    .pl-result-neg td { font-weight: 800; font-size: 13px; color: #ef4444; background: rgba(239,68,68,.05); }
+    .pl-result-pos td { font-weight: 800; font-size: 13px; color: #22c55e; background: rgba(34,197,94,.05); }
+    .pl-result-acc td { font-weight: 900; font-size: 14px; color: var(--accent); background: rgba(240,112,0,.08); border-top: 1px solid rgba(240,112,0,.2); }
+
+    /* SUB ROW */
+    .pl-sub td { font-size: 11px; color: var(--muted); background: rgba(255,255,255,.01); }
+    .pl-sub td:first-child { padding-left: 28px; color: var(--muted); }
+
+    /* HIGHLIGHT BEST/WORST */
+    .td-best { color: #22c55e !important; font-weight: 700; }
+    .td-warn { color: #f59e0b !important; }
+    .td-bad  { color: #ef4444 !important; }
+
+    @media (max-width: 1300px) { .pl-kpi-row { grid-template-columns: repeat(3,1fr); } }
+
+    /* ── ФЛОТ ── */
+    .fleet-page { padding: 28px 32px; max-width: 1440px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .fleet-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .fleet-sum-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px 20px;
+    }
+    .fleet-sum-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 6px; }
+    .fleet-sum-val   { font-size: 26px; font-weight: 900; line-height: 1.1; }
+    .fleet-sum-sub   { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    /* статус-картки */
+    .fleet-status-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .fsc {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .fsc:hover { border-color: rgba(240,112,0,.3); }
+    .fsc-accent { position: absolute; top: 0; left: 0; width: 3px; height: 100%; border-radius: 4px 0 0 4px; }
+    .fsc-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .fsc-main  { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+    .fsc-num   { font-size: 32px; font-weight: 900; line-height: 1; }
+    .fsc-pct   { font-size: 15px; font-weight: 700; }
+    .fsc-row   { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+    .fsc-sub   { font-size: 11px; color: var(--muted); }
+    .fsc-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 20px; white-space: nowrap;
+    }
+    .badge-red    { background: rgba(239,68,68,.15);  color: #ef4444; }
+    .badge-yellow { background: rgba(245,158,11,.15); color: #f59e0b; }
+    .badge-green  { background: rgba(34,197,94,.15);  color: #22c55e; }
+    .badge-muted  { background: rgba(255,255,255,.07); color: var(--muted); }
+    @media (max-width: 1300px) { .fleet-status-row { grid-template-columns: repeat(2,1fr); } }
+
+    .fleet-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 1300px) { .fleet-grid { grid-template-columns: repeat(3, 1fr); } .fleet-summary { grid-template-columns: repeat(2,1fr); } }
+
+    .fleet-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .fleet-card:hover { border-color: rgba(240,112,0,.35); }
+
+    .fleet-card-head {
+      padding: 14px 16px 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .fleet-city  { font-size: 15px; font-weight: 800; }
+    .fleet-brand { font-size: 9px; color: var(--muted); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+    .fleet-roi {
+      font-size: 12px; font-weight: 800;
+      padding: 3px 9px; border-radius: 20px;
+    }
+    .roi-green  { background: rgba(34,197,94,.15);  color: #22c55e; }
+    .roi-orange { background: rgba(240,112,0,.15);  color: #F07000; }
+    .roi-yellow { background: rgba(245,158,11,.15); color: #f59e0b; }
+    .roi-red    { background: rgba(239,68,68,.15);  color: #ef4444; }
+
+    .fleet-table { width: 100%; border-collapse: collapse; }
+    .fleet-table th {
+      font-size: 9px; font-weight: 700; letter-spacing: .5px; color: var(--muted);
+      text-transform: uppercase; padding: 8px 12px 4px; text-align: left;
+    }
+    .fleet-table th:nth-child(2),
+    .fleet-table td:nth-child(2) { text-align: center; width: 36px; }
+    .fleet-table th:nth-child(3),
+    .fleet-table td:nth-child(3) { text-align: right; width: 52px; }
+    .fleet-table th:last-child,
+    .fleet-table td:last-child { text-align: right; width: 58px; }
+    .fleet-table td {
+      font-size: 11px; padding: 5px 12px;
+      border-top: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .fleet-table td:first-child { color: #ccc; }
+    .fleet-table td:nth-child(2) { font-weight: 700; }
+    .fleet-table td:nth-child(3) { color: var(--muted); font-size: 10px; }
+    .fleet-table td:last-child { font-size: 11px; color: #aaa; }
+    .fleet-table tr.fleet-total td {
+      font-weight: 800; color: var(--accent);
+      background: rgba(240,112,0,.06);
+      font-size: 11px;
+    }
+
+    .fleet-card-foot {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .fleet-foot-item { font-size: 11px; color: var(--muted); }
+    .fleet-foot-val  { font-size: 13px; font-weight: 700; margin-top: 1px; }
+
+    /* ── КОМАНДА ── */
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    .team-page { padding: 28px 32px; max-width: 1440px; margin: 0 auto; position: relative; z-index: 1; }
+
+    .team-block-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 16px; margin-top: 32px;
+    }
+    .team-block-title:first-child { margin-top: 0; }
+
+    /* Top management row */
+    .mgmt-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .mgmt-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 8px 14px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .mgmt-card:hover { border-color: rgba(240,112,0,0.35); }
+    .mgmt-avatar {
+      width: 46px; height: 46px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), rgba(240,112,0,0.4));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; color: #fff;
+      margin: 0 auto 8px;
+    }
+    .mgmt-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; line-height: 1.3; }
+    .mgmt-role { font-size: 11px; color: var(--muted); line-height: 1.3; }
+    .mgmt-card.owner .mgmt-avatar { background: linear-gradient(135deg, #6366f1, #818cf8); }
+    .mgmt-card.cfo .mgmt-avatar  { background: linear-gradient(135deg, #22c55e, #16a34a); }
+
+    /* Central office */
+    .office-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .office-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color 0.2s;
+    }
+    .office-card:hover { border-color: rgba(240,112,0,0.3); }
+    .office-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+    .office-name { font-size: 13px; font-weight: 600; }
+    .office-role { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* Branch cards grid */
+    .branch-team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 1300px) {
+      .branch-team-grid { grid-template-columns: repeat(3, 1fr); }
+      .mgmt-grid { grid-template-columns: repeat(7, 1fr); }
+    }
+    .branch-team-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .branch-team-card:hover { border-color: rgba(240,112,0,0.3); }
+    .btc-head {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .btc-city { font-size: 15px; font-weight: 800; }
+    .btc-brand {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      color: var(--muted); text-transform: uppercase; margin-top: 2px;
+    }
+    .btc-badge {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      background: rgba(240,112,0,0.12);
+      padding: 3px 9px; border-radius: 20px;
+    }
+    .btc-body { padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 9px; }
+    .btc-row { display: flex; align-items: flex-start; gap: 8px; }
+    .btc-role {
+      font-size: 10px; color: var(--muted); font-weight: 500;
+      min-width: 80px; flex-shrink: 0; padding-top: 1px; line-height: 1.3;
+    }
+    .btc-name { font-size: 13px; font-weight: 600; word-break: break-word; }
+    .btc-phone { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .btc-divider { height: 1px; background: var(--border); margin: 2px 0; }
+
+    /* ── TOOLTIP ── */
+    .has-tip {
+      position: relative;
+      cursor: default;
+    }
+    .has-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1e1e;
+      border: 1px solid rgba(240,112,0,0.4);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.5;
+      white-space: pre-line;
+      padding: 8px 12px;
+      border-radius: 8px;
+      min-width: 160px;
+      max-width: 220px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s;
+      z-index: 999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .has-tip::before {
+      content: '';
+      position: absolute;
+      bottom: calc(100% + 2px);
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(240,112,0,0.4);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.18s;
+      z-index: 999;
+    }
+    .has-tip:hover::after,
+    .has-tip:hover::before { opacity: 1; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .main-grid { grid-template-columns: 1fr; }
+      .bottom-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 16px; }
+      .header { padding: 0 16px; }
+      .nav { padding: 0 16px; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .kpi-num { font-size: 24px; }
+      .bottom-grid { grid-template-columns: 1fr; }
+      thead th:nth-child(3),
+      thead th:nth-child(5),
+      tbody td:nth-child(3),
+      tbody td:nth-child(5) { display: none; }
+    }
+  /* ═══ ФІЛІЇ PAGE ═══ */
+  .filii-wrapper { padding: 20px 32px 24px; display:flex; flex-direction:column; gap:16px; height: calc(100vh - 72px); overflow:hidden; }
+  .filii-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+  .filii-title-block { display:flex; align-items:center; gap:14px; }
+  .filii-icon-wrap { width:48px; height:48px; background:rgba(240,112,0,.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+  .filii-h1 { font-size:22px; font-weight:900; letter-spacing:-0.5px; }
+  .filii-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .filii-chips { display:flex; gap:12px; flex-wrap:wrap; }
+  .filii-chip { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:10px 18px; text-align:center; }
+  .filii-chip-val { font-size:20px; font-weight:800; color:var(--accent); }
+  .filii-chip-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+
+  .filii-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,1fr); gap:14px; flex:1; }
+  .fil-card { background:var(--bg2); border:1px solid var(--border); border-top-width:3px; border-radius:16px; padding:22px 24px; cursor:pointer; transition:background .2s; display:flex; flex-direction:column; justify-content:space-between; }
+  .fil-card:hover { background:var(--bg3); }
+  .fil-card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .fil-dot-big { width:18px; height:18px; border-radius:50%; flex-shrink:0; box-shadow:0 0 10px currentColor; }
+  .fil-name { font-size:26px; font-weight:900; letter-spacing:-0.5px; }
+  .fil-brand { font-size:13px; color:var(--muted); margin-top:2px; letter-spacing:.4px; }
+  .fil-cars-badge { margin-left:auto; background:var(--bg3); border-radius:8px; padding:5px 14px; font-size:20px; font-weight:800; white-space:nowrap; }
+  .fil-addr { font-size:14px; color:var(--muted); margin-bottom:14px; }
+  .fil-metrics { display:flex; gap:10px; flex-wrap:wrap; }
+  .fil-metric { display:flex; align-items:center; gap:6px; background:var(--bg3); border-radius:8px; padding:6px 14px; }
+  .fil-mlbl { font-size:13px; color:var(--muted); }
+  .fil-mval { font-size:20px; font-weight:800; }
+  .fil-mval.g { color:var(--green); }
+  .fil-mval.y { color:var(--yellow); }
+  .fil-mval.r { color:var(--red); }
+  .fil-coming { opacity:0.8; }
+  .fil-coming-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(244,63,94,.12); color:#F43F5E; border:1px solid rgba(244,63,94,.3); border-radius:8px; padding:8px 16px; font-size:16px; font-weight:700; letter-spacing:.4px; margin-top:12px; }
+  .fil-coming-plan { font-size:14px; color:var(--muted); margin-top:10px; line-height:1.5; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">D</div>
+    <div>
+      <div class="logo-name">DriveMe</div>
+      <div class="logo-sub">Command Center</div>
+    </div>
+    <div class="logo-motto">«Тільки перемога, тільки вперед!»</div>
+  </div>
+  <div class="header-right">
+    <div class="live-pill"><div class="live-dot"></div>LIVE</div>
+    <div class="header-date" id="hDate"></div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-tab active">Дашборд</div>
+  <div class="nav-tab">Філії</div>
+  <div class="nav-tab">Флот</div>
+  <div class="nav-tab">Команда</div>
+  <div class="nav-tab">P&amp;L</div>
+  <div class="nav-tab">Аналітика</div>
+  <button class="nav-tasks-btn" id="tasksBtn">ЗАДАЧІ</button>
+</nav>
+
+<!-- TASKS SIDEBAR -->
+<div class="tasks-overlay" id="tasksOverlay"></div>
+<div class="tasks-sidebar" id="tasksSidebar">
+  <div class="tasks-header">
+    <div class="tasks-title">ЗАДАЧІ</div>
+    <button class="tasks-close" id="tasksClose">✕</button>
+  </div>
+  <div class="tasks-add">
+    <input class="tasks-input" id="taskInput" placeholder="Нова задача..." />
+    <button class="tasks-add-btn" id="taskAddBtn">+</button>
+  </div>
+  <div class="tasks-list" id="tasksList"></div>
+  <div class="tasks-footer">
+    <div class="tasks-count" id="tasksCount">0 задач</div>
+    <button class="tasks-clear" id="tasksClear">Очистити виконані</button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<main class="content" id="tab-dashboard">
+
+  <!-- TOP ROW -->
+  <div class="section-row">
+    <div>
+      <div class="section-label">Травень 2026</div>
+      <div class="section-title">Загальний огляд</div>
+    </div>
+    <div class="period-btns">
+      <button class="period-btn active">Сьогодні</button>
+      <button class="period-btn">Тиждень</button>
+      <button class="period-btn">Місяць</button>
+      <button class="period-btn">Квартал</button>
+    </div>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Вал місяць</div>
+        <div class="kpi-icon">💰</div>
+      </div>
+      <div class="kpi-num">34.35<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge up">↑ 2.1%</span>
+        <span class="kpi-desc">vs березень</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:91.6%"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Авто в роботі</div>
+        <div class="kpi-icon">🚗</div>
+      </div>
+      <div class="kpi-num">276<span class="unit">/348</span></div>
+      <div class="kpi-footer">
+        <span class="badge neu">79.3%</span>
+        <span class="kpi-desc">завантаженість</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:79.3%"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Фінрез з брендом</div>
+        <div class="kpi-icon">📈</div>
+      </div>
+      <div class="kpi-num">6.75<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge up">↑ 19.7%</span>
+        <span class="kpi-desc">операційний прибуток</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:71.2%"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Бренд Uklon</div>
+        <div class="kpi-icon">🏷️</div>
+      </div>
+      <div class="kpi-num">1.63<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge down">↓ 33%</span>
+        <span class="kpi-desc">від плану 2.44М</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.8%"></div></div>
+    </div>
+
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- BRANCHES TABLE -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Філії — виконання плану</div>
+        <div class="chip">Квітень 2026 · 348 авто</div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Філія</th>
+            <th style="text-align:center">Авто</th>
+            <th>Вал (факт / план / %)</th>
+            <th>Бренд (факт / план / %)</th>
+            <th>Прогноз Бренд</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="branch-name">Дніпро</div><div class="branch-brand">DRIVE ME · ДП-1</div></td>
+            <td class="fw8" style="text-align:center">49</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">5 590 406</span><span class="pct-pill pct-y">95.6%</span></div>
+              <div class="plan-ref">план 5 850 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:95.56%;background:#f59e0b"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">147 000</span><span class="pct-pill pct-r">66.7%</span></div>
+              <div class="plan-ref">план 220 500</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:66.67%;background:#ef4444"></div></div>
+            </td>
+            <td><div class="prognoz-val">147 000</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Дніпро 2</div><div class="branch-brand">WAY UP DRIVE · ДП-2</div></td>
+            <td class="fw8" style="text-align:center">71</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">7 468 478</span><span class="pct-pill pct-r">90.0%</span></div>
+              <div class="plan-ref">план 8 300 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:89.98%;background:#ef4444"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">205 000</span><span class="pct-pill pct-r">64.2%</span></div>
+              <div class="plan-ref">план 319 500</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:64.16%;background:#ef4444"></div></div>
+            </td>
+            <td><div class="prognoz-val">205 000</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Запоріжжя</div><div class="branch-brand">DRIVE ME · ЗП</div></td>
+            <td class="fw8" style="text-align:center">43</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">4 274 125</span><span class="pct-pill pct-r">88.1%</span></div>
+              <div class="plan-ref">план 4 850 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:88.13%;background:#ef4444"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val c-green">156 627</span><span class="pct-pill pct-g">101.2% ✓</span></div>
+              <div class="plan-ref">план 154 800</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:100%;background:#22c55e"></div></div>
+            </td>
+            <td><div class="prognoz-val">156 627</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Кривий Ріг</div><div class="branch-brand">DRIVE ME · КР</div></td>
+            <td class="fw8" style="text-align:center">50</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">4 496 125</span><span class="pct-pill pct-y">94.7%</span></div>
+              <div class="plan-ref">план 4 750 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:94.66%;background:#f59e0b"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">123 000</span><span class="pct-pill pct-y">91.1%</span></div>
+              <div class="plan-ref">план 135 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:91.11%;background:#f59e0b"></div></div>
+            </td>
+            <td><div class="prognoz-val">123 000</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Полтава</div><div class="branch-brand">WAY UP DRIVE · ПЛ</div></td>
+            <td class="fw8" style="text-align:center">64</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">5 671 237</span><span class="pct-pill pct-y">97.8%</span></div>
+              <div class="plan-ref">план 5 800 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:97.78%;background:#f59e0b"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">329 000</span><span class="pct-pill pct-y">81.6%</span></div>
+              <div class="plan-ref">план 403 200</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:81.60%;background:#f59e0b"></div></div>
+            </td>
+            <td><div class="prognoz-val">329 000</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Вінниця</div><div class="branch-brand">WAY UP DRIVE · ВН</div></td>
+            <td class="fw8" style="text-align:center">30</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">2 034 333</span><span class="pct-pill pct-r">84.8%</span></div>
+              <div class="plan-ref">план 2 400 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:84.76%;background:#ef4444"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val">109 500</span><span class="pct-pill pct-r">54.1%</span></div>
+              <div class="plan-ref">план 202 500</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:54.07%;background:#ef4444"></div></div>
+            </td>
+            <td><div class="prognoz-val">109 500</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+          <tr>
+            <td><div class="branch-name">Львів</div><div class="branch-brand">DRIVE ME · ЛВ</div></td>
+            <td class="fw8" style="text-align:center">41</td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val c-green">4 817 764</span><span class="pct-pill pct-g">107.1% ✓</span></div>
+              <div class="plan-ref">план 4 500 000</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:100%;background:#22c55e"></div></div>
+            </td>
+            <td>
+              <div class="pc-row"><span class="plan-fact-val c-green">564 620</span><span class="pct-pill pct-g">127.5% 🏆</span></div>
+              <div class="plan-ref">план 442 800</div>
+              <div class="plan-bar"><div class="plan-bar-fill" style="width:100%;background:#22c55e"></div></div>
+            </td>
+            <td><div class="prognoz-val" style="color:#22c55e">564 620</div><div class="prognoz-sub">квіт. факт</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AUTOPARK PANEL -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">Автопарк — показники</div>
+        <div class="chip">Квітень 2026</div>
+      </div>
+      <div class="ap-body">
+
+        <div class="ap-section">
+          <div class="ap-section-label">Ключові KPI</div>
+          <div class="ap-row">
+            <div class="ap-label">Revenue</div>
+            <div class="ap-val c-accent">38 151 339</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Operating Profit</div>
+            <div class="ap-val c-green">6 745 347</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Take Rate</div>
+            <div class="ap-val">37.11%</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">ROI</div>
+            <div class="ap-val">78.44%</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Operating Margin</div>
+            <div class="ap-val">17.68%</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Utilization Rate</div>
+            <div class="ap-val c-yellow">80.45%</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">CAC</div>
+            <div class="ap-val">1 282 грн</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Retention Rate</div>
+            <div class="ap-val c-green">113%</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Net Profit / авто</div>
+            <div class="ap-val">19 383 грн</div>
+          </div>
+        </div>
+
+        <div class="ap-divider"></div>
+
+        <div class="ap-section">
+          <div class="ap-section-label">ДТП</div>
+          <div class="ap-row">
+            <div class="ap-label">ДТП всього</div>
+            <div class="ap-val c-red">45 шт.</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">ДТП винні</div>
+            <div class="ap-val">26 шт.</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">% Винних</div>
+            <div class="ap-val c-yellow">57.78%</div>
+          </div>
+        </div>
+
+        <div class="ap-divider"></div>
+
+        <div class="ap-section">
+          <div class="ap-section-label">Водії та поїздки</div>
+          <div class="ap-row">
+            <div class="ap-label">Водії</div>
+            <div class="ap-val">493</div>
+          </div>
+          <div class="ap-row">
+            <div class="ap-label">Всього поїздок</div>
+            <div class="ap-val">211 692</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-card">
+    <div class="chart-head">
+      <div>
+        <div class="section-label">Динаміка</div>
+        <div class="card-title" style="font-size:16px">Вал по днях — травень 2026</div>
+      </div>
+      <div class="chip">грн / день</div>
+    </div>
+    <canvas id="chart" height="80"></canvas>
+  </div>
+
+  <!-- BOTTOM STATS -->
+  <div class="bottom-grid">
+    <div class="stat-mini">
+      <div class="stat-mini-label">ДТП цього місяця</div>
+      <div class="stat-mini-value c-yellow">8</div>
+      <div class="stat-mini-sub">2.3% від флоту · ціль &lt;2%</div>
+    </div>
+    <div class="stat-mini">
+      <div class="stat-mini-label">СТО цього місяця</div>
+      <div class="stat-mini-value">24</div>
+      <div class="stat-mini-sub">6.9% від флоту · ціль &lt;5.5%</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- КОМАНДА TAB -->
+<section class="tab-section" id="tab-filii">
+  <div class="filii-wrapper">
+
+    <!-- TOP STATS -->
+    <div class="filii-top">
+      <div class="filii-title-block">
+        <div class="filii-icon-wrap">📍</div>
+        <div>
+          <div class="filii-h1">Мережа філій</div>
+          <div class="filii-sub">DRIVE ME &amp; WAY UP DRIVE · 7 активних + Одеса відкривається</div>
+        </div>
+      </div>
+      <div class="filii-chips">
+        <div class="filii-chip"><div class="filii-chip-val">348</div><div class="filii-chip-lbl">авто в парку</div></div>
+        <div class="filii-chip"><div class="filii-chip-val">7<span style="font-size:12px;color:var(--muted)">+1</span></div><div class="filii-chip-lbl">міст</div></div>
+        <div class="filii-chip"><div class="filii-chip-val">80.5%</div><div class="filii-chip-lbl">завантаженість</div></div>
+        <div class="filii-chip"><div class="filii-chip-val">6.75М</div><div class="filii-chip-lbl">ОП / місяць</div></div>
+      </div>
+    </div>
+
+    <!-- BODY: GRID OF BRANCH CARDS -->
+    <div class="filii-grid">
+
+      <!-- ДП-1: Дніпро -->
+      <div class="fil-card" style="border-top-color:#F07000">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#F07000;color:#F07000"></div>
+          <div><div class="fil-name">Дніпро</div><div class="fil-brand">DRIVE ME · ДП-1</div></div>
+          <div class="fil-cars-badge">49 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Набережна Перемоги, 12</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval y">95.6%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval r">66.7%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval">82.9%</span></div>
+        </div>
+      </div>
+
+      <!-- ДП-2: Дніпро 2 -->
+      <div class="fil-card" style="border-top-color:#3B82F6">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#3B82F6;color:#3B82F6"></div>
+          <div><div class="fil-name">Дніпро 2</div><div class="fil-brand">WAY UP DRIVE · ДП-2</div></div>
+          <div class="fil-cars-badge">71 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Паторжинського, 39</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval r">90.0%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval r">64.2%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval r">76.0%</span></div>
+        </div>
+      </div>
+
+      <!-- ЗП: Запоріжжя -->
+      <div class="fil-card" style="border-top-color:#22c55e">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#22c55e;color:#22c55e"></div>
+          <div><div class="fil-name">Запоріжжя</div><div class="fil-brand">DRIVE ME · ЗП</div></div>
+          <div class="fil-cars-badge">43 авто</div>
+        </div>
+        <div class="fil-addr">📍 пр. Соборний, 158</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval r">88.1%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval g">101.2% ✓</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval y">75.1%</span></div>
+        </div>
+      </div>
+
+      <!-- КР: Кривий Ріг -->
+      <div class="fil-card" style="border-top-color:#A855F7">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#A855F7;color:#A855F7"></div>
+          <div><div class="fil-name">Кривий Ріг</div><div class="fil-brand">DRIVE ME · КР</div></div>
+          <div class="fil-cars-badge">50 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Визволення, 37</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval y">94.7%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval y">91.1%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval">81.0%</span></div>
+        </div>
+      </div>
+
+      <!-- ПЛ: Полтава -->
+      <div class="fil-card" style="border-top-color:#F59E0B">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#F59E0B;color:#F59E0B"></div>
+          <div><div class="fil-name">Полтава</div><div class="fil-brand">WAY UP DRIVE · ПЛ</div></div>
+          <div class="fil-cars-badge">64 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Сінна, 12</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval y">97.8%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval y">81.6%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval g">85.5%</span></div>
+        </div>
+      </div>
+
+      <!-- ВН: Вінниця -->
+      <div class="fil-card" style="border-top-color:#EC4899">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#EC4899;color:#EC4899"></div>
+          <div><div class="fil-name">Вінниця</div><div class="fil-brand">WAY UP DRIVE · ВН</div></div>
+          <div class="fil-cars-badge">30 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Хмельницьке шосе, 7</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval r">84.8%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval r">54.1%</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval r">71.9%</span></div>
+        </div>
+      </div>
+
+      <!-- ЛВ: Львів -->
+      <div class="fil-card" style="border-top-color:#06B6D4">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#06B6D4;color:#06B6D4"></div>
+          <div><div class="fil-name">Львів</div><div class="fil-brand">DRIVE ME · ЛВ</div></div>
+          <div class="fil-cars-badge">41 авто</div>
+        </div>
+        <div class="fil-addr">📍 вул. Городоцька, 213</div>
+        <div class="fil-metrics">
+          <div class="fil-metric"><span class="fil-mlbl">Вал</span><span class="fil-mval g">107.1% ✓</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Бренд</span><span class="fil-mval g">127.5% 🏆</span></div>
+          <div class="fil-metric"><span class="fil-mlbl">Завантаж.</span><span class="fil-mval g">88.7%</span></div>
+        </div>
+      </div>
+
+      <!-- ОД: Одеса — coming soon -->
+      <div class="fil-card fil-coming" style="border-top-color:#F43F5E">
+        <div class="fil-card-head">
+          <div class="fil-dot-big" style="background:#F43F5E;color:#F43F5E"></div>
+          <div><div class="fil-name">Одеса</div><div class="fil-brand">DRIVE ME · ОД</div></div>
+          <div class="fil-cars-badge" style="color:#F43F5E">~50 авто</div>
+        </div>
+        <div class="fil-addr">📍 Одеса, Україна</div>
+        <div class="fil-coming-tag">🔜 ВІДКРИТТЯ ОСІНЬ 2026</div>
+        <div class="fil-coming-plan">Заплановано вересень 2026<br>DRIVE ME · новий регіон</div>
+      </div>
+
+    </div><!-- /filii-grid -->
+
+    <!-- UNUSED: old SVG map placeholder — removed -->
+    <div style="display:none">
+      <svg viewBox="0 0 800 540" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="border-glow" x="-15%" y="-15%" width="130%" height="130%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+              <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+            </filter>
+          </defs>
+
+          <!-- BG transparent -->
+          <rect width="800" height="540" fill="transparent"/>
+
+          <!-- Ukraine accurate border — glow -->
+          <path d="M 96,54 L 217,54 L 369,61 L 413,34 L 500,34 L 565,81 L 609,108 L 674,128 L 717,231 L 761,250 L 787,270 L 769,304 L 717,311 L 674,358 L 639,385 L 587,385 L 556,419 L 500,425 L 461,398 L 413,405 L 378,398 L 339,459 L 296,479 L 261,466 L 217,466 L 187,439 L 170,354 L 170,279 L 130,279 L 87,305 L 13,258 L 13,332 L 35,318 L 109,285 L 70,175 L 44,135 L 96,54 Z"
+            fill="none" stroke="#F07000" stroke-width="6" stroke-opacity="0.07"
+            stroke-linejoin="round" filter="url(#border-glow)"/>
+
+          <!-- Ukraine accurate border — thin line -->
+          <path d="M 96,54 L 217,54 L 369,61 L 413,34 L 500,34 L 565,81 L 609,108 L 674,128 L 717,231 L 761,250 L 787,270 L 769,304 L 717,311 L 674,358 L 639,385 L 587,385 L 556,419 L 500,425 L 461,398 L 413,405 L 378,398 L 339,459 L 296,479 L 261,466 L 217,466 L 187,439 L 170,354 L 170,279 L 130,279 L 87,305 L 13,258 L 13,332 L 35,318 L 109,285 L 70,175 L 44,135 L 96,54 Z"
+            fill="#F07000" fill-opacity="0.015"
+            stroke="#F07000" stroke-width="1.2" stroke-opacity="0.32"
+            stroke-linejoin="round" stroke-linecap="round"/>
+
+          <!-- Crimea peninsula — dashed -->
+          <path d="M 556,419 L 600,445 L 635,467 L 610,492 L 560,519 L 500,525 L 456,505 L 440,468 L 500,425 Z"
+            fill="none" stroke="#F07000" stroke-width="0.8" stroke-opacity="0.20"
+            stroke-dasharray="5,3" stroke-linejoin="round"/>
+
+          <!-- ─── МАРКЕРИ МІСТ ─── -->
+
+          <!-- 1. ДНІПРО ДП-1 (orange) cx=561, cy=268 -->
+          <circle cx="561" cy="268" r="14" fill="#F07000" fill-opacity="0.12" class="map-pulse"/>
+          <circle cx="561" cy="268" r="14" fill="#F07000" fill-opacity="0.12" class="map-pulse-2"/>
+          <circle cx="561" cy="268" r="7" fill="#F07000" fill-opacity="0.25" stroke="#F07000" stroke-width="1.2"/>
+          <circle cx="561" cy="268" r="4" fill="#F07000"/>
+          <text x="561" y="254" text-anchor="middle" font-size="10" fill="#F07000" font-weight="700" font-family="Inter,sans-serif" letter-spacing="0.5">ДНІПРО</text>
+          <text x="561" y="244" text-anchor="middle" font-size="8" fill="#F07000" fill-opacity="0.65" font-family="Inter,sans-serif">49 авто DM</text>
+
+          <!-- 2. ДНІПРО-2 ДП-2 (blue) cx=578, cy=254 — трохи вище ДП-1 -->
+          <circle cx="578" cy="254" r="12" fill="#3B82F6" fill-opacity="0.12" class="map-pulse" style="animation-delay:.6s"/>
+          <circle cx="578" cy="254" r="12" fill="#3B82F6" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:2s"/>
+          <circle cx="578" cy="254" r="6" fill="#3B82F6" fill-opacity="0.25" stroke="#3B82F6" stroke-width="1.2"/>
+          <circle cx="578" cy="254" r="3.5" fill="#3B82F6"/>
+          <text x="597" y="258" text-anchor="start" font-size="9" fill="#3B82F6" font-weight="700" font-family="Inter,sans-serif">ДП-2 WU</text>
+          <text x="597" y="268" text-anchor="start" font-size="8" fill="#3B82F6" fill-opacity="0.65" font-family="Inter,sans-serif">71 авто</text>
+
+          <!-- 3. ЗАПОРІЖЖЯ (green) cx=566, cy=323 -->
+          <circle cx="566" cy="323" r="13" fill="#22c55e" fill-opacity="0.12" class="map-pulse" style="animation-delay:1.1s"/>
+          <circle cx="566" cy="323" r="13" fill="#22c55e" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:2.5s"/>
+          <circle cx="566" cy="323" r="6.5" fill="#22c55e" fill-opacity="0.25" stroke="#22c55e" stroke-width="1.2"/>
+          <circle cx="566" cy="323" r="4" fill="#22c55e"/>
+          <text x="566" y="342" text-anchor="middle" font-size="10" fill="#22c55e" font-weight="700" font-family="Inter,sans-serif" letter-spacing="0.4">ЗАПОРІЖЖЯ</text>
+          <text x="566" y="352" text-anchor="middle" font-size="8" fill="#22c55e" fill-opacity="0.65" font-family="Inter,sans-serif">43 авто DM</text>
+
+          <!-- 4. КРИВИЙ РІГ (purple) cx=493, cy=312 -->
+          <circle cx="493" cy="312" r="13" fill="#A855F7" fill-opacity="0.12" class="map-pulse" style="animation-delay:1.6s"/>
+          <circle cx="493" cy="312" r="13" fill="#A855F7" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:3s"/>
+          <circle cx="493" cy="312" r="6.5" fill="#A855F7" fill-opacity="0.25" stroke="#A855F7" stroke-width="1.2"/>
+          <circle cx="493" cy="312" r="4" fill="#A855F7"/>
+          <text x="471" y="306" text-anchor="end" font-size="10" fill="#A855F7" font-weight="700" font-family="Inter,sans-serif">КР. РІГ</text>
+          <text x="471" y="318" text-anchor="end" font-size="8" fill="#A855F7" fill-opacity="0.65" font-family="Inter,sans-serif">50 авто DM</text>
+
+          <!-- 5. ПОЛТАВА (yellow) cx=541, cy=193 -->
+          <circle cx="541" cy="193" r="13" fill="#F59E0B" fill-opacity="0.12" class="map-pulse" style="animation-delay:2s"/>
+          <circle cx="541" cy="193" r="13" fill="#F59E0B" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:.4s"/>
+          <circle cx="541" cy="193" r="6.5" fill="#F59E0B" fill-opacity="0.25" stroke="#F59E0B" stroke-width="1.2"/>
+          <circle cx="541" cy="193" r="4" fill="#F59E0B"/>
+          <text x="558" y="189" text-anchor="start" font-size="10" fill="#F59E0B" font-weight="700" font-family="Inter,sans-serif">ПОЛТАВА</text>
+          <text x="558" y="200" text-anchor="start" font-size="8" fill="#F59E0B" fill-opacity="0.65" font-family="Inter,sans-serif">64 авто WU</text>
+
+          <!-- 6. ВІННИЦЯ (pink) cx=281, cy=222 -->
+          <circle cx="281" cy="222" r="13" fill="#EC4899" fill-opacity="0.12" class="map-pulse" style="animation-delay:2.4s"/>
+          <circle cx="281" cy="222" r="13" fill="#EC4899" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:.9s"/>
+          <circle cx="281" cy="222" r="6.5" fill="#EC4899" fill-opacity="0.25" stroke="#EC4899" stroke-width="1.2"/>
+          <circle cx="281" cy="222" r="4" fill="#EC4899"/>
+          <text x="281" y="207" text-anchor="middle" font-size="10" fill="#EC4899" font-weight="700" font-family="Inter,sans-serif">ВІННИЦЯ</text>
+          <text x="281" y="197" text-anchor="middle" font-size="8" fill="#EC4899" fill-opacity="0.65" font-family="Inter,sans-serif">30 авто WU</text>
+
+          <!-- 7. ЛЬВІВ (cyan) cx=87, cy=180 -->
+          <circle cx="87" cy="180" r="13" fill="#06B6D4" fill-opacity="0.12" class="map-pulse" style="animation-delay:2.9s"/>
+          <circle cx="87" cy="180" r="13" fill="#06B6D4" fill-opacity="0.12" class="map-pulse-2" style="animation-delay:1.5s"/>
+          <circle cx="87" cy="180" r="6.5" fill="#06B6D4" fill-opacity="0.25" stroke="#06B6D4" stroke-width="1.2"/>
+          <circle cx="87" cy="180" r="4" fill="#06B6D4"/>
+          <text x="87" y="165" text-anchor="middle" font-size="10" fill="#06B6D4" font-weight="700" font-family="Inter,sans-serif">ЛЬВІВ</text>
+          <text x="87" y="155" text-anchor="middle" font-size="8" fill="#06B6D4" fill-opacity="0.65" font-family="Inter,sans-serif">41 авто DM</text>
+
+    </div><!-- close hidden SVG div -->
+  </div><!-- /filii-wrapper -->
+</section><!-- /tab-filii -->
+
+<section class="tab-section" id="tab-team">
+<div class="team-page">
+
+  <!-- ТОП-МЕНЕДЖМЕНТ -->
+  <div class="team-block-title">Топ-менеджмент</div>
+  <div class="mgmt-grid">
+    <div class="mgmt-card owner">
+      <div class="mgmt-avatar">РМ</div>
+      <div class="mgmt-name">Роман Маслов</div>
+      <div class="mgmt-role">Власник</div>
+    </div>
+    <div class="mgmt-card">
+      <div class="mgmt-avatar" style="padding:0;overflow:hidden;background:none;">
+        <img src="andrii.jpg" alt="АП" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      </div>
+      <div class="mgmt-name">Андрій П'яних</div>
+      <div class="mgmt-role">CEO</div>
+    </div>
+    <div class="mgmt-card">
+      <div class="mgmt-avatar">ВІ</div>
+      <div class="mgmt-name">Волчан Іван</div>
+      <div class="mgmt-role">COO</div>
+    </div>
+    <div class="mgmt-card cfo">
+      <div class="mgmt-avatar">ОЛ</div>
+      <div class="mgmt-name">Омельченко Людмила</div>
+      <div class="mgmt-role">CFO</div>
+    </div>
+    <div class="mgmt-card">
+      <div class="mgmt-avatar">ЛМ</div>
+      <div class="mgmt-name">Лебедєв Максим</div>
+      <div class="mgmt-role">CTO</div>
+    </div>
+    <div class="mgmt-card">
+      <div class="mgmt-avatar">Т</div>
+      <div class="mgmt-name">Таміла</div>
+      <div class="mgmt-role">Головний бухгалтер</div>
+    </div>
+    <div class="mgmt-card">
+      <div class="mgmt-avatar" style="background:linear-gradient(135deg,#ec4899,#be185d)">ВУ</div>
+      <div class="mgmt-name">Усенко Вероніка</div>
+      <div class="mgmt-role">HRG</div>
+    </div>
+  </div>
+
+  <!-- ЦЕНТРАЛЬНИЙ ОФІС -->
+  <div class="team-block-title">Центральний офіс</div>
+  <div class="office-grid">
+    <div class="office-card">
+      <div class="office-dot" style="background:var(--green)"></div>
+      <div><div class="office-name">Авраменко Ксенія</div><div class="office-role">Менеджер зі страхування</div></div>
+    </div>
+    <div class="office-card">
+      <div class="office-dot"></div>
+      <div><div class="office-name">Пишун Ігор</div><div class="office-role">Голова відділу контролю</div></div>
+    </div>
+    <div class="office-card">
+      <div class="office-dot"></div>
+      <div><div class="office-name">Скочеляс Олеся</div><div class="office-role">Аналітик</div></div>
+    </div>
+    <div class="office-card">
+      <div class="office-dot"></div>
+      <div><div class="office-name">Шабанова Аліна</div><div class="office-role">Аналітик</div></div>
+    </div>
+    <div class="office-card">
+      <div class="office-dot" style="background:var(--yellow)"></div>
+      <div><div class="office-name">Тимошенко Олена</div><div class="office-role">SMM</div></div>
+    </div>
+  </div>
+
+  <!-- ФІЛІЇ -->
+  <div class="team-block-title">Команди філій · 7 міст · 348 авто</div>
+  <div class="branch-team-grid">
+
+    <!-- ДП-1 -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Дніпро 1</div><div class="btc-brand">DRIVE ME · 49 авто</div></div>
+        <div class="btc-badge">ДП-1</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Билиба Роман</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Шеремет Євген</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Пугачова Анна</div></div></div>
+        <div class="btc-divider"></div>
+        <div class="btc-row"><div class="btc-role">Заст. техн.</div><div><div class="btc-name">Батурін Сергій</div></div></div>
+      </div>
+    </div>
+
+    <!-- ДП-2 -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Дніпро 2</div><div class="btc-brand">WAY UP DRIVE · 71 авто</div></div>
+        <div class="btc-badge">ДП-2</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Бітюков Діма</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Гринченко Олег</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Мусияка Іра</div></div></div>
+        <div class="btc-divider"></div>
+        <div class="btc-row"><div class="btc-role">Заст. техн.</div><div><div class="btc-name">Безпалько Сергій</div></div></div>
+      </div>
+    </div>
+
+    <!-- Запоріжжя -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Запоріжжя</div><div class="btc-brand">DRIVE ME · 43 авто</div></div>
+        <div class="btc-badge">ЗП</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Дуплий Діма</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Олефіренко Ярослав</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Медовкіна Альона</div></div></div>
+      </div>
+    </div>
+
+    <!-- Кривий Ріг -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Кривий Ріг</div><div class="btc-brand">DRIVE ME · 50 авто</div></div>
+        <div class="btc-badge">КР</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Стьопін Роман</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Чорна Анна</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Бугайова Юля</div></div></div>
+        <div class="btc-divider"></div>
+        <div class="btc-row"><div class="btc-role">Заст. техн.</div><div><div class="btc-name">Міхович Вадим</div></div></div>
+      </div>
+    </div>
+
+    <!-- Полтава -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Полтава</div><div class="btc-brand">WAY UP DRIVE · 64 авто</div></div>
+        <div class="btc-badge">ПЛ</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Крат Олег</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Войтенко Влад</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Усенко Вероніка</div></div></div>
+        <div class="btc-divider"></div>
+        <div class="btc-row"><div class="btc-role">Заст. техн.</div><div><div class="btc-name">Школьний Руслан</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. техн.</div><div><div class="btc-name">Біленко Ігор</div></div></div>
+      </div>
+    </div>
+
+    <!-- Вінниця -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Вінниця</div><div class="btc-brand">WAY UP DRIVE · 30 авто</div></div>
+        <div class="btc-badge">ВН</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Кабанов Сергій</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Романча Євген</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Гонтарук Ангеліна</div></div></div>
+      </div>
+    </div>
+
+    <!-- Львів -->
+    <div class="branch-team-card">
+      <div class="btc-head">
+        <div><div class="btc-city">Львів</div><div class="btc-brand">DRIVE ME · 41 авто</div></div>
+        <div class="btc-badge">ЛВ</div>
+      </div>
+      <div class="btc-body">
+        <div class="btc-row"><div class="btc-role">Керівник</div><div><div class="btc-name">Мількевич Вадим</div></div></div>
+        <div class="btc-row"><div class="btc-role">Заст. ефект.</div><div><div class="btc-name">Бабій Святослав</div></div></div>
+        <div class="btc-row"><div class="btc-role">Рекрутер</div><div><div class="btc-name">Грицан Соломія</div></div></div>
+      </div>
+    </div>
+
+  </div><!-- /branch-team-grid -->
+</div><!-- /team-page -->
+</section><!-- /tab-team -->
+
+<!-- ФЛОТ TAB -->
+<section class="tab-section" id="tab-fleet">
+<div class="fleet-page">
+
+  <!-- STATUS ROW -->
+  <div class="fleet-status-row">
+
+    <!-- СТО -->
+    <div class="fsc">
+      <div class="fsc-accent" style="background:#ef4444"></div>
+      <div class="fsc-label">Авто в СТО</div>
+      <div class="fsc-main">
+        <div class="fsc-num" style="color:#ef4444">24</div>
+        <div class="fsc-pct" style="color:#ef4444">6.9%</div>
+      </div>
+      <div class="fsc-row">
+        <div class="fsc-sub">від флоту · ціль &lt;5.5%</div>
+        <div class="fsc-badge badge-red">🔴 Вище норми</div>
+      </div>
+    </div>
+
+    <!-- ДТП авто -->
+    <div class="fsc">
+      <div class="fsc-accent" style="background:#f59e0b"></div>
+      <div class="fsc-label">Авто в ДТП</div>
+      <div class="fsc-main">
+        <div class="fsc-num" style="color:#f59e0b">8</div>
+        <div class="fsc-pct" style="color:#f59e0b">2.3%</div>
+      </div>
+      <div class="fsc-row">
+        <div class="fsc-sub">від флоту · ціль &lt;2%</div>
+        <div class="fsc-badge badge-yellow">⚠️ Над нормою</div>
+      </div>
+    </div>
+
+    <!-- Штрафмайданчик -->
+    <div class="fsc">
+      <div class="fsc-accent" style="background:#6366f1"></div>
+      <div class="fsc-label">Штрафмайданчик</div>
+      <div class="fsc-main">
+        <div class="fsc-num" style="color:#818cf8">3</div>
+        <div class="fsc-pct" style="color:var(--muted)">авто</div>
+      </div>
+      <div class="fsc-row">
+        <div class="fsc-sub">Заблоковано · уточни цифру</div>
+        <div class="fsc-badge" style="background:rgba(99,102,241,.15);color:#818cf8">Потребує дій</div>
+      </div>
+    </div>
+
+    <!-- ДТП місяць -->
+    <div class="fsc">
+      <div class="fsc-accent" style="background:#F07000"></div>
+      <div class="fsc-label">ДТП цього місяця</div>
+      <div class="fsc-main">
+        <div class="fsc-num" style="color:var(--accent)">8</div>
+        <div class="fsc-pct" style="color:var(--muted)">всього</div>
+      </div>
+      <div class="fsc-row">
+        <div class="fsc-sub">Винні: <span style="color:#ef4444;font-weight:700">3</span> · Не винні: <span style="color:#22c55e;font-weight:700">5</span></div>
+        <div class="fsc-badge badge-muted">37.5% вина</div>
+      </div>
+    </div>
+
+  </div><!-- /fleet-status-row -->
+
+  <!-- SUMMARY -->
+  <div class="fleet-summary">
+    <div class="fleet-sum-card">
+      <div class="fleet-sum-label">Всього авто</div>
+      <div class="fleet-sum-val">348</div>
+      <div class="fleet-sum-sub">7 філій · 2 бренди</div>
+    </div>
+    <div class="fleet-sum-card">
+      <div class="fleet-sum-label">Активи флоту</div>
+      <div class="fleet-sum-val c-accent">$2.3М</div>
+      <div class="fleet-sum-sub">97.85М грн · курс 43</div>
+    </div>
+    <div class="fleet-sum-card">
+      <div class="fleet-sum-label">Середній ROI/рік</div>
+      <div class="fleet-sum-val" style="color:var(--green)">84.5%</div>
+      <div class="fleet-sum-sub">по всьому парку</div>
+    </div>
+    <div class="fleet-sum-card" style="border-left:3px solid #38bdf8;padding-left:13px;">
+      <div class="fleet-sum-label" style="display:flex;align-items:center;gap:6px;">🚢 Авто з Кореї</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin:6px 0 4px;">
+        <div class="fleet-sum-val" style="color:#38bdf8;font-size:30px;">31</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:2px;">авто в дорозі</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px;">
+        <span style="background:rgba(56,189,248,.12);color:#38bdf8;border:1px solid rgba(56,189,248,.25);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;">🌊 У морі: 11</span>
+        <span style="background:rgba(245,158,11,.12);color:#fbbf24;border:1px solid rgba(245,158,11,.25);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;">📦 Вантажиться: 18</span>
+        <span style="background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.25);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;">🛒 Придбано: 2</span>
+      </div>
+      <div class="fleet-sum-sub">Найближче: <span style="color:#38bdf8;font-weight:700;">03.06.2026</span> · Sonata + KIA K5 · порт ЧРП</div>
+    </div>
+  </div>
+
+  <!-- BRANCH FLEET CARDS -->
+  <div class="fleet-grid">
+
+    <!-- ДП-1 -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Дніпро 1</div><div class="fleet-brand">DRIVE ME · ДП-1</div></div>
+        <div class="fleet-roi roi-orange">ROI 88%</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Peugeot 301</td><td>12</td><td>5 200</td><td>62 400</td></tr>
+          <tr><td>Renault Logan</td><td>9</td><td>3 300</td><td>29 700</td></tr>
+          <tr><td>Renault Sandero</td><td>9</td><td>7 000</td><td>63 000</td></tr>
+          <tr><td>Sonata New Rise</td><td>5</td><td>13 500</td><td>67 500</td></tr>
+          <tr><td>Sonata LF</td><td>8</td><td>6 400</td><td>51 200</td></tr>
+          <tr><td>Hyundai Elantra</td><td>2</td><td>5 500</td><td>11 000</td></tr>
+          <tr><td>Sonata YF</td><td>1</td><td>6 400</td><td>6 400</td></tr>
+          <tr><td>KIA K5</td><td>1</td><td>6 400</td><td>6 400</td></tr>
+          <tr><td>Citroen Elysee</td><td>1</td><td>10 000</td><td>10 000</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>48</td><td>—</td><td>$307 600</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">13 226 800</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">970 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- ДП-2 -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Дніпро 2</div><div class="fleet-brand">WAY UP DRIVE · ДП-2</div></div>
+        <div class="fleet-roi roi-orange">ROI 87%</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Sonata LF</td><td>18</td><td>6 400</td><td>115 200</td></tr>
+          <tr><td>Peugeot 301</td><td>12</td><td>5 200</td><td>62 400</td></tr>
+          <tr><td>Renault Logan</td><td>10</td><td>3 300</td><td>33 000</td></tr>
+          <tr><td>Chevrolet Cobalt</td><td>9</td><td>8 000</td><td>72 000</td></tr>
+          <tr><td>Toyota Prius</td><td>5</td><td>9 000</td><td>45 000</td></tr>
+          <tr><td>Renault Sandero</td><td>5</td><td>7 000</td><td>35 000</td></tr>
+          <tr><td>Citroen Elysee</td><td>5</td><td>10 000</td><td>50 000</td></tr>
+          <tr><td>Sonata New Rise</td><td>2</td><td>13 500</td><td>27 000</td></tr>
+          <tr><td>Tesla Model 3</td><td>1</td><td>16 000</td><td>16 000</td></tr>
+          <tr><td>Nissan Leaf 2</td><td>1</td><td>15 000</td><td>15 000</td></tr>
+          <tr><td>KIA K5</td><td>1</td><td>6 400</td><td>6 400</td></tr>
+          <tr><td>Ford Fiesta</td><td>1</td><td>5 000</td><td>5 000</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>71</td><td>—</td><td>$482 000</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">20 726 000</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">1 500 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- Запоріжжя -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Запоріжжя</div><div class="fleet-brand">DRIVE ME · ЗП</div></div>
+        <div class="fleet-roi roi-green">ROI 122% 🏆</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Renault Logan</td><td>38</td><td>3 300</td><td>125 400</td></tr>
+          <tr><td>Renault Sandero</td><td>5</td><td>7 000</td><td>35 000</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>43</td><td>—</td><td>$160 400</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">6 897 200</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">700 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- Кривий Ріг -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Кривий Ріг</div><div class="fleet-brand">DRIVE ME · КР</div></div>
+        <div class="fleet-roi roi-yellow">ROI 82%</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Renault Logan</td><td>26</td><td>3 300</td><td>85 800</td></tr>
+          <tr><td>Renault Sandero</td><td>13</td><td>7 000</td><td>91 000</td></tr>
+          <tr><td>Chevrolet Cobalt</td><td>9</td><td>8 000</td><td>72 000</td></tr>
+          <tr><td>Hyundai Elantra</td><td>2</td><td>5 500</td><td>11 000</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>50</td><td>—</td><td>$259 800</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">11 171 400</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">760 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- Полтава -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Полтава</div><div class="fleet-brand">WAY UP DRIVE · ПЛ</div></div>
+        <div class="fleet-roi roi-orange">ROI 90%</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Renault Logan</td><td>38</td><td>3 300</td><td>125 400</td></tr>
+          <tr><td>Citroen Elysee</td><td>8</td><td>10 000</td><td>80 000</td></tr>
+          <tr><td>Renault Sandero</td><td>7</td><td>7 000</td><td>49 000</td></tr>
+          <tr><td>Chevrolet Cobalt</td><td>6</td><td>8 000</td><td>48 000</td></tr>
+          <tr><td>Peugeot 301</td><td>2</td><td>5 200</td><td>10 400</td></tr>
+          <tr><td>Hyundai Elantra</td><td>2</td><td>5 500</td><td>11 000</td></tr>
+          <tr><td>Sonata LF</td><td>2</td><td>6 400</td><td>12 800</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>65</td><td>—</td><td>$336 600</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">14 473 800</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">1 080 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- Вінниця -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Вінниця</div><div class="fleet-brand">WAY UP DRIVE · ВН</div></div>
+        <div class="fleet-roi roi-red">ROI 56% ⚠️</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Citroen Elysee</td><td>15</td><td>10 000</td><td>150 000</td></tr>
+          <tr><td>Renault Sandero</td><td>4</td><td>7 000</td><td>28 000</td></tr>
+          <tr><td>Hyundai Elantra</td><td>4</td><td>5 500</td><td>22 000</td></tr>
+          <tr><td>Renault Logan</td><td>6</td><td>3 300</td><td>19 800</td></tr>
+          <tr><td>Sonata LF</td><td>1</td><td>6 400</td><td>6 400</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>30</td><td>—</td><td>$226 200</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">9 726 600</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">450 000 грн</div></div>
+      </div>
+    </div>
+
+    <!-- Львів -->
+    <div class="fleet-card">
+      <div class="fleet-card-head">
+        <div><div class="fleet-city">Львів</div><div class="fleet-brand">DRIVE ME · ЛВ</div></div>
+        <div class="fleet-roi roi-yellow">ROI 62%</div>
+      </div>
+      <table class="fleet-table">
+        <thead><tr><th>Модель</th><th>Кіл.</th><th>$/од.</th><th>Всього $</th></tr></thead>
+        <tbody>
+          <tr><td>Sonata New Rise</td><td>37</td><td>13 500</td><td>499 500</td></tr>
+          <tr><td>Renault Sandero</td><td>4</td><td>7 000</td><td>28 000</td></tr>
+          <tr class="fleet-total"><td>РАЗОМ</td><td>41</td><td>—</td><td>$527 500</td></tr>
+        </tbody>
+      </table>
+      <div class="fleet-card-foot">
+        <div class="fleet-foot-item">Активи, грн<div class="fleet-foot-val">21 627 500</div></div>
+        <div class="fleet-foot-item" style="text-align:right">ОП/міс<div class="fleet-foot-val">1 121 479 грн</div></div>
+      </div>
+    </div>
+
+  </div><!-- /fleet-grid -->
+</div><!-- /fleet-page -->
+</section><!-- /tab-fleet -->
+
+<!-- P&L TAB -->
+<section class="tab-section" id="tab-pl">
+<div class="pl-page">
+
+  <!-- MONTH SWITCHER -->
+  <div class="pl-month-switcher">
+    <div class="pl-year-label">2026</div>
+    <button class="pl-mon-btn disabled" data-month="01">Січень</button>
+    <button class="pl-mon-btn disabled" data-month="02">Лютий</button>
+    <button class="pl-mon-btn disabled" data-month="03">Березень</button>
+    <button class="pl-mon-btn active"   data-month="04">Квітень</button>
+    <button class="pl-mon-btn current"  data-month="05">Травень ●</button>
+    <button class="pl-mon-btn disabled" data-month="06">Червень</button>
+    <button class="pl-mon-btn disabled" data-month="07">Липень</button>
+    <button class="pl-mon-btn disabled" data-month="08">Серпень</button>
+    <button class="pl-mon-btn disabled" data-month="09">Вересень</button>
+    <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
+    <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
+    <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+  </div>
+
+  <!-- NO DATA PLACEHOLDER -->
+  <div class="pl-no-data" id="plNoData">
+    <div class="pl-no-data-icon">📂</div>
+    <div class="pl-no-data-title">Дані за цей місяць ще не завантажені</div>
+    <div class="pl-no-data-sub">Завантажте P&amp;L файл — і таблиця з'явиться тут автоматично</div>
+  </div>
+
+  <!-- КВІТЕНЬ 2026 CONTENT -->
+  <div class="pl-content show" id="pl-content-04">
+
+  <!-- KPI ROW -->
+  <div class="pl-kpi-row">
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">Вал (каса)</div>
+      <div class="pl-kpi-val">34.35М</div>
+      <div class="pl-kpi-sub">план 36.45М · 94.25%</div>
+    </div>
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">Бренд Uklon</div>
+      <div class="pl-kpi-val" style="color:var(--yellow)">1.63М</div>
+      <div class="pl-kpi-sub">план 1.88М · 87.03%</div>
+    </div>
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">Всього дохід</div>
+      <div class="pl-kpi-val" style="color:var(--green)">38.35М</div>
+      <div class="pl-kpi-sub">з усіма надходженнями</div>
+    </div>
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">Всього витрати</div>
+      <div class="pl-kpi-val" style="color:#ef4444">31.61М</div>
+      <div class="pl-kpi-sub">82.4% від доходу</div>
+    </div>
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">ОП (з брендом)</div>
+      <div class="pl-kpi-val c-accent">6.75М</div>
+      <div class="pl-kpi-sub">Margin 17.68%</div>
+    </div>
+    <div class="pl-kpi">
+      <div class="pl-kpi-label">Take Rate</div>
+      <div class="pl-kpi-val">37.11%</div>
+      <div class="pl-kpi-sub">частка парку від каси</div>
+    </div>
+  </div>
+
+  <!-- MAIN P&L TABLE -->
+  <div class="pl-wrap">
+    <div class="pl-wrap-head">
+      <div class="pl-wrap-title">P&amp;L — Повна таблиця по філіях</div>
+      <div class="pl-month-badge">Квітень 2026</div>
+    </div>
+    <div class="pl-table-scroll">
+    <table class="pl-table">
+      <thead>
+        <tr>
+          <th>Стаття</th>
+          <th style="border-top-color:#3B82F6"><div class="pl-th-dot" style="background:#3B82F6;box-shadow:0 0 7px #3B82F6"></div><div class="pl-th-city">Дніпро 2</div><div class="pl-th-meta">WU · ДП-2</div></th>
+          <th style="border-top-color:#F59E0B"><div class="pl-th-dot" style="background:#F59E0B;box-shadow:0 0 7px #F59E0B"></div><div class="pl-th-city">Полтава</div><div class="pl-th-meta">WU · ПЛ</div></th>
+          <th style="border-top-color:#EC4899"><div class="pl-th-dot" style="background:#EC4899;box-shadow:0 0 7px #EC4899"></div><div class="pl-th-city">Вінниця</div><div class="pl-th-meta">WU · ВН</div></th>
+          <th style="border-top-color:#F07000"><div class="pl-th-dot" style="background:#F07000;box-shadow:0 0 7px #F07000"></div><div class="pl-th-city">Дніпро</div><div class="pl-th-meta">DM · ДП-1</div></th>
+          <th style="border-top-color:#22c55e"><div class="pl-th-dot" style="background:#22c55e;box-shadow:0 0 7px #22c55e"></div><div class="pl-th-city">Запоріжжя</div><div class="pl-th-meta">DM · ЗП</div></th>
+          <th style="border-top-color:#A855F7"><div class="pl-th-dot" style="background:#A855F7;box-shadow:0 0 7px #A855F7"></div><div class="pl-th-city">Кривий Ріг</div><div class="pl-th-meta">DM · КР</div></th>
+          <th style="border-top-color:#06B6D4"><div class="pl-th-dot" style="background:#06B6D4;box-shadow:0 0 7px #06B6D4"></div><div class="pl-th-city">Львів</div><div class="pl-th-meta">DM · ЛВ</div></th>
+          <th><div class="pl-th-city" style="color:var(--muted);font-size:11px">ВЕСЬ ПАРК</div></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ДОХОДИ -->
+        <tr class="pl-group"><td colspan="9">Доходи</td></tr>
+        <tr>
+          <td>Каса Uklon (Вал)</td>
+          <td>7 468 478</td><td>5 671 237</td><td>2 034 333</td><td>5 590 406</td>
+          <td>4 274 125</td><td>4 496 125</td><td>4 817 764</td><td><b>34 352 468</b></td>
+        </tr>
+        <tr>
+          <td>Бренд Uklon</td>
+          <td class="td-warn">205 000</td><td>329 000</td><td class="td-bad">109 500</td>
+          <td class="td-bad">147 000</td><td class="td-best">156 627</td><td>123 000</td>
+          <td class="td-best">564 620</td><td><b>1 634 747</b></td>
+        </tr>
+        <tr>
+          <td>Страхові виплати</td>
+          <td>280 388</td><td>222 354</td><td>76 910</td><td>320 655</td>
+          <td>100 036</td><td>127 830</td><td>74 700</td><td><b>1 202 873</b></td>
+        </tr>
+        <tr>
+          <td>Утримання з водіїв</td>
+          <td>156 528</td><td>132 571</td><td>214 942</td><td>173 945</td>
+          <td>103 633</td><td>147 034</td><td>96 500</td><td><b>1 025 153</b></td>
+        </tr>
+        <tr>
+          <td>Штрафи з водіїв</td>
+          <td>14 018</td><td>22 050</td><td>6 097</td><td>20 149</td>
+          <td>2 619</td><td>10 555</td><td>11 514</td><td><b>87 003</b></td>
+        </tr>
+        <tr class="pl-total">
+          <td>= Всього дохід</td>
+          <td>8 125 236</td><td>6 384 688</td><td>2 448 903</td><td>6 259 631</td>
+          <td>4 644 160</td><td>4 917 453</td><td>5 565 098</td><td>38 345 170</td>
+        </tr>
+
+        <!-- ВИТРАТИ -->
+        <tr class="pl-group"><td colspan="9">Витрати</td></tr>
+        <tr>
+          <td>ЗП водіїв</td>
+          <td>4 646 429</td><td>3 602 993</td><td>1 254 614</td><td>3 502 287</td>
+          <td>2 614 735</td><td>2 858 177</td><td>3 125 402</td><td><b>21 604 636</b></td>
+        </tr>
+        <tr>
+          <td>ЗП адміністрації</td>
+          <td>208 404</td><td>243 790</td><td>102 190</td><td>222 741</td>
+          <td>146 200</td><td>153 170</td><td>122 726</td><td><b>1 199 221</b></td>
+        </tr>
+        <tr>
+          <td>Слюсарний ремонт</td>
+          <td>1 040 978</td><td>627 835</td><td>372 421</td><td class="td-bad">961 994</td>
+          <td class="td-bad">745 866</td><td>594 447</td><td class="td-best">278 975</td><td><b>4 622 516</b></td>
+        </tr>
+        <tr>
+          <td>Кузовний ремонт (ДТП)</td>
+          <td>164 899</td><td>56 506</td><td>29 643</td><td class="td-bad">226 948</td>
+          <td>142 109</td><td>161 162</td><td>133 409</td><td><b>914 675</b></td>
+        </tr>
+        <tr>
+          <td>ОСАГО (поліси)</td>
+          <td>132 520</td><td>215 345</td><td>35 449</td><td class="td-best">0</td>
+          <td>149 085</td><td>165 650</td><td class="td-best">0</td><td><b>698 049</b></td>
+        </tr>
+        <tr>
+          <td>Шиномонтаж / шини</td>
+          <td>286 684</td><td>82 898</td><td>302</td><td>126 030</td>
+          <td>82 616</td><td>88 079</td><td>64 786</td><td><b>731 395</b></td>
+        </tr>
+        <tr>
+          <td>Адмін витрати</td>
+          <td>70 034</td><td>58 421</td><td>44 210</td><td>43 686</td>
+          <td>43 755</td><td>48 503</td><td>50 736</td><td><b>359 344</b></td>
+        </tr>
+        <tr class="pl-sub">
+          <td>↳ в т.ч. оренда офісу</td>
+          <td>15 000</td><td>16 950</td><td>13 786</td><td>8 316</td>
+          <td>5 434</td><td>14 172</td><td>16 888</td><td><b>90 545</b></td>
+        </tr>
+        <tr>
+          <td>Маркетинг</td>
+          <td>40 221</td><td>21 038</td><td>22 153</td><td>30 545</td>
+          <td>27 798</td><td>24 626</td><td>33 539</td><td><b>199 920</b></td>
+        </tr>
+        <tr>
+          <td>Фінансові витрати</td>
+          <td>22 122</td><td>55 075</td><td>14 040</td><td>19 376</td>
+          <td>43 048</td><td>27 991</td><td>59 043</td><td><b>240 695</b></td>
+        </tr>
+        <tr>
+          <td>ЦО (перевиставлені)</td>
+          <td>337 139</td><td>303 059</td><td>140 155</td><td>236 764</td>
+          <td>204 482</td><td>243 416</td><td>201 756</td><td><b>1 666 771</b></td>
+        </tr>
+        <tr class="pl-total">
+          <td>= Всього витрати</td>
+          <td>6 687 766</td><td>5 215 386</td><td>2 008 070</td><td>5 256 763</td>
+          <td>4 114 620</td><td>4 304 969</td><td>4 022 036</td><td>31 609 609</td>
+        </tr>
+
+        <!-- РЕЗУЛЬТАТ -->
+        <tr class="pl-group"><td colspan="9">Результат</td></tr>
+        <tr class="pl-result-pos">
+          <td>Фін.рез. (без бренду)</td>
+          <td>1 253 894</td><td>845 718</td><td>325 359</td><td>842 347</td>
+          <td>368 776</td><td>493 541</td><td>980 965</td><td>5 110 600</td>
+        </tr>
+        <tr class="pl-result-acc">
+          <td>ОП (з брендом) ✦</td>
+          <td>1 458 894</td><td>1 174 718</td><td>434 859</td><td>989 347</td>
+          <td>525 403</td><td>616 541</td><td>1 545 585</td><td>6 745 347</td>
+        </tr>
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ВИТРАТИ/АВТО -->
+  <div class="pl-wrap">
+    <div class="pl-wrap-head">
+      <div class="pl-wrap-title">Витрати на авто (грн/авто)</div>
+      <div class="pl-month-badge">Квітень 2026</div>
+    </div>
+    <div class="pl-table-scroll">
+    <table class="pl-table">
+      <thead>
+        <tr>
+          <th>Стаття</th>
+          <th style="border-top-color:#3B82F6"><div class="pl-th-dot" style="background:#3B82F6;box-shadow:0 0 7px #3B82F6"></div><div class="pl-th-city">Дніпро 2</div><div class="pl-th-meta">WU · ДП-2</div></th>
+          <th style="border-top-color:#F59E0B"><div class="pl-th-dot" style="background:#F59E0B;box-shadow:0 0 7px #F59E0B"></div><div class="pl-th-city">Полтава</div><div class="pl-th-meta">WU · ПЛ</div></th>
+          <th style="border-top-color:#EC4899"><div class="pl-th-dot" style="background:#EC4899;box-shadow:0 0 7px #EC4899"></div><div class="pl-th-city">Вінниця</div><div class="pl-th-meta">WU · ВН</div></th>
+          <th style="border-top-color:#F07000"><div class="pl-th-dot" style="background:#F07000;box-shadow:0 0 7px #F07000"></div><div class="pl-th-city">Дніпро</div><div class="pl-th-meta">DM · ДП-1</div></th>
+          <th style="border-top-color:#22c55e"><div class="pl-th-dot" style="background:#22c55e;box-shadow:0 0 7px #22c55e"></div><div class="pl-th-city">Запоріжжя</div><div class="pl-th-meta">DM · ЗП</div></th>
+          <th style="border-top-color:#A855F7"><div class="pl-th-dot" style="background:#A855F7;box-shadow:0 0 7px #A855F7"></div><div class="pl-th-city">Кривий Ріг</div><div class="pl-th-meta">DM · КР</div></th>
+          <th style="border-top-color:#06B6D4"><div class="pl-th-dot" style="background:#06B6D4;box-shadow:0 0 7px #06B6D4"></div><div class="pl-th-city">Львів</div><div class="pl-th-meta">DM · ЛВ</div></th>
+          <th><div class="pl-th-city" style="color:var(--muted);font-size:11px">НОРМА</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Авто в парку</td><td>71</td><td>64</td><td>30</td><td>49</td><td>43</td><td>50</td><td>41</td><td>348</td></tr>
+        <tr>
+          <td>Слюсарний/авто</td>
+          <td>14 662</td><td class="td-best">9 810</td><td>12 414</td><td class="td-bad">19 633</td>
+          <td class="td-bad">17 346</td><td>11 889</td><td class="td-best">6 804</td><td>13 283</td>
+        </tr>
+        <tr>
+          <td>Кузовний/авто</td>
+          <td>2 323</td><td class="td-best">883</td><td>988</td><td class="td-bad">4 632</td>
+          <td>3 305</td><td>3 223</td><td>3 254</td><td>2 628</td>
+        </tr>
+        <tr><td>ОСАГО/авто</td><td>1 866</td><td>3 365</td><td>1 182</td><td class="td-best">0</td><td>3 467</td><td>3 313</td><td class="td-best">0</td><td>2 006</td></tr>
+        <tr><td>Адмін/авто</td><td>986</td><td class="td-best">913</td><td class="td-bad">1 474</td><td class="td-best">892</td><td>1 018</td><td>970</td><td>1 237</td><td>1 033</td></tr>
+        <tr><td>Маркетинг/авто</td><td>566</td><td class="td-best">329</td><td class="td-bad">738</td><td>623</td><td>646</td><td class="td-best">493</td><td class="td-bad">818</td><td>574</td></tr>
+        <tr><td>ЦО/авто</td><td>4 748</td><td>4 735</td><td>4 672</td><td>4 832</td><td>4 755</td><td>4 868</td><td>4 921</td><td>4 790</td></tr>
+        <tr class="pl-total">
+          <td>Net Profit/авто</td>
+          <td>20 548</td><td>18 355</td><td>14 495</td><td>20 191</td><td>12 219</td><td>12 331</td><td class="td-best">37 697</td><td>19 383</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  </div><!-- /pl-content-04 -->
+
+</div><!-- /pl-page -->
+</section><!-- /tab-pl -->
+
+<script>
+  // ── TASKS ──
+  const overlay   = document.getElementById('tasksOverlay');
+  const sidebar   = document.getElementById('tasksSidebar');
+  const tasksList = document.getElementById('tasksList');
+  const taskInput = document.getElementById('taskInput');
+  const tasksCount= document.getElementById('tasksCount');
+
+  let tasks = JSON.parse(localStorage.getItem('dm_tasks') || '[]');
+
+  function saveTasks() { localStorage.setItem('dm_tasks', JSON.stringify(tasks)); }
+
+  function renderTasks() {
+    tasksList.innerHTML = '';
+    tasks.forEach((t, i) => {
+      const el = document.createElement('div');
+      el.className = 'task-item' + (t.done ? ' done' : '');
+      el.innerHTML = `
+        <div class="task-check">${t.done ? '✓' : ''}</div>
+        <div class="task-body">
+          <div class="task-text">${t.text}</div>
+          ${t.createdAt ? `<div class="task-time">${t.createdAt}</div>` : ''}
+        </div>
+        <div class="task-del" data-i="${i}">×</div>`;
+      el.querySelector('.task-check').addEventListener('click', () => {
+        tasks[i].done = !tasks[i].done; saveTasks(); renderTasks();
+      });
+      el.querySelector('.task-del').addEventListener('click', e => {
+        e.stopPropagation(); tasks.splice(i,1); saveTasks(); renderTasks();
+      });
+      tasksList.appendChild(el);
+    });
+    const left = tasks.filter(t => !t.done).length;
+    tasksCount.textContent = left + ' активних · ' + tasks.filter(t=>t.done).length + ' виконано';
+  }
+
+  function addTask() {
+    const txt = taskInput.value.trim();
+    if (!txt) return;
+    const now = new Date().toLocaleString('uk-UA', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+    tasks.unshift({ text: txt, done: false, createdAt: now });
+    taskInput.value = '';
+    saveTasks(); renderTasks();
+  }
+
+  function openTasks()  { overlay.classList.add('open'); sidebar.classList.add('open'); }
+  function closeTasks() { overlay.classList.remove('open'); sidebar.classList.remove('open'); }
+
+  document.getElementById('tasksBtn').addEventListener('click', openTasks);
+  document.getElementById('tasksClose').addEventListener('click', closeTasks);
+  overlay.addEventListener('click', closeTasks);
+  document.getElementById('taskAddBtn').addEventListener('click', addTask);
+  taskInput.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+  document.getElementById('tasksClear').addEventListener('click', () => {
+    tasks = tasks.filter(t => !t.done); saveTasks(); renderTasks();
+  });
+
+  renderTasks();
+
+  // Date
+  document.getElementById('hDate').textContent =
+    new Date().toLocaleDateString('uk-UA', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+  // Period
+  document.querySelectorAll('.period-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+
+  // Nav tabs with section switching
+  const tabMap = {
+    'Дашборд':  'tab-dashboard',
+    'Філії':    'tab-filii',
+    'Команда':  'tab-team',
+    'Флот':     'tab-fleet',
+    'P&L':      'tab-pl',
+  };
+  const allSections = ['tab-dashboard','tab-filii','tab-team','tab-fleet','tab-pl'];
+
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const name = t.textContent.trim();
+      const target = tabMap[name];
+      allSections.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (target === id) {
+          el.style.display = 'block';
+        } else {
+          el.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Tooltips для команди філій
+  const tipData = {
+    // ДП-1
+    'Билиба Роман':       'Керівник ДП-1\nDRIVE ME · Дніпро',
+    'Шеремет Євген':      'Заст. з ефективності ДП-1\nDRIVE ME · Дніпро',
+    'Пугачова Анна':      'Рекрутер ДП-1\nDRIVE ME · Дніпро',
+    'Батурін Сергій':     'Заст. з технічної частини ДП-1\nDRIVE ME · Дніпро',
+    // ДП-2
+    'Бітюков Діма':       'Керівник ДП-2\nWAY UP DRIVE · Дніпро',
+    'Гринченко Олег':     'Заст. з ефективності ДП-2\nWAY UP DRIVE · Дніпро',
+    'Мусияка Іра':        'Рекрутер ДП-2\nWAY UP DRIVE · Дніпро',
+    'Безпалько Сергій':   'Заст. з технічної частини ДП-2\nWAY UP DRIVE · Дніпро',
+    // Запоріжжя
+    'Дуплий Діма':        'Керівник ЗП\nDRIVE ME · Запоріжжя',
+    'Олефіренко Ярослав': 'Заст. з ефективності ЗП\nDRIVE ME · Запоріжжя',
+    'Медовкіна Альона':   'Рекрутер ЗП\nDRIVE ME · Запоріжжя',
+    // Кривий Ріг
+    'Стьопін Роман':      'Керівник КР\nDRIVE ME · Кривий Ріг',
+    'Чорна Анна':         'Заст. з ефективності КР\nDRIVE ME · Кривий Ріг',
+    'Бугайова Юля':       'Рекрутер КР\nDRIVE ME · Кривий Ріг',
+    'Міхович Вадим':      'Заст. з технічної частини КР\nDRIVE ME · Кривий Ріг',
+    // Полтава
+    'Крат Олег':          'Керівник ПЛ\nWAY UP DRIVE · Полтава',
+    'Войтенко Влад':      'Заст. з ефективності ПЛ\nWAY UP DRIVE · Полтава',
+    'Усенко Вероніка':    'Рекрутер ПЛ / HRG\nWAY UP DRIVE · Полтава',
+    'Школьний Руслан':    'Заст. з технічної частини ПЛ\nWAY UP DRIVE · Полтава',
+    'Біленко Ігор':       'Заст. з технічної частини ПЛ\nWAY UP DRIVE · Полтава',
+    // Вінниця
+    'Кабанов Сергій':     'Керівник ВН\nWAY UP DRIVE · Вінниця',
+    'Романча Євген':      'Заст. з ефективності ВН\nWAY UP DRIVE · Вінниця',
+    'Гонтарук Ангеліна':  'Рекрутер ВН\nWAY UP DRIVE · Вінниця',
+    // Львів
+    'Мількевич Вадим':    'Керівник ЛВ\nDRIVE ME · Львів',
+    'Бабій Святослав':    'Заст. з ефективності ЛВ\nDRIVE ME · Львів',
+    'Грицан Соломія':     'Рекрутер ЛВ\nDRIVE ME · Львів',
+  };
+
+  document.querySelectorAll('.btc-name').forEach(el => {
+    const name = el.textContent.trim();
+    if (tipData[name]) {
+      el.classList.add('has-tip');
+      el.setAttribute('data-tip', tipData[name]);
+    }
+  });
+
+  // Chart
+  const ctx = document.getElementById('chart').getContext('2d');
+  const days = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+  const fact = [1180000,1220000,1050000,1310000,1280000,890000,920000,1340000,1290000,1180000,1220000,1150000];
+  const plan = Array(12).fill(1250000);
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [
+        {
+          label: 'Факт',
+          data: fact,
+          borderColor: '#F07000',
+          backgroundColor: 'rgba(240,112,0,0.07)',
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.4,
+          pointBackgroundColor: '#F07000',
+          pointBorderColor: '#141414',
+          pointBorderWidth: 2,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        },
+        {
+          label: 'План',
+          data: plan,
+          borderColor: '#333333',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          fill: false,
+          pointRadius: 0,
+          tension: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: { color: '#666', font: { size: 12, family: 'Inter' }, boxWidth: 14, padding: 20 }
+        },
+        tooltip: {
+          backgroundColor: '#1C1C1C',
+          borderColor: 'rgba(255,255,255,0.07)',
+          borderWidth: 1,
+          titleColor: '#fff',
+          bodyColor: '#888',
+          padding: 12,
+          callbacks: {
+            label: c => '  ' + c.dataset.label + ': ' + (c.raw/1000000).toFixed(2) + 'М грн'
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#555', font: { size: 11, family: 'Inter' } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#555',
+            font: { size: 11, family: 'Inter' },
+            callback: v => (v/1000000).toFixed(1) + 'М'
+          }
+        }
+      }
+    }
+  });
+
+  // P&L Month Switcher
+  const plMonths = { '04': true }; // місяці з даними
+
+  document.querySelectorAll('.pl-mon-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const m = btn.getAttribute('data-month');
+      if (btn.classList.contains('disabled')) return;
+
+      // оновити активну кнопку
+      document.querySelectorAll('.pl-mon-btn').forEach(b => {
+        b.classList.remove('active');
+        if (b.classList.contains('current')) {
+          // прибрати active але залишити current стиль
+        }
+      });
+      btn.classList.add('active');
+
+      // показати потрібний контент
+      document.querySelectorAll('.pl-content').forEach(c => c.classList.remove('show'));
+      const noData = document.getElementById('plNoData');
+      const content = document.getElementById('pl-content-' + m);
+
+      if (content) {
+        content.classList.add('show');
+        noData.classList.remove('show');
+      } else {
+        noData.classList.add('show');
+      }
+    });
+  });
+</script>
+</body>
+</html>
