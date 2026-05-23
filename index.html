@@ -3014,9 +3014,400 @@
   const aiBody    = document.getElementById('aiPanelBody');
   const aiSub     = document.getElementById('aiPanelSubtitle');
 
-  const AI_CONTENT = {
+  // ── DOM READERS ──────────────────────────────────────────
+  function num(el) {
+    if (!el) return 0;
+    return parseFloat(el.textContent.replace(/[^\d.,-]/g, '').replace(',','.')) || 0;
+  }
+  function pct(el) {
+    if (!el) return 0;
+    return parseFloat(el.style.width) || 0;
+  }
+  function statusClass(val, thresholds) {
+    // thresholds: [goodMin, warnMin] — above good = success, above warn = warning, below = danger
+    if (val >= thresholds[0]) return 'success';
+    if (val >= thresholds[1]) return 'warning';
+    return 'danger';
+  }
+  function icon(cls) {
+    return cls === 'success' ? '✅' : cls === 'warning' ? '⚠️' : '🔴';
+  }
+  function color(val, thresholds) {
+    if (val >= thresholds[0]) return 'g';
+    if (val >= thresholds[1]) return 'y';
+    return 'r';
+  }
+
+  function readKpis() {
+    const cards = document.querySelectorAll('#tab-dashboard .kpi-card');
+    const out = [];
+    cards.forEach(card => {
+      const tag  = card.querySelector('.kpi-tag')?.textContent.trim() || '';
+      const numEl = card.querySelector('.kpi-num');
+      const unit  = numEl?.querySelector('.unit');
+      const raw   = numEl ? numEl.textContent.replace(unit?.textContent||'','').trim() : '—';
+      const bar   = card.querySelector('.kpi-bar-fill');
+      const barPct = pct(bar);
+      const st = bar?.classList.contains('red') ? 'danger'
+               : bar?.classList.contains('yellow') ? 'warning' : 'success';
+      out.push({ tag, raw, barPct, st });
+    });
+    return out;
+  }
+
+  function readFili() {
+    const cards = document.querySelectorAll('.fil-card:not(.fil-coming)');
+    return Array.from(cards).map(card => {
+      const name  = card.querySelector('.fil-name')?.textContent.trim() || '';
+      const brand = card.querySelector('.fil-brand')?.textContent.trim() || '';
+      const metrics = [];
+      card.querySelectorAll('.fil-metric').forEach(m => {
+        const lbl = m.querySelector('.fil-mlbl')?.textContent.trim() || '';
+        const valEl = m.querySelector('.fil-mval');
+        const raw = valEl?.textContent.trim() || '';
+        const val = parseFloat(raw) || 0;
+        const st  = valEl?.classList.contains('g') ? 'success'
+                  : valEl?.classList.contains('r') ? 'danger' : 'warning';
+        metrics.push({ lbl, raw, val, st });
+      });
+      return { name, brand, metrics };
+    });
+  }
+
+  function readFleet() {
+    const cards = document.querySelectorAll('.fleet-sum-card');
+    const out = {};
+    cards.forEach(c => {
+      const lbl = c.querySelector('.fleet-sum-label')?.textContent.trim() || '';
+      const val = c.querySelector('.fleet-sum-val')?.textContent.trim() || '—';
+      out[lbl] = val;
+    });
+    return out;
+  }
+
+  function readPlKpis() {
+    const kpis = document.querySelectorAll('#tab-pl .pl-kpi');
+    const out = {};
+    kpis.forEach(k => {
+      const lbl = k.querySelector('.pl-kpi-label')?.textContent.trim() || '';
+      const val = k.querySelector('.pl-kpi-val')?.textContent.trim() || '—';
+      out[lbl] = val;
+    });
+    return out;
+  }
+
+  // ── BLOCK BUILDER ─────────────────────────────────────────
+  function block(type, iconTxt, title, html) {
+    return `<div class="ai-block ${type}">
+      <div class="ai-block-title">${iconTxt} ${title}</div>
+      <div>${html}</div>
+    </div>`;
+  }
+  function row(label, val, cls='') {
+    return `<div class="ai-metric-row"><span>${label}</span><span class="ai-metric-val ${cls}">${val}</span></div>`;
+  }
+  function bullets(items) {
+    return `<ul class="ai-block-text" style="margin-top:8px">${items.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  }
+
+  // ── ANALYZERS PER TAB ──────────────────────────────────────
+  function analyzeDashboard() {
+    const kpis = readKpis();
+    const valCard    = kpis[0] || {};
+    const carsCard   = kpis[1] || {};
+    const finCard    = kpis[2] || {};
+    const brandCard  = kpis[3] || {};
+
+    const valPct   = valCard.barPct   || 0;
+    const carsPct  = carsCard.barPct  || 0;
+    const brandPct = brandCard.barPct || 0;
+    const finPct   = finCard.barPct   || 0;
+
+    const valSt   = statusClass(valPct,   [95,85]);
+    const carsSt  = statusClass(carsPct,  [88,78]);
+    const brandSt = statusClass(brandPct, [90,75]);
+    const finSt   = statusClass(finPct,   [90,75]);
+
+    const brandGap = brandPct < 100
+      ? `Недобір ~${Math.round((100-brandPct)/100 * 244 * 10000 / 10000 * 10)/10 * 0.1}М грн`
+      : 'План виконано';
+
+    const blocks = [];
+
+    // Бренд
+    blocks.push(block(brandSt, icon(brandSt), `Бренд Uklon — ${brandCard.raw || '—'}М`,
+      row('Виконання', brandPct.toFixed(1)+'%', color(brandPct,[90,75])) +
+      row('Ціль', '100%') +
+      bullets(brandPct < 80
+        ? [`Недобір критичний — прямий вплив на фінрез`,
+           `Кожен -1% завантаженості = -170К грн/міс Бренду`,
+           `Терміново: підняти флот в роботі`]
+        : brandPct < 90
+        ? [`Бренд нижче плану — є резерв для зростання`,
+           `Фокус на завантаженість 85%+`,
+           `Реалістично закрити місяць на 90%+`]
+        : [`Бренд в межах норми`,`Тримати завантаженість стабільно`])
+    ));
+
+    // Завантаженість
+    blocks.push(block(carsSt, icon(carsSt), `Авто в роботі — ${carsCard.raw || '—'}`,
+      row('Завантаженість', carsPct.toFixed(1)+'%', color(carsPct,[88,78])) +
+      row('Ціль', '90%') +
+      row('Gap', `-${(90-carsPct).toFixed(1)}pp`, carsPct < 88 ? 'r' : 'y') +
+      bullets(carsPct < 78
+        ? [`Критично — більше 37 авто без водіїв`,
+           `Пріоритет: рекрутинг КР та ДП-2`,
+           `Розглянути перерозподіл авто між філіями`]
+        : carsPct < 87
+        ? [`${Math.round((90-carsPct)/100*348)} авто не приносять виручку`,
+           `До 90% потрібно ще ~${Math.round((90-carsPct)/100*348)} водіїв`,
+           `Канал "Приведи друга" — CAC ~200 грн, найдешевший`]
+        : [`Завантаженість близька до цілі`,`Утримати результат до кінця місяця`])
+    ));
+
+    // Вал
+    blocks.push(block(valSt, icon(valSt), `Вал місяць — ${valCard.raw || '—'}М`,
+      row('Виконання', valPct.toFixed(1)+'%', color(valPct,[95,85])) +
+      bullets(valPct >= 95
+        ? [`Вал майже в плані — результат сильний`,
+           `Ще +${(100-valPct).toFixed(1)}% до повного виконання`]
+        : valPct >= 85
+        ? [`Вал нижче плану — резерв у завантаженості`,
+           `Кожен +1% авто в роботі ≈ +350К грн вал/міс`]
+        : [`Вал суттєво нижче плану`,`Перевірити простій та ДТП`])
+    ));
+
+    // Фінрез
+    blocks.push(block(finSt, icon(finSt), `Фінрез з брендом — ${finCard.raw || '—'}М`,
+      row('Виконання', finPct.toFixed(1)+'%', color(finPct,[90,75])) +
+      bullets([
+        `Мотивація CEO (Андрій): 3% від фінрез`,
+        `Ціль фінрез: 9.48М → бонус ~284К грн/міс`,
+        `Поточний рівень: ~222К грн/міс`
+      ])
+    ));
+
+    return {
+      subtitle: `Загальний огляд · дані з екрану`,
+      blocks
+    };
+  }
+
+  function analyzeFili() {
+    const fili = readFili();
+    if (!fili.length) return { subtitle: 'Філії', blocks: [block('info','📊','Дані не знайдено','<p class="ai-block-text">Перейдіть на вкладку Філії</p>')] };
+
+    // Знайти лідера і аутсайдера по валу
+    const sorted = [...fili].sort((a,b) => {
+      const av = a.metrics.find(m=>m.lbl==='Вал')?.val || 0;
+      const bv = b.metrics.find(m=>m.lbl==='Вал')?.val || 0;
+      return bv - av;
+    });
+
+    const leader = sorted[0];
+    const laggard = sorted[sorted.length-1];
+
+    // Бренд аналіз
+    const brandOk   = fili.filter(f => (f.metrics.find(m=>m.lbl==='Бренд')?.st === 'success'));
+    const brandBad  = fili.filter(f => (f.metrics.find(m=>m.lbl==='Бренд')?.st === 'danger'));
+
+    // Завантаженість аналіз
+    const zavOk  = fili.filter(f => (f.metrics.find(m=>m.lbl==='Завантаж.')?.val||0) >= 85);
+    const zavBad = fili.filter(f => (f.metrics.find(m=>m.lbl==='Завантаж.')?.val||0) < 78);
+
+    const blocks = [];
+
+    // Лідери
+    const top3 = sorted.slice(0,3);
+    blocks.push(block('success','🏆','Лідери по валу',
+      top3.map((f,i) => {
+        const v = f.metrics.find(m=>m.lbl==='Вал');
+        return row(`${['🥇','🥈','🥉'][i]} ${f.name}`, v?.raw || '—', v?.st==='success'?'g':v?.st==='danger'?'r':'y');
+      }).join('') +
+      bullets([
+        `${leader.name} — найвищий вал серед всіх філій`,
+        brandOk.length ? `Бренд план виконали: ${brandOk.map(f=>f.name).join(', ')}` : 'Жодна філія не виконала план по Бренду'
+      ])
+    ));
+
+    // Аутсайдер
+    blocks.push(block('danger','🔴',`Увага — ${laggard.name}`,
+      laggard.metrics.map(m =>
+        row(m.lbl, m.raw, m.st==='success'?'g':m.st==='danger'?'r':'y')
+      ).join('') +
+      bullets([
+        `${laggard.name} потребує особливої уваги`,
+        zavBad.length > 1 ? `Низька завантаженість також у: ${zavBad.filter(f=>f.name!==laggard.name).map(f=>f.name).join(', ')}` : 'Решта філій тримає завантаженість'
+      ])
+    ));
+
+    // Бренд статус
+    blocks.push(block(brandBad.length > 3 ? 'danger' : 'warning','🏷️','Бренд Uklon по філіях',
+      fili.map(f => {
+        const b = f.metrics.find(m=>m.lbl==='Бренд');
+        return row(f.name, b?.raw||'—', b?.st==='success'?'g':b?.st==='danger'?'r':'y');
+      }).join('') +
+      bullets(brandOk.length
+        ? [`${brandOk.map(f=>f.name).join(', ')} — виконали план Бренду`,
+           `Вивчити їх практику завантаженості`]
+        : [`Всі філії нижче плану по Бренду`,`Головна причина — низька завантаженість`])
+    ));
+
+    // Одеса
+    blocks.push(block('info','🗺️','Одеса — підготовка до відкриття',
+      bullets([
+        'Відкриття: вересень 2026, 50 авто',
+        'Керівника філії потрібно шукати зараз',
+        'Рекрутинг водіїв — за 60 днів до відкриття',
+        '21 авто з Кореї (прибуття 03.06) — частина піде в Одесу'
+      ])
+    ));
+
+    return { subtitle: `Аналіз ${fili.length} філій · дані з екрану`, blocks };
+  }
+
+  function analyzeFleet() {
+    const fleet = readFleet();
+    const keys  = Object.keys(fleet);
+
+    const blocks = [];
+
+    // Зведення з флоту
+    if (keys.length) {
+      blocks.push(block('info','🚗','Поточний стан флоту',
+        keys.map(k => row(k, fleet[k])).join('') +
+        bullets([
+          'Простій без водія — головна причина втрат',
+          'Кожне авто що стоїть = ~1 300 грн/день недоотриманого вал',
+          'СТО у квітні +2.5pp vs норма — аномалія під контроль'
+        ])
+      ));
+    }
+
+    blocks.push(block('info','🚢','Авто з Кореї — 31 авто в дорозі',
+      row('У морі','11 авто') +
+      row('Вантажиться','18 авто','y') +
+      row('Придбано','2 авто') +
+      row('Найближче прибуття','03.06.2026','g') +
+      bullets([
+        'Порт: ЧРП (Чорноморськ)',
+        'Готувати 31 водія вже зараз — кожен день простою = збитки',
+        'New Rise — найдешевша у обслуговуванні (6 870 грн/міс)'
+      ])
+    ));
+
+    blocks.push(block('danger','⚙️','Хронічні авто — рішення потрібне',
+      bullets([
+        '7 авто з повторними поломками — кандидати на заміну',
+        'Logan після 250К км: слюсарка +40% від профілю (10 699 грн/міс)',
+        'Sonata LF — найдорожча (13 661 грн/міс)',
+        'Стратегія: продати через DriveMe Auto → купити New Rise'
+      ])
+    ));
+
+    return { subtitle: 'Стан парку 348 авто · дані з екрану', blocks };
+  }
+
+  function analyzePL() {
+    const kpis = readPlKpis();
+    const keys = Object.keys(kpis);
+
+    const blocks = [];
+
+    // KPI summary
+    if (keys.length) {
+      blocks.push(block('success','💰','Ключові P&L показники',
+        keys.map(k => {
+          const v = kpis[k];
+          const isRed = v.includes('-') || parseFloat(v) < 0;
+          return row(k, v, isRed?'r':'');
+        }).join('') +
+        bullets(['Revenue = Вал + Бренд + Страховки + Утримання з водіїв',
+                 'Take Rate 37.11% — частка парку від каси Uklon'])
+      ));
+    }
+
+    // Витрати
+    blocks.push(block('warning','📉','Витрати під контролем?',
+      row('ЗП / Доход','11.3%','r') +
+      row('Margin','17.68%','y') +
+      row('Витрати / Доход','82.4%','y') +
+      bullets([
+        'ЗП ростуть швидше за виручку — ризик маржинальності',
+        'Цільова margin: 20%+ → потрібен фінрез 9.48М',
+        'Ремонти Sonata LF найдорожчі — ротація на New Rise знизить'
+      ])
+    ));
+
+    // ROI
+    blocks.push(block('info','📈','ROI по філіях (річний прогноз)',
+      row('Запоріжжя','122%','g') +
+      row('Львів','108% + CashBack 3%','g') +
+      row('Дніпро','~90%','y') +
+      row('Вінниця','55%','r') +
+      bullets([
+        'Модель ЗП+ЗП дає кращий ROI ніж лізинг',
+        'Вінниця 30 авто — масштаб замалий для хорошого ROI',
+        'Збільшення Вінниці до 50 авто → ROI ~85%'
+      ])
+    ));
+
+    // Мотивація CEO
+    blocks.push(block('success','🎯','Мотивація CEO — Андрій',
+      row('Поточний бонус (3% ОП)','~222 360 грн','g') +
+      row('Ціль ОП','9.48М грн') +
+      row('Бонус при виконанні','~284 400 грн','g') +
+      bullets([
+        '+10.7pp завантаженості = +2.73М фінрез = +82К бонус CEO',
+        'Кожні 5 авто додаткових у роботі = +15К грн/міс до бонусу'
+      ])
+    ));
+
+    return { subtitle: 'Фінансовий звіт · дані з екрану', blocks };
+  }
+
+  function analyzeTeam() {
+    return {
+      subtitle: 'Команда та HR · квітень 2026',
+      blocks: [
+        block('danger','💸','CAC — вартість залучення водія',
+          row('Факт квітень','1 309 грн','r') +
+          row('Ціль','500 грн','g') +
+          row('Перевитрата','+162% 🔴','r') +
+          bullets(['Канал "Приведи друга": конверсія 95%, CAC ~200 грн',
+                   'Масштабувати реферальну програму — найдешевший канал'])
+        ),
+        block('warning','🔄','Воронка рекрутингу · квітень',
+          row('Заявки','591') +
+          row('Вийшли на роботу','156','y') +
+          row('Конверсія','26.4%','r') +
+          row('Звільнились','138','r') +
+          row('Чистий приріст','+18','y') +
+          bullets(['ДП-DM: -9 чистий — втрачаємо більше ніж набираємо',
+                   'Критична фаза: онбординг день 0–30'])
+        ),
+        block('success','🏅','Retention — кращі практики',
+          row('Львів (лідер)','1.71','g') +
+          row('Вінниця (аутсайдер)','0.59','r') +
+          bullets(['Розрив x3 — вивчити онбординг Львова',
+                   'EWS: водій без поїздок 3+ дні → дзвінок одразу',
+                   'Впровадити скрипт Львова в КР, ВН, ДП-1'])
+        ),
+        block('info','💡','Пріоритети HR зараз',
+          bullets(['Масштабувати "Приведи друга" у всіх 7 філіях',
+                   'Закрити вакансії: Маркетолог + Менеджер реклами',
+                   '31 водія під авто з Кореї — рекрутинг старт сьогодні',
+                   'Ціль травень: чистий приріст +40 водіїв'])
+        )
+      ]
+    };
+  }
+
+  // ── RENDER ────────────────────────────────────────────────
+  // (static fallback — замінений динамічними аналізаторами вище)
+  const AI_CONTENT_UNUSED = {
     'Дашборд': {
-      subtitle: 'Загальний огляд · Травень 2026',
+      subtitle: 'PLACEHOLDER',
       blocks: [
         {
           type: 'danger',
@@ -3296,20 +3687,24 @@
   };
 
   function renderAiPanel(tabName) {
-    const data = AI_CONTENT[tabName] || AI_CONTENT['Дашборд'];
+    // Вибрати динамічний аналізатор залежно від таба
+    let data;
+    if (tabName === 'Дашборд')   data = analyzeDashboard();
+    else if (tabName === 'Філії') data = analyzeFili();
+    else if (tabName === 'Флот')  data = analyzeFleet();
+    else if (tabName === 'P&L')   data = analyzePL();
+    else if (tabName === 'Команда') data = analyzeTeam();
+    else data = { subtitle: tabName, blocks: [block('info','📊','Розділ в розробці', bullets(['Аналіз буде додано найближчим часом']))] };
+
     aiSub.textContent = data.subtitle;
     aiBody.innerHTML = `<div class="ai-tab-label">Вкладка: ${tabName}</div>` +
-      data.blocks.map(b => `
-        <div class="ai-block ${b.type}">
-          <div class="ai-block-title">${b.icon} ${b.title}</div>
-          <div>${b.html}</div>
-        </div>
-      `).join('');
+      data.blocks.join('');
+    aiBody.scrollTop = 0;
   }
 
   function openAiPanel() {
     const activeTab = document.querySelector('.nav-tab.active');
-    const tabName = activeTab ? activeTab.textContent.replace('&', '&') : 'Дашборд';
+    const tabName = activeTab ? activeTab.textContent.trim() : 'Дашборд';
     renderAiPanel(tabName);
     aiPanel.classList.add('open');
     aiOverlay.classList.add('open');
