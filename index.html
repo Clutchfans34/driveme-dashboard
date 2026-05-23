@@ -93,20 +93,39 @@
     body.light .period-btn.active    { background: var(--accent); color: #fff; }
     body.light .pl-th-city           { color: var(--text) !important; }
 
-    /* ══ THEME TOGGLE BUTTON ══ */
+    /* ══ THEME TOGGLE SWITCH ══ */
     .theme-toggle {
-      width: 38px; height: 38px;
+      position: relative;
+      width: 56px; height: 28px;
       background: var(--bg3);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 18px;
+      border-radius: 100px;
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s, transform .2s;
-      line-height: 1;
+      transition: background .3s;
       flex-shrink: 0;
+      padding: 0;
     }
-    .theme-toggle:hover { background: var(--bg4); transform: scale(1.08); }
+    .theme-toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 20px; height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .3s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.35);
+      pointer-events: none;
+      line-height: 1;
+    }
+    body.light .theme-toggle {
+      background: #d0d8e8;
+    }
+    body.light .theme-toggle-thumb {
+      transform: translateX(28px);
+      background: #F07000;
+      box-shadow: 0 1px 6px rgba(240,112,0,.4);
+    }
 
     body::after {
       content: '';
@@ -1291,7 +1310,9 @@
     <div class="logo-motto">«Тільки перемога, тільки вперед!»</div>
   </div>
   <div class="header-right">
-    <button class="theme-toggle" id="themeToggle" title="Переключити тему">🌙</button>
+    <button class="theme-toggle" id="themeToggle" title="Переключити тему">
+      <span class="theme-toggle-thumb" id="themeThumb">🌙</span>
+    </button>
     <div class="live-pill"><div class="live-dot"></div>LIVE</div>
     <div class="header-date" id="hDate"></div>
   </div>
@@ -2828,14 +2849,15 @@
 
   // ── Theme toggle ──────────────────────────────────────────
   const themeToggle = document.getElementById('themeToggle');
-  const savedTheme = localStorage.getItem('dm-theme') || 'dark';
+  const themeThumb  = document.getElementById('themeThumb');
+  const savedTheme  = localStorage.getItem('dm-theme') || 'dark';
   if (savedTheme === 'light') {
     document.body.classList.add('light');
-    themeToggle.textContent = '☀️';
+    themeThumb.textContent = '☀️';
   }
   themeToggle.addEventListener('click', () => {
     const isLight = document.body.classList.toggle('light');
-    themeToggle.textContent = isLight ? '☀️' : '🌙';
+    themeThumb.textContent = isLight ? '☀️' : '🌙';
     localStorage.setItem('dm-theme', isLight ? 'light' : 'dark');
   });
 </script>
