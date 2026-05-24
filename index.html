@@ -3651,86 +3651,118 @@
   <!-- РЯДОК 2: БРЕНД ПІДСУМОК + ПИТАННЯ -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
 
-    <!-- ТАРИФИ + КОМІСІЇ UKLON -->
+    <!-- ТАРИФИ UKLON ПО КЛАСАХ -->
     <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
-      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">🚕 Тарифи Uklon по містах · Комісії</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Стандарт · дані квітень 2026 ✅</div>
-      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">🚕 Тарифи Uklon по класах · Квітень 2026 ✅</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">мін₴ / ₴ за км у місті</div>
+
+      <!-- Легенда класів -->
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <span style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(34,197,94,.12);color:#22c55e;border:1px solid rgba(34,197,94,.3);">Стандарт</span>
+        <span style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(34,158,217,.12);color:#229ED9;border:1px solid rgba(34,158,217,.3);">Комфорт</span>
+        <span style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.3);">Бізнес</span>
+        <span style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(168,85,247,.12);color:#a855f7;border:1px solid rgba(168,85,247,.3);">Дитячий</span>
+        <span style="padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(148,163,184,.12);color:var(--muted);border:1px solid var(--border);">Міжмісто</span>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;font-size:11px;">
         <thead>
-          <tr style="border-bottom:1px solid var(--border);">
-            <th style="text-align:left;padding:5px 0;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Місто</th>
-            <th style="text-align:center;padding:5px 4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Мін.₴ Ст.</th>
-            <th style="text-align:center;padding:5px 4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">₴/км Ст.</th>
-            <th style="text-align:center;padding:5px 4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">₴/км Біз.</th>
-            <th style="text-align:center;padding:5px 4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Take Rate</th>
-            <th style="text-align:right;padding:5px 0;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Ком.Uklon⚠️</th>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left;padding:5px 0;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;width:18%;">Місто</th>
+            <th style="text-align:center;padding:4px 2px;width:16%;">
+              <div style="color:#22c55e;font-size:10px;font-weight:700;">СТ.</div>
+              <div style="color:var(--muted);font-size:9px;">мін / км</div>
+            </th>
+            <th style="text-align:center;padding:4px 2px;width:16%;">
+              <div style="color:#229ED9;font-size:10px;font-weight:700;">КОМ.</div>
+              <div style="color:var(--muted);font-size:9px;">мін / км</div>
+            </th>
+            <th style="text-align:center;padding:4px 2px;width:16%;">
+              <div style="color:#f59e0b;font-size:10px;font-weight:700;">БІЗ.</div>
+              <div style="color:var(--muted);font-size:9px;">мін / км</div>
+            </th>
+            <th style="text-align:center;padding:4px 2px;width:17%;">
+              <div style="color:#a855f7;font-size:10px;font-weight:700;">ДИТ.</div>
+              <div style="color:var(--muted);font-size:9px;">мін / км</div>
+            </th>
+            <th style="text-align:center;padding:4px 2px;width:17%;">
+              <div style="color:var(--muted);font-size:10px;font-weight:700;">МІЖ.</div>
+              <div style="color:var(--muted);font-size:9px;">мін / км</div>
+            </th>
           </tr>
         </thead>
         <tbody>
+          <!-- ДП-1 -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">ДП-1 <span style="font-size:10px;color:var(--muted);font-weight:400;">DM</span></td>
-            <td style="text-align:center;padding:7px 4px;">100</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">12</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">12</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">37.35%</td>
-            <td style="text-align:right;color:var(--muted);">~10.3%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ДП-1<br><span style="font-size:9px;color:var(--muted);font-weight:400;">DRIVE ME</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">100 / 12</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">110 / 13</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">180 / 12</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- ДП-2 -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">ДП-2 <span style="font-size:10px;color:var(--muted);font-weight:400;">WU</span></td>
-            <td style="text-align:center;padding:7px 4px;">100</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">12</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">20.5</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">37.79%</td>
-            <td style="text-align:right;color:var(--muted);">~7.8%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ДП-2<br><span style="font-size:9px;color:var(--muted);font-weight:400;">WAY UP</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">100 / 12</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">110 / 13</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">15 / 20.5</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- ЗП -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">ЗП <span style="font-size:10px;color:var(--muted);font-weight:400;">DM</span></td>
-            <td style="text-align:center;padding:7px 4px;">90</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">13</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">16</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">38.82%</td>
-            <td style="text-align:right;color:var(--muted);">~7.1%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ЗП<br><span style="font-size:9px;color:var(--muted);font-weight:400;">DRIVE ME</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">90 / 13</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">95 / 14</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">110 / 16</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- КР -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">КР <span style="font-size:10px;color:var(--muted);font-weight:400;">DM</span></td>
-            <td style="text-align:center;padding:7px 4px;">90</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">10</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">14</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">36.43%</td>
-            <td style="text-align:right;color:var(--muted);">~8.1%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">КР<br><span style="font-size:9px;color:var(--muted);font-weight:400;">DRIVE ME</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">90 / 10</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">95 / 11</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">105 / 14</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- ПЛ -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">ПЛ <span style="font-size:10px;color:var(--muted);font-weight:400;">WU</span></td>
-            <td style="text-align:center;padding:7px 4px;">95</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">14.5</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">17</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">36.47%</td>
-            <td style="text-align:right;color:var(--muted);">~10.5%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ПЛ<br><span style="font-size:9px;color:var(--muted);font-weight:400;">WAY UP</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">95 / 14.5</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">100 / 16</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">20 / 17</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- ВН -->
           <tr style="border-bottom:1px solid var(--border);">
-            <td style="padding:8px 0;font-weight:700;">ВН <span style="font-size:10px;color:var(--muted);font-weight:400;">WU</span></td>
-            <td style="text-align:center;padding:7px 4px;">90</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;">16.3</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:600;">18.6</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">38.33%</td>
-            <td style="text-align:right;color:var(--muted);">~16.5%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ВН<br><span style="font-size:9px;color:var(--muted);font-weight:400;">WAY UP</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:600;">90 / 16.3</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:600;">82 / 13</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:600;">112 / 18.6</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
+          <!-- ЛВ -->
           <tr>
-            <td style="padding:8px 0;font-weight:700;">ЛВ 🏆 <span style="font-size:10px;color:var(--muted);font-weight:400;">DM</span></td>
-            <td style="text-align:center;padding:7px 4px;">100</td>
-            <td style="text-align:center;padding:7px 4px;font-weight:600;color:#22c55e;">22.5</td>
-            <td style="text-align:center;padding:7px 4px;color:#f59e0b;font-weight:700;">26.5</td>
-            <td style="text-align:center;padding:7px 4px;color:#229ED9;font-weight:700;">35.13%</td>
-            <td style="text-align:right;color:var(--muted);">~13.3%</td>
+            <td style="padding:7px 0;font-weight:700;font-size:12px;">ЛВ 🏆<br><span style="font-size:9px;color:var(--muted);font-weight:400;">DRIVE ME</span></td>
+            <td style="text-align:center;padding:6px 2px;color:#22c55e;font-weight:700;">100 / 22.5</td>
+            <td style="text-align:center;padding:6px 2px;color:#229ED9;font-weight:700;">90 / 20.5</td>
+            <td style="text-align:center;padding:6px 2px;color:#f59e0b;font-weight:700;">120 / 26.5</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
+            <td style="text-align:center;padding:6px 2px;color:var(--muted);">❓</td>
           </tr>
         </tbody>
       </table>
-      <div style="margin-top:14px;display:flex;flex-direction:column;gap:7px;">
-        <div style="padding:8px 12px;background:rgba(34,158,217,.08);border-radius:7px;border:1px solid rgba(34,158,217,.2);font-size:11px;">
-          💡 <strong>Take Rate</strong> = частка DriveMe від каси водія (35–38%). <strong>Ком. Uklon</strong> = (Revenue − Каса) / Revenue ⚠️ оцінка
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:7px;">
+        <div style="padding:7px 11px;background:rgba(148,163,184,.07);border-radius:7px;border:1px solid var(--border);font-size:10px;color:var(--muted);">
+          ❓ <strong>Дитячий та Міжмісто</strong> — дані відсутні. Уточнити у Влада Uklon.
         </div>
-        <div style="padding:8px 12px;background:rgba(34,197,94,.08);border-radius:7px;border:1px solid rgba(34,197,94,.2);font-size:11px;">
-          🟢 <strong>Львів CashBack +3%</strong> від валової каси: 5 553 584 × 3% = <strong>~166 607 грн</strong>/міс додатково
+        <div style="padding:7px 11px;background:rgba(34,197,94,.08);border-radius:7px;border:1px solid rgba(34,197,94,.2);font-size:10px;">
+          🟢 <strong>Львів CashBack +3%</strong> від валової каси: 5 553 584 × 3% = <strong>~166 607 грн</strong>/міс
         </div>
       </div>
     </div>
