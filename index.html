@@ -865,40 +865,52 @@
     .c-accent { color: var(--accent); }
 
     /* ══ PULSE ANIMATIONS — червоні критичні показники ══ */
-    @keyframes pulse-text-red {
-      0%, 100% { text-shadow: none; opacity: 1; }
-      50%       { text-shadow: 0 0 14px rgba(239,68,68,.85); opacity: .82; }
-    }
     @keyframes pulse-badge-red {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
-      50%       { box-shadow: 0 0 0 3px rgba(239,68,68,.28), 0 0 12px rgba(239,68,68,.35); }
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239,68,68,0);
+        background: rgba(239,68,68,.15);
+      }
+      50% {
+        box-shadow: 0 0 0 3px rgba(239,68,68,.5), 0 0 18px rgba(239,68,68,.6);
+        background: rgba(239,68,68,.38);
+      }
+    }
+    @keyframes pulse-text-red {
+      0%, 100% {
+        text-shadow: none;
+        color: #ef4444;
+      }
+      50% {
+        text-shadow: 0 0 10px rgba(239,68,68,.9), 0 0 20px rgba(239,68,68,.5);
+        color: #ff6b6b;
+      }
     }
     @keyframes pulse-bar-red {
       0%, 100% { box-shadow: none; filter: brightness(1); }
-      50%       { box-shadow: 0 0 10px rgba(239,68,68,.6); filter: brightness(1.15); }
+      50%       { box-shadow: 0 0 14px rgba(239,68,68,.8), 0 0 4px rgba(239,68,68,1); filter: brightness(1.3); }
     }
 
-    /* Текстові червоні значення */
-    .fil-mval.r,
-    .pct-r,
-    .td-bad,
-    .c-red { animation: pulse-text-red 2.4s ease-in-out infinite; }
+    /* Бейджі з % (pct-r, badge-red, badge.down) */
+    .pct-r        { animation: pulse-badge-red 2s ease-in-out infinite; }
+    .badge-red    { animation: pulse-badge-red 2s ease-in-out infinite; }
+    .badge.down   { animation: pulse-badge-red 2s ease-in-out infinite; }
 
-    /* Червоні бейджі */
-    .badge-red,
-    .badge.down { animation: pulse-badge-red 2.4s ease-in-out infinite; }
+    /* Текстові червоні значення */
+    .fil-mval.r   { animation: pulse-text-red 2s ease-in-out infinite; }
+    .td-bad       { animation: pulse-text-red 2s ease-in-out infinite; }
+    .c-red        { animation: pulse-text-red 2s ease-in-out infinite; }
 
     /* Червоні прогрес-бари */
-    .kpi-bar-fill.red,
-    .plan-bar-fill[style*="#ef4444"] { animation: pulse-bar-red 2.4s ease-in-out infinite; }
+    .kpi-bar-fill.red              { animation: pulse-bar-red 2s ease-in-out infinite; }
+    .plan-bar-fill[style*="ef4444"]{ animation: pulse-bar-red 2s ease-in-out infinite; }
 
-    /* Вимкнути пульс у світлій темі — менш агресивно */
-    body.light .fil-mval.r,
+    /* Світла тема — повільніше */
     body.light .pct-r,
-    body.light .td-bad,
-    body.light .c-red       { animation-duration: 3.5s; }
     body.light .badge-red,
-    body.light .badge.down  { animation-duration: 3.5s; }
+    body.light .badge.down,
+    body.light .fil-mval.r,
+    body.light .td-bad,
+    body.light .c-red { animation-duration: 3s; }
     .fw8 { font-weight: 800; }
 
     /* ── ALERTS ── */
