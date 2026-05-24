@@ -1604,6 +1604,8 @@
   <div class="nav-tab active">Дашборд</div>
   <div class="nav-tab">Філії</div>
   <div class="nav-tab">Флот</div>
+  <div class="nav-tab">Водії</div>
+  <div class="nav-tab">HR</div>
   <div class="nav-tab">Команда</div>
   <div class="nav-tab">P&amp;L</div>
   <div class="nav-tab">Аналітика</div>
@@ -2711,6 +2713,38 @@
 </div><!-- /fleet-page -->
 </section><!-- /tab-fleet -->
 
+<!-- ── ВОДІЇ ── -->
+<section class="tab-section" id="tab-drivers" style="display:none">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
+    <div style="width:44px;height:44px;background:rgba(240,112,0,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🚗</div>
+    <div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-.5px;">Водії</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px;">Lifecycle водія · онбординг · утримання · реактивація</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;height:340px;flex-direction:column;gap:14px;color:var(--muted);border:1px dashed var(--border);border-radius:16px;">
+    <div style="font-size:40px;">🚧</div>
+    <div style="font-size:15px;font-weight:600;">Розділ у розробці</div>
+    <div style="font-size:13px;opacity:.7;">Тут буде аналітика по водіях: lifecycle, EWS, онбординг, ротація</div>
+  </div>
+</section><!-- /tab-drivers -->
+
+<!-- ── HR ── -->
+<section class="tab-section" id="tab-hr" style="display:none">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
+    <div style="width:44px;height:44px;background:rgba(168,85,247,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">👥</div>
+    <div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-.5px;">HR</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px;">Рекрутинг · воронка · CAC · утримання команди</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;height:340px;flex-direction:column;gap:14px;color:var(--muted);border:1px dashed var(--border);border-radius:16px;">
+    <div style="font-size:40px;">🚧</div>
+    <div style="font-size:15px;font-weight:600;">Розділ у розробці</div>
+    <div style="font-size:13px;opacity:.7;">Тут буде HR-аналітика: воронка 591→156, CAC, retention, мотивація</div>
+  </div>
+</section><!-- /tab-hr -->
+
 <!-- P&L TAB -->
 <section class="tab-section" id="tab-pl">
 <div class="pl-page">
@@ -3041,11 +3075,14 @@
     'Новини':   'tab-news',
     'Дашборд':  'tab-dashboard',
     'Філії':    'tab-filii',
-    'Команда':  'tab-team',
     'Флот':     'tab-fleet',
+    'Водії':    'tab-drivers',
+    'HR':       'tab-hr',
+    'Команда':  'tab-team',
     'P&L':      'tab-pl',
+    'Аналітика':'tab-analytics',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-pl'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-drivers','tab-hr','tab-pl','tab-analytics'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
