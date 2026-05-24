@@ -1608,6 +1608,7 @@
   <div class="nav-tab">HR</div>
   <div class="nav-tab">Команда</div>
   <div class="nav-tab">P&amp;L</div>
+  <div class="nav-tab">Uklon</div>
   <div class="nav-tab">Аналітика</div>
   <button class="nav-tasks-btn" id="tasksBtn">ЗАДАЧІ</button>
 </nav>
@@ -3497,6 +3498,291 @@
 </div><!-- /pl-page -->
 </section><!-- /tab-pl -->
 
+<!-- ── UKLON ── -->
+<section class="tab-section" id="tab-uklon" style="display:none">
+
+  <!-- HEADER -->
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
+    <div style="width:44px;height:44px;background:rgba(0,180,120,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">🟢</div>
+    <div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-.5px;">Uklon — Партнер</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:2px;">Тарифи · Бренд · Контакти · Питання на порядку денному</div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:10px;">
+      <a href="https://t.me/vlad_uklon" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;background:rgba(34,158,217,.12);border:1px solid rgba(34,158,217,.35);border-radius:10px;color:#229ED9;font-size:12px;font-weight:700;text-decoration:none;transition:background .18s;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;flex-shrink:0;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Влад Uklon
+      </a>
+      <a href="https://t.me/ivan_uklon" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;background:rgba(34,158,217,.12);border:1px solid rgba(34,158,217,.35);border-radius:10px;color:#229ED9;font-size:12px;font-weight:700;text-decoration:none;transition:background .18s;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;flex-shrink:0;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Іван Uklon
+      </a>
+      <a href="https://t.me/kostiantyn_uklon" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:34px;background:rgba(34,158,217,.12);border:1px solid rgba(34,158,217,.35);border-radius:10px;color:#229ED9;font-size:12px;font-weight:700;text-decoration:none;transition:background .18s;">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:14px;height:14px;flex-shrink:0;"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Костянтин Uklon
+      </a>
+    </div>
+  </div>
+
+  <!-- РЯДОК 1: ТАРИФИ БРЕНДУ ПО МІСТАХ -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:20px;">
+    <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:20px;">🏷️ Тарифна сітка Бренду Uklon по містах · підтверджено 16.05.2026</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;">
+
+      <!-- ДНІПРО DM -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Дніпро DM<br><span style="color:var(--accent)">ДП-1 · 49 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">700+</span><span style="font-weight:700;color:#22c55e;">5 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(245,158,11,.1);border-radius:6px;border:1px solid rgba(245,158,11,.2);">
+            <span style="color:var(--muted);">600–699</span><span style="font-weight:700;color:#f59e0b;">3 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 600</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:var(--text);">3 000 ₴/авто</strong><br>→ всі у 600–699</div>
+      </div>
+
+      <!-- ДНІПРО WU -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Дніпро WU<br><span style="color:#6366f1">ДП-2 · 71 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">700+</span><span style="font-weight:700;color:#22c55e;">5 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(245,158,11,.1);border-radius:6px;border:1px solid rgba(245,158,11,.2);">
+            <span style="color:var(--muted);">600–699</span><span style="font-weight:700;color:#f59e0b;">3 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 600</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:var(--text);">~2 887 ₴/авто</strong><br>→ 5 авто на 700+</div>
+      </div>
+
+      <!-- ЗАПОРІЖЖЯ -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Запоріжжя<br><span style="color:#22c55e">ЗП · 43 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">400+</span><span style="font-weight:700;color:#22c55e;">4 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 400</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:#22c55e;">101.2% ✅</strong><br>→ ~39/43 авто досягли</div>
+      </div>
+
+      <!-- КРИВИЙ РІГ -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Кривий Ріг<br><span style="color:#f59e0b">КР · 50 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">500+</span><span style="font-weight:700;color:#22c55e;">3 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 500</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:#f59e0b;">91.1%</strong><br>→ 41/50 авто досягли</div>
+      </div>
+
+      <!-- ПОЛТАВА -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Полтава<br><span style="color:#a855f7">ПЛ · 64 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">700+</span><span style="font-weight:700;color:#22c55e;">7 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 700</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:#f59e0b;">81.6%</strong><br>→ 47/64 досягли 700+</div>
+      </div>
+
+      <!-- ВІННИЦЯ -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Вінниця<br><span style="color:#ec4899">ВН · 30 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">700+</span><span style="font-weight:700;color:#22c55e;">7 500 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(245,158,11,.1);border-radius:6px;border:1px solid rgba(245,158,11,.2);">
+            <span style="color:var(--muted);">500–699</span><span style="font-weight:700;color:#f59e0b;">5 500 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 500</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:#ef4444;">54.1% 🔴</strong><br>→ ~20/30 у 500–699</div>
+      </div>
+
+      <!-- ЛЬВІВ -->
+      <div style="background:var(--bg3);border-radius:12px;padding:14px;border:1px solid rgba(34,197,94,.25);">
+        <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">Львів 🏆<br><span style="color:#22c55e">ЛВ · 41 авто</span></div>
+        <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.15);border-radius:6px;border:1px solid rgba(34,197,94,.3);">
+            <span style="color:var(--muted);">750+</span><span style="font-weight:700;color:#22c55e;">12 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(34,197,94,.1);border-radius:6px;border:1px solid rgba(34,197,94,.2);">
+            <span style="color:var(--muted);">650–749</span><span style="font-weight:700;color:#22c55e;">9 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(245,158,11,.1);border-radius:6px;border:1px solid rgba(245,158,11,.2);">
+            <span style="color:var(--muted);">500–649</span><span style="font-weight:700;color:#f59e0b;">7 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:rgba(245,158,11,.08);border-radius:6px;">
+            <span style="color:var(--muted);">400–499</span><span style="font-weight:700;color:#f59e0b;">5 000 ₴</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 8px;background:var(--bg2);border-radius:6px;">
+            <span style="color:var(--muted);">&lt; 400</span><span style="color:var(--muted);">0 ₴</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Факт кві: <strong style="color:#22c55e;">127.5% 🏆</strong><br>+ CashBack 3% від вал. каси</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- РЯДОК 2: БРЕНД ПІДСУМОК + ПИТАННЯ -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+    <!-- БРЕНД ВИПЛАТИ ПІДСУМОК -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:18px;">💰 Бренд Uklon — Факт Квітень 2026</div>
+      <table style="width:100%;border-collapse:collapse;font-size:13px;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left;padding:6px 0;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;">Місто</th>
+            <th style="text-align:center;padding:6px 8px;color:var(--muted);font-size:11px;font-weight:600;">Факт (грн)</th>
+            <th style="text-align:center;padding:6px 8px;color:var(--muted);font-size:11px;font-weight:600;">План (грн)</th>
+            <th style="text-align:center;padding:6px 8px;color:var(--muted);font-size:11px;font-weight:600;">%</th>
+            <th style="text-align:right;padding:6px 0;color:var(--muted);font-size:11px;font-weight:600;">₴/авто</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">ЛВ 🏆</td>
+            <td style="text-align:center;padding:8px;color:#22c55e;font-weight:700;">564 620</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">442 800</td>
+            <td style="text-align:center;padding:8px;color:#22c55e;font-weight:700;">127.5% ✅</td>
+            <td style="text-align:right;font-weight:700;">13 771</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">ПЛ</td>
+            <td style="text-align:center;padding:8px;font-weight:600;">329 000</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">403 200</td>
+            <td style="text-align:center;padding:8px;color:#f59e0b;font-weight:700;">81.6%</td>
+            <td style="text-align:right;">5 141</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">ЗП</td>
+            <td style="text-align:center;padding:8px;color:#22c55e;font-weight:700;">156 627</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">154 800</td>
+            <td style="text-align:center;padding:8px;color:#22c55e;font-weight:700;">101.2% ✅</td>
+            <td style="text-align:right;">3 643</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">ДП-2</td>
+            <td style="text-align:center;padding:8px;font-weight:600;">205 000</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">319 500</td>
+            <td style="text-align:center;padding:8px;color:#ef4444;font-weight:700;">64.2% 🔴</td>
+            <td style="text-align:right;">2 887</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">КР</td>
+            <td style="text-align:center;padding:8px;font-weight:600;">123 000</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">135 000</td>
+            <td style="text-align:center;padding:8px;color:#f59e0b;font-weight:700;">91.1%</td>
+            <td style="text-align:right;">2 460</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 0;font-weight:700;">ДП-1</td>
+            <td style="text-align:center;padding:8px;font-weight:600;">147 000</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">220 500</td>
+            <td style="text-align:center;padding:8px;color:#ef4444;font-weight:700;">66.7% 🔴</td>
+            <td style="text-align:right;">3 000</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0;font-weight:700;">ВН</td>
+            <td style="text-align:center;padding:8px;font-weight:600;">109 500</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">202 500</td>
+            <td style="text-align:center;padding:8px;color:#ef4444;font-weight:700;">54.1% 🔴</td>
+            <td style="text-align:right;">3 650</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr style="border-top:2px solid var(--border);">
+            <td style="padding:10px 0;font-weight:700;">ВСЬОГО</td>
+            <td style="text-align:center;padding:8px;font-weight:900;font-size:15px;color:#f59e0b;">1 634 747</td>
+            <td style="text-align:center;padding:8px;color:var(--muted);">1 878 300</td>
+            <td style="text-align:center;padding:8px;font-weight:700;color:#f59e0b;">87.0%</td>
+            <td style="text-align:right;font-weight:700;">4 699</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(34,197,94,.08);border-radius:8px;border:1px solid rgba(34,197,94,.2);font-size:12px;">
+        🟢 <strong>Львів CashBack 3%</strong> від валової каси (Revenue): 5 553 584 × 3% = <strong>~166 607 грн</strong> додатково
+      </div>
+    </div>
+
+    <!-- ПИТАННЯ НА ПОРЯДКУ ДЕННОМУ -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+      <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:18px;">📋 Питання на порядку денному з Uklon</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <div style="padding:12px 14px;background:rgba(239,68,68,.08);border-radius:10px;border:1px solid rgba(239,68,68,.2);border-left:3px solid #ef4444;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">🚕 Інклюзивний клас — Дніпро</div>
+          <div style="font-size:12px;color:var(--muted);">Запуск нового класу замовлень для маломобільних пасажирів. Умови участі, вимоги до авто, додаткова виплата.</div>
+          <div style="margin-top:6px;font-size:11px;color:#ef4444;font-weight:600;">🔴 Статус: уточнити у Влада</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(99,102,241,.08);border-radius:10px;border:1px solid rgba(99,102,241,.2);border-left:3px solid #6366f1;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">🌍 Ташкент — міжнародний напрямок</div>
+          <div style="font-size:12px;color:var(--muted);">Uklon присутній в Узбекистані. Обговорення можливості партнерства/відкриття DriveMe Ташкент.</div>
+          <div style="margin-top:6px;font-size:11px;color:#6366f1;font-weight:600;">🔵 Статус: попередні переговори</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(245,158,11,.08);border-radius:10px;border:1px solid rgba(245,158,11,.2);border-left:3px solid #f59e0b;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">💳 Лізинг через Uklon</div>
+          <div style="font-size:12px;color:var(--muted);">Програма лізингу авто для водіїв від Uklon. Умови, відсоткова ставка, термін. Порівняти з ULF.</div>
+          <div style="margin-top:6px;font-size:11px;color:#f59e0b;font-weight:600;">🟡 Статус: запросити умови</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(34,197,94,.08);border-radius:10px;border:1px solid rgba(34,197,94,.2);border-left:3px solid #22c55e;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">🗺️ Одеса — відкриття вересень 2026</div>
+          <div style="font-size:12px;color:var(--muted);">Умови роботи Uklon в Одесі, тарифна сітка Бренду, квота на авто, підтримка при відкритті.</div>
+          <div style="margin-top:6px;font-size:11px;color:#22c55e;font-weight:600;">🟢 Статус: активні переговори</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(168,85,247,.08);border-radius:10px;border:1px solid rgba(168,85,247,.2);border-left:3px solid #a855f7;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">📊 Звіти з показниками від Влада</div>
+          <div style="font-size:12px;color:var(--muted);">Регулярні аналітичні звіти від Uklon: поїздки по авто, завантаження, середній чек, рейтинги.</div>
+          <div style="margin-top:6px;font-size:11px;color:#a855f7;font-weight:600;">🟣 Статус: налаштувати регулярну передачу</div>
+        </div>
+
+        <div style="padding:12px 14px;background:rgba(34,158,217,.08);border-radius:10px;border:1px solid rgba(34,158,217,.2);border-left:3px solid #229ED9;">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">🏢 Корпоративні клієнти — нова система оплати</div>
+          <div style="font-size:12px;color:var(--muted);">Uklon запускає корпоративний кабінет для бізнесу. Можливість залучення B2B замовлень для DriveMe.</div>
+          <div style="margin-top:6px;font-size:11px;color:#229ED9;font-weight:600;">🔵 Статус: вивчити умови участі</div>
+        </div>
+
+        <div style="padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border);border-left:3px solid var(--muted);">
+          <div style="font-weight:700;font-size:13px;margin-bottom:4px;">➕ Інші питання</div>
+          <div style="font-size:12px;color:var(--muted);">Зміни тарифної сітки · Нові класи авто · Рейтингова система водіїв · Акції Uklon</div>
+          <div style="margin-top:6px;font-size:11px;color:var(--muted);font-weight:600;">⬜ На опрацювання</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</section><!-- /tab-uklon -->
+
 <script>
   // ── TASKS ──
   const overlay   = document.getElementById('tasksOverlay');
@@ -3578,9 +3864,10 @@
     'HR':       'tab-hr',
     'Команда':  'tab-team',
     'P&L':      'tab-pl',
+    'Uklon':    'tab-uklon',
     'Аналітика':'tab-analytics',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-drivers','tab-hr','tab-pl','tab-analytics'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
