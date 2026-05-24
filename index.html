@@ -1467,6 +1467,63 @@
   .fil-coming { opacity:0.8; }
   .fil-coming-tag { display:inline-flex; align-items:center; gap:6px; background:rgba(244,63,94,.12); color:#F43F5E; border:1px solid rgba(244,63,94,.3); border-radius:8px; padding:8px 16px; font-size:16px; font-weight:700; letter-spacing:.4px; margin-top:12px; }
   .fil-coming-plan { font-size:14px; color:var(--muted); margin-top:10px; line-height:1.5; }
+
+  /* ══ NEWS TAB ══ */
+  .news-wrapper { padding:24px 32px 32px; max-width:860px; margin:0 auto; }
+  .news-header-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; }
+  .news-eyebrow { font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+  .news-title { font-size:28px; font-weight:900; letter-spacing:-0.5px; }
+  .news-add-btn { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:0 20px; height:38px; font-size:13px; font-weight:700; cursor:pointer; transition:opacity .2s; }
+  .news-add-btn:hover { opacity:.85; }
+
+  .news-feed { display:flex; flex-direction:column; gap:14px; }
+
+  .news-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:20px 22px; display:flex; gap:16px; border-left:4px solid transparent; transition:background .2s; }
+  .news-card:hover { background:var(--bg3); }
+  .news-card.info    { border-left-color:#6366F1; }
+  .news-card.success { border-left-color:#22C55E; }
+  .news-card.warning { border-left-color:#F59E0B; }
+  .news-card.danger  { border-left-color:#EF4444; }
+  .news-card.fleet   { border-left-color:#06B6D4; }
+  .news-card.hr      { border-left-color:#A855F7; }
+  .news-card.finance { border-left-color:#F07000; }
+
+  .news-icon { font-size:26px; flex-shrink:0; margin-top:2px; }
+  .news-body { flex:1; }
+  .news-meta { display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+  .news-tag { font-size:10px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; padding:2px 8px; border-radius:5px; background:var(--bg3); color:var(--muted); }
+  .news-filia { font-size:11px; font-weight:700; color:var(--accent); }
+  .news-date { font-size:11px; color:var(--muted); margin-left:auto; }
+  .news-card-title { font-size:16px; font-weight:800; margin-bottom:6px; line-height:1.3; }
+  .news-card-text { font-size:13px; color:var(--muted2); line-height:1.6; }
+  .news-del { background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; padding:4px 8px; border-radius:6px; flex-shrink:0; opacity:.5; transition:opacity .2s; }
+  .news-del:hover { opacity:1; color:var(--red); }
+
+  .news-empty { text-align:center; padding:60px 20px; color:var(--muted); }
+  .news-empty-icon { font-size:48px; margin-bottom:12px; }
+  .news-empty-text { font-size:15px; }
+
+  /* Modal */
+  .news-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:800; opacity:0; pointer-events:none; transition:opacity .25s; }
+  .news-modal-overlay.open { opacity:1; pointer-events:all; }
+  .news-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-54%); width:520px; max-width:calc(100vw - 32px); background:var(--bg2); border:1px solid var(--border); border-radius:20px; z-index:801; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; }
+  .news-modal.open { opacity:1; pointer-events:all; transform:translate(-50%,-50%); }
+  .news-modal-header { display:flex; align-items:center; justify-content:space-between; padding:20px 24px 16px; border-bottom:1px solid var(--border); }
+  .news-modal-title { font-size:17px; font-weight:800; }
+  .news-modal-close { background:var(--bg3); border:1px solid var(--border); border-radius:8px; width:30px; height:30px; cursor:pointer; color:var(--muted); font-size:15px; display:flex; align-items:center; justify-content:center; }
+  .news-modal-body { padding:20px 24px 24px; display:flex; flex-direction:column; gap:14px; }
+  .news-form-group { display:flex; flex-direction:column; gap:5px; }
+  .news-form-row { display:flex; gap:12px; }
+  .news-form-label { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); }
+  .news-form-input, .news-form-textarea, .news-form-select { background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:14px; font-family:inherit; width:100%; box-sizing:border-box; transition:border-color .2s; }
+  .news-form-input:focus, .news-form-textarea:focus, .news-form-select:focus { outline:none; border-color:var(--accent); }
+  .news-form-textarea { height:90px; resize:none; }
+  .news-form-submit { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; transition:opacity .2s; }
+  .news-form-submit:hover { opacity:.85; }
+
+  body.light .news-form-input,
+  body.light .news-form-textarea,
+  body.light .news-form-select { background:var(--bg3); color:var(--text); }
   </style>
 </head>
 <body>
@@ -1513,6 +1570,7 @@
 
 <!-- NAV -->
 <nav class="nav">
+  <div class="nav-tab">Новини</div>
   <div class="nav-tab active">Дашборд</div>
   <div class="nav-tab">Філії</div>
   <div class="nav-tab">Флот</div>
@@ -1537,6 +1595,69 @@
   <div class="tasks-footer">
     <div class="tasks-count" id="tasksCount">0 задач</div>
     <button class="tasks-clear" id="tasksClear">Очистити виконані</button>
+  </div>
+</div>
+
+<!-- NEWS TAB -->
+<section class="tab-section" id="tab-news" style="display:none">
+  <div class="news-wrapper">
+    <div class="news-header-row">
+      <div>
+        <div class="news-eyebrow">СТРІЧКА НОВИН</div>
+        <div class="news-title">Новини DriveMe</div>
+      </div>
+      <button class="news-add-btn" id="newsAddBtn">+ Додати новину</button>
+    </div>
+    <div class="news-feed" id="newsFeed">
+      <!-- новини рендеряться JS'ом -->
+    </div>
+  </div>
+</section>
+
+<!-- ADD NEWS MODAL -->
+<div class="news-modal-overlay" id="newsModalOverlay"></div>
+<div class="news-modal" id="newsModal">
+  <div class="news-modal-header">
+    <div class="news-modal-title">Нова новина</div>
+    <button class="news-modal-close" id="newsModalClose">✕</button>
+  </div>
+  <div class="news-modal-body">
+    <div class="news-form-group">
+      <label class="news-form-label">Заголовок</label>
+      <input class="news-form-input" id="newsTitle" placeholder="Наприклад: Львів виконав план по Бренду!" />
+    </div>
+    <div class="news-form-group">
+      <label class="news-form-label">Текст</label>
+      <textarea class="news-form-textarea" id="newsText" placeholder="Деталі..."></textarea>
+    </div>
+    <div class="news-form-row">
+      <div class="news-form-group" style="flex:1">
+        <label class="news-form-label">Тег</label>
+        <select class="news-form-select" id="newsTag">
+          <option value="info">📋 Загальне</option>
+          <option value="success">✅ Успіх</option>
+          <option value="warning">⚠️ Увага</option>
+          <option value="danger">🔴 Критично</option>
+          <option value="fleet">🚗 Флот</option>
+          <option value="hr">👥 HR</option>
+          <option value="finance">💰 Фінанси</option>
+        </select>
+      </div>
+      <div class="news-form-group" style="flex:1">
+        <label class="news-form-label">Філія (або залиш порожнім)</label>
+        <select class="news-form-select" id="newsFilia">
+          <option value="">— Всі філії —</option>
+          <option value="ДП-1">Дніпро ДП-1</option>
+          <option value="ДП-2">Дніпро 2 ДП-2</option>
+          <option value="ЗП">Запоріжжя ЗП</option>
+          <option value="КР">Кривий Ріг КР</option>
+          <option value="ПЛ">Полтава ПЛ</option>
+          <option value="ВН">Вінниця ВН</option>
+          <option value="ЛВ">Львів ЛВ</option>
+        </select>
+      </div>
+    </div>
+    <button class="news-form-submit" id="newsSubmit">Опублікувати</button>
   </div>
 </div>
 
@@ -2866,13 +2987,14 @@
 
   // Nav tabs with section switching
   const tabMap = {
+    'Новини':   'tab-news',
     'Дашборд':  'tab-dashboard',
     'Філії':    'tab-filii',
     'Команда':  'tab-team',
     'Флот':     'tab-fleet',
     'P&L':      'tab-pl',
   };
-  const allSections = ['tab-dashboard','tab-filii','tab-team','tab-fleet','tab-pl'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-pl'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
@@ -3778,6 +3900,116 @@
       }
     });
   });
+
+  // ── NEWS MODULE ───────────────────────────────────────────
+  const NEWS_KEY = 'dm-news';
+  const TAG_MAP = {
+    info:    { label:'Загальне',  icon:'📋' },
+    success: { label:'Успіх',    icon:'✅' },
+    warning: { label:'Увага',    icon:'⚠️' },
+    danger:  { label:'Критично', icon:'🔴' },
+    fleet:   { label:'Флот',     icon:'🚗' },
+    hr:      { label:'HR',       icon:'👥' },
+    finance: { label:'Фінанси',  icon:'💰' },
+  };
+
+  function loadNews() {
+    try { return JSON.parse(localStorage.getItem(NEWS_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveNews(arr) { localStorage.setItem(NEWS_KEY, JSON.stringify(arr)); }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('uk-UA', { day:'numeric', month:'short', year:'numeric' })
+      + ' ' + d.toLocaleTimeString('uk-UA', { hour:'2-digit', minute:'2-digit' });
+  }
+
+  function renderNews() {
+    const feed = document.getElementById('newsFeed');
+    const items = loadNews();
+    if (!items.length) {
+      feed.innerHTML = `<div class="news-empty">
+        <div class="news-empty-icon">📰</div>
+        <div class="news-empty-text">Новин ще немає.<br>Натисни «+ Додати новину» щоб опублікувати першу.</div>
+      </div>`;
+      return;
+    }
+    feed.innerHTML = items.slice().reverse().map((n, i) => {
+      const realIdx = items.length - 1 - i;
+      const tag = TAG_MAP[n.tag] || TAG_MAP.info;
+      return `<div class="news-card ${n.tag}">
+        <div class="news-icon">${tag.icon}</div>
+        <div class="news-body">
+          <div class="news-meta">
+            <span class="news-tag">${tag.label}</span>
+            ${n.filia ? `<span class="news-filia">${n.filia}</span>` : ''}
+            <span class="news-date">${formatDate(n.date)}</span>
+          </div>
+          <div class="news-card-title">${n.title}</div>
+          ${n.text ? `<div class="news-card-text">${n.text}</div>` : ''}
+        </div>
+        <button class="news-del" onclick="deleteNews(${realIdx})" title="Видалити">✕</button>
+      </div>`;
+    }).join('');
+  }
+
+  window.deleteNews = function(idx) {
+    const items = loadNews();
+    items.splice(idx, 1);
+    saveNews(items);
+    renderNews();
+  };
+
+  // Modal open/close
+  const newsAddBtn       = document.getElementById('newsAddBtn');
+  const newsModal        = document.getElementById('newsModal');
+  const newsModalOverlay = document.getElementById('newsModalOverlay');
+  const newsModalClose   = document.getElementById('newsModalClose');
+
+  function openNewsModal() {
+    newsModal.classList.add('open');
+    newsModalOverlay.classList.add('open');
+    document.getElementById('newsTitle').focus();
+  }
+  function closeNewsModal() {
+    newsModal.classList.remove('open');
+    newsModalOverlay.classList.remove('open');
+    document.getElementById('newsTitle').value = '';
+    document.getElementById('newsText').value = '';
+    document.getElementById('newsTag').value = 'info';
+    document.getElementById('newsFilia').value = '';
+  }
+
+  newsAddBtn.addEventListener('click', openNewsModal);
+  newsModalClose.addEventListener('click', closeNewsModal);
+  newsModalOverlay.addEventListener('click', closeNewsModal);
+
+  document.getElementById('newsSubmit').addEventListener('click', () => {
+    const title = document.getElementById('newsTitle').value.trim();
+    if (!title) { document.getElementById('newsTitle').focus(); return; }
+    const items = loadNews();
+    items.push({
+      title,
+      text:  document.getElementById('newsText').value.trim(),
+      tag:   document.getElementById('newsTag').value,
+      filia: document.getElementById('newsFilia').value,
+      date:  new Date().toISOString(),
+    });
+    saveNews(items);
+    renderNews();
+    closeNewsModal();
+  });
+
+  // Init with default news if empty
+  if (!loadNews().length) {
+    saveNews([
+      { title:'Львів виконав план по Бренду на 127.5% 🏆', text:'Філія Львів вперше перевищила план по Бренду Uklon. Завантаженість 95%+, рекрутинг зразковий.', tag:'success', filia:'ЛВ', date: new Date(Date.now() - 2*86400000).toISOString() },
+      { title:'Авто з Кореї — прибуття 03.06.2026', text:'11 авто вже у морі, 18 вантажиться. Порт ЧРП. Готуємо 31 водія для прийому флоту.', tag:'fleet', filia:'', date: new Date(Date.now() - 86400000).toISOString() },
+      { title:'Бренд Uklon — критичне відставання 🔴', text:'Загальний Бренд 1.63М при плані 2.44М (66.8%). Головна причина — завантаженість 79.3% vs ціль 90%.', tag:'danger', filia:'', date: new Date().toISOString() },
+    ]);
+  }
+  renderNews();
 </script>
 </body>
 </html>
