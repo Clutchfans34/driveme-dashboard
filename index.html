@@ -1153,6 +1153,54 @@
     .pl-mon-btn.disabled {
       opacity: 0.3; cursor: not-allowed;
     }
+
+    /* ── DASHBOARD YEAR PICKER ── */
+    .dash-year-wrap {
+      position: relative;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+    .dash-year-btn {
+      display: flex; align-items: center; gap: 4px;
+      padding: 6px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 800;
+      color: var(--text);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      cursor: pointer; transition: all .18s;
+      white-space: nowrap; letter-spacing: .5px;
+      user-select: none;
+    }
+    .dash-year-btn:hover { border-color: rgba(240,112,0,.4); }
+    .dash-year-arrow {
+      font-size: 10px; color: var(--muted);
+      transition: transform .2s;
+    }
+    .dash-year-wrap.open .dash-year-arrow { transform: rotate(180deg); }
+    .dash-year-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 200;
+      min-width: 90px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .dash-year-wrap.open .dash-year-dropdown { display: block; }
+    .dash-year-opt {
+      padding: 10px 16px;
+      font-size: 13px; font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .dash-year-opt:hover { background: var(--bg4); color: var(--text); }
+    .dash-year-opt.selected { color: var(--accent); }
+    #dashMonthBtns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
     /* NO DATA PLACEHOLDER */
     .pl-no-data {
       display: none;
@@ -1800,20 +1848,33 @@
 <main class="content" id="tab-dashboard">
 
   <!-- MONTH SELECTOR -->
-  <div class="pl-month-switcher" style="margin-bottom:20px">
-    <div class="pl-year-label">2026</div>
-    <button class="pl-mon-btn disabled" data-month="1">Січень</button>
-    <button class="pl-mon-btn disabled" data-month="2">Лютий</button>
-    <button class="pl-mon-btn disabled" data-month="3">Березень</button>
-    <button class="pl-mon-btn active"   data-month="4" onclick="switchMonth(4)">Квітень</button>
-    <button class="pl-mon-btn current"  data-month="5" onclick="switchMonth(5)">Травень ●</button>
-    <button class="pl-mon-btn disabled" data-month="6">Червень</button>
-    <button class="pl-mon-btn disabled" data-month="7">Липень</button>
-    <button class="pl-mon-btn disabled" data-month="8">Серпень</button>
-    <button class="pl-mon-btn disabled" data-month="9">Вересень</button>
-    <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
-    <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
-    <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+  <div class="pl-month-switcher" style="margin-bottom:20px;position:relative">
+    <!-- Year picker -->
+    <div class="dash-year-wrap" id="dashYearWrap">
+      <div class="dash-year-btn" id="dashYearBtn" onclick="toggleYearPicker()">
+        <span id="dashYearVal">2026</span> <span class="dash-year-arrow">▾</span>
+      </div>
+      <div class="dash-year-dropdown" id="dashYearDropdown">
+        <div class="dash-year-opt" onclick="selectYear(2026)">2026</div>
+        <div class="dash-year-opt" onclick="selectYear(2025)">2025</div>
+        <div class="dash-year-opt" onclick="selectYear(2024)">2024</div>
+      </div>
+    </div>
+    <!-- Month buttons -->
+    <div id="dashMonthBtns">
+      <button class="pl-mon-btn disabled" data-month="1">Січень</button>
+      <button class="pl-mon-btn disabled" data-month="2">Лютий</button>
+      <button class="pl-mon-btn disabled" data-month="3">Березень</button>
+      <button class="pl-mon-btn active"   data-month="4" onclick="switchMonth(4)">Квітень</button>
+      <button class="pl-mon-btn current"  data-month="5" onclick="switchMonth(5)">Травень ●</button>
+      <button class="pl-mon-btn disabled" data-month="6">Червень</button>
+      <button class="pl-mon-btn disabled" data-month="7">Липень</button>
+      <button class="pl-mon-btn disabled" data-month="8">Серпень</button>
+      <button class="pl-mon-btn disabled" data-month="9">Вересень</button>
+      <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
+      <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
+      <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+    </div>
     <div class="live-badge" id="dash-live-badge" style="display:none">
       <span class="live-dot"></span> LIVE · 15 трав.
     </div>
@@ -4538,6 +4599,56 @@
       document.querySelectorAll('.period-btn').forEach(x => x.classList.remove('active'));
       b.classList.add('active');
     });
+  });
+
+  // ── YEAR PICKER ─────────────────────────────────────────────
+  function toggleYearPicker() {
+    document.getElementById('dashYearWrap').classList.toggle('open');
+  }
+  function selectYear(y) {
+    document.getElementById('dashYearVal').textContent = y;
+    document.getElementById('dashYearWrap').classList.remove('open');
+    // Mark selected
+    document.querySelectorAll('.dash-year-opt').forEach(o => {
+      o.classList.toggle('selected', parseInt(o.textContent) === y);
+    });
+    const btns = document.getElementById('dashMonthBtns');
+    if (y === 2026) {
+      // Restore 2026 state
+      btns.innerHTML = `
+        <button class="pl-mon-btn disabled" data-month="1">Січень</button>
+        <button class="pl-mon-btn disabled" data-month="2">Лютий</button>
+        <button class="pl-mon-btn disabled" data-month="3">Березень</button>
+        <button class="pl-mon-btn active"   data-month="4" onclick="switchMonth(4)">Квітень</button>
+        <button class="pl-mon-btn current"  data-month="5" onclick="switchMonth(5)">Травень ●</button>
+        <button class="pl-mon-btn disabled" data-month="6">Червень</button>
+        <button class="pl-mon-btn disabled" data-month="7">Липень</button>
+        <button class="pl-mon-btn disabled" data-month="8">Серпень</button>
+        <button class="pl-mon-btn disabled" data-month="9">Вересень</button>
+        <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
+        <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
+        <button class="pl-mon-btn disabled" data-month="12">Грудень</button>`;
+      switchMonth(4);
+    } else {
+      // Other years — all disabled, show no-data message
+      const months = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+      btns.innerHTML = months.map((m,i) =>
+        `<button class="pl-mon-btn disabled" data-month="${i+1}">${m}</button>`
+      ).join('');
+      // Show no-data state in KPI cards
+      document.querySelectorAll('#tab-dashboard .kpi-num').forEach(el => el.innerHTML = '—');
+      document.querySelectorAll('#tab-dashboard .kpi-desc').forEach(el => el.textContent = `Дані ${y} року в розробці`);
+      document.querySelectorAll('#tab-dashboard .badge').forEach(el => { el.className = 'badge neu'; el.textContent = '—'; });
+      document.querySelectorAll('#tab-dashboard .kpi-bar-fill').forEach(el => el.style.width = '0%');
+      document.getElementById('dash-live-badge').style.display = 'none';
+      const chip = document.querySelector('#tab-dashboard .chip');
+      if (chip) chip.textContent = `${y} · дані в розробці`;
+    }
+  }
+  // Close dropdown when clicking outside
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('dashYearWrap');
+    if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
   });
 
   // ── MONTH SELECTOR ──────────────────────────────────────────
