@@ -4970,7 +4970,7 @@
     },
     dtp: {
       title:'ДТП: кількість / % вини · Квіт 2025 – Квіт 2026',
-      fmt: v => v==null?'—':v.all===0?'0':v.all+' / '+Math.round(v.own/v.all*100)+'%вин.',
+      fmt: v => v==null?'—':v.all===0?'0':v.all+' / '+v.own,
       clr: v => v==null?'':v.all===0?'#22c55e':v.all<=3?'#22c55e':v.all<=7?'#f59e0b':'#ef4444',
       data:{
         'ДП-1':[{all:2,own:2},{all:1,own:1},{all:6,own:3},{all:5,own:2},{all:7,own:4},{all:6,own:2},{all:2,own:2},{all:4,own:1},{all:11,own:3},{all:8,own:2},{all:4,own:2},{all:5,own:1},{all:6,own:5}],
