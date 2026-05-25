@@ -1799,7 +1799,7 @@
   <!-- TOP ROW -->
   <div class="section-row">
     <div>
-      <div class="section-label" id="dash-month-label">Травень 2026</div>
+      <div class="section-label" id="dash-month-label">Квітень 2026</div>
       <div class="section-title">Загальний огляд</div>
     </div>
     <div class="period-btns">
@@ -1817,8 +1817,8 @@
       <button class="mpill" disabled>Січень</button>
       <button class="mpill" disabled>Лютий</button>
       <button class="mpill" disabled>Березень</button>
-      <button class="mpill" data-month="4" onclick="switchMonth(4)">Квітень</button>
-      <button class="mpill live-pill active" data-month="5" onclick="switchMonth(5)">Травень <span class="live-dot"></span></button>
+      <button class="mpill active" data-month="4" onclick="switchMonth(4)">Квітень</button>
+      <button class="mpill live-pill" data-month="5" onclick="switchMonth(5)">Травень <span class="live-dot"></span></button>
       <button class="mpill" disabled>Червень</button>
       <button class="mpill" disabled>Липень</button>
       <button class="mpill" disabled>Серпень</button>
@@ -1840,12 +1840,12 @@
         <div class="kpi-tag">Вал місяць</div>
         <div class="kpi-icon">💰</div>
       </div>
-      <div class="kpi-num">35.0<span class="unit">М</span></div>
+      <div class="kpi-num">34.35<span class="unit">М</span></div>
       <div class="kpi-footer">
-        <span class="badge up">↑ 1.8%</span>
-        <span class="kpi-desc">прогноз · 95.65% плану</span>
+        <span class="badge up">↑ 2.1%</span>
+        <span class="kpi-desc">vs березень</span>
       </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:95.65%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill" style="width:91.6%"></div></div>
     </div>
 
     <div class="kpi-card">
@@ -1853,12 +1853,12 @@
         <div class="kpi-tag">Авто в роботі</div>
         <div class="kpi-icon">🚗</div>
       </div>
-      <div class="kpi-num">274<span class="unit">/348</span></div>
+      <div class="kpi-num">280<span class="unit">/348</span></div>
       <div class="kpi-footer">
-        <span class="badge neu">78.57%</span>
+        <span class="badge neu">80.45%</span>
         <span class="kpi-desc">завантаженість</span>
       </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:78.57%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:80.45%"></div></div>
     </div>
 
     <div class="kpi-card">
@@ -1866,12 +1866,12 @@
         <div class="kpi-tag">Фінрез з брендом</div>
         <div class="kpi-icon">📈</div>
       </div>
-      <div class="kpi-num">~6.5<span class="unit">М</span></div>
+      <div class="kpi-num">6.75<span class="unit">М</span></div>
       <div class="kpi-footer">
-        <span class="badge neu">оцінка</span>
-        <span class="kpi-desc">підсумок в кінці місяця</span>
+        <span class="badge up">↑ 19.7%</span>
+        <span class="kpi-desc">операційний прибуток</span>
       </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:68%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:71.2%"></div></div>
     </div>
 
     <div class="kpi-card">
@@ -1879,12 +1879,12 @@
         <div class="kpi-tag">Бренд Uklon</div>
         <div class="kpi-icon">🏷️</div>
       </div>
-      <div class="kpi-num">1.25<span class="unit">М</span></div>
+      <div class="kpi-num">1.63<span class="unit">М</span></div>
       <div class="kpi-footer">
-        <span class="badge down">↓ 33.5%</span>
-        <span class="kpi-desc">від плану 1.88М (66.6%)</span>
+        <span class="badge down">↓ 33%</span>
+        <span class="kpi-desc">від плану 2.44М</span>
       </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.6%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.8%"></div></div>
     </div>
 
   </div>
@@ -4623,11 +4623,8 @@
     if (chip) chip.textContent = d.tableChip;
   }
 
-  // Init: May is default (current month). Show live badge on load.
-  document.getElementById('dash-live-badge').style.display = 'flex';
-  // Sync branches chip to May
-  const initChip = document.querySelector('#tab-dashboard .chip');
-  if (initChip) initChip.textContent = 'Травень 2026 · 348 авто · LIVE';
+  // Init: April is default (confirmed static data). Live badge hidden.
+  document.getElementById('dash-live-badge').style.display = 'none';
 
   // Nav tabs with section switching
   const tabMap = {
