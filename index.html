@@ -794,8 +794,8 @@
     /* ── KPI GRID ── */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 12px;
       margin-bottom: 20px;
     }
 
@@ -803,7 +803,7 @@
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: var(--r);
-      padding: 22px 22px 18px;
+      padding: 16px 16px 14px;
       position: relative;
       overflow: hidden;
       transition: border-color 0.2s;
@@ -1908,6 +1908,19 @@
 
     <div class="kpi-card">
       <div class="kpi-card-top">
+        <div class="kpi-tag">Бренд Uklon</div>
+        <div class="kpi-icon">🏷️</div>
+      </div>
+      <div class="kpi-num">1.63<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge down">↓ 33%</span>
+        <span class="kpi-desc">від плану 2.44М</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.8%"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
         <div class="kpi-tag">Авто в роботі</div>
         <div class="kpi-icon">🚗</div>
       </div>
@@ -1934,15 +1947,28 @@
 
     <div class="kpi-card">
       <div class="kpi-card-top">
-        <div class="kpi-tag">Бренд Uklon</div>
-        <div class="kpi-icon">🏷️</div>
+        <div class="kpi-tag">Утримання за пошкодження</div>
+        <div class="kpi-icon">🔧</div>
       </div>
-      <div class="kpi-num">1.63<span class="unit">М</span></div>
+      <div class="kpi-num">1.03<span class="unit">М</span></div>
       <div class="kpi-footer">
-        <span class="badge down">↓ 33%</span>
-        <span class="kpi-desc">від плану 2.44М</span>
+        <span class="badge neu">92%</span>
+        <span class="kpi-desc">від нарахованих 1.12М</span>
       </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.8%"></div></div>
+      <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:92%"></div></div>
+    </div>
+
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Заходи від СК</div>
+        <div class="kpi-icon">🛡️</div>
+      </div>
+      <div class="kpi-num">1.20<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge neu">45 ДТП</span>
+        <span class="kpi-desc">страхові виплати</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:75%"></div></div>
     </div>
 
   </div>
