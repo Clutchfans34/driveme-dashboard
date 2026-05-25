@@ -1616,18 +1616,18 @@
       tbody td:nth-child(5) { display: none; }
     }
   /* ═══ ФІЛІЇ PAGE ═══ */
-  .filii-wrapper { padding: 20px 32px 24px; display:flex; flex-direction:column; gap:16px; min-height: calc(100vh - 72px); }
+  .filii-wrapper { padding: 20px 32px 24px; display:flex; flex-direction:column; gap:16px; height: calc(100vh - 72px); overflow:hidden; }
   .filii-top { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; }
   .filii-title-block { display:flex; align-items:center; gap:14px; }
-  .filii-icon-wrap { width:48px; height:48px; background:rgba(240,112,0,.15); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
-  .filii-h1 { font-size:22px; font-weight:900; letter-spacing:-0.5px; }
-  .filii-sub { font-size:12px; color:var(--muted); margin-top:2px; }
-  .filii-chips { display:flex; gap:12px; flex-wrap:wrap; }
-  .filii-chip { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:10px 18px; text-align:center; }
-  .filii-chip-val { font-size:20px; font-weight:800; color:var(--accent); }
-  .filii-chip-lbl { font-size:11px; color:var(--muted); margin-top:2px; }
+  .filii-icon-wrap { width:36px; height:36px; background:rgba(240,112,0,.15); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; }
+  .filii-h1 { font-size:18px; font-weight:900; letter-spacing:-0.5px; }
+  .filii-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+  .filii-chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .filii-chip { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:6px 14px; text-align:center; }
+  .filii-chip-val { font-size:16px; font-weight:800; color:var(--accent); }
+  .filii-chip-lbl { font-size:10px; color:var(--muted); margin-top:1px; }
 
-  .filii-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,auto); gap:14px; }
+  .filii-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(2,1fr); gap:14px; flex:1; }
   .fil-card { background:var(--bg3); border:1px solid var(--border); border-top-width:3px; border-radius:12px; padding:16px 17px; cursor:pointer; transition:background .2s; display:flex; flex-direction:column; justify-content:space-between; }
   .fil-card:hover { background:var(--bg4); }
   .fil-card-head { display:flex; align-items:center; gap:9px; margin-bottom:6px; }
