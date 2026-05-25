@@ -2182,9 +2182,9 @@
     <div class="chart-head">
       <div>
         <div class="section-label">Динаміка</div>
-        <div class="card-title" style="font-size:16px">Вал по днях — травень 2026</div>
+        <div class="card-title" style="font-size:16px">Фінрез / авто по філіях — Жовт 2025 – Квіт 2026</div>
       </div>
-      <div class="chip">грн / день</div>
+      <div class="chip">грн / авто / міс</div>
     </div>
     <canvas id="chart" height="80"></canvas>
   </div>
@@ -4859,58 +4859,55 @@
     }
   });
 
-  // Chart
+  // Chart — Branch comparison: Net Profit per Car (Oct 2025 – Apr 2026)
   const ctx = document.getElementById('chart').getContext('2d');
-  const days = ['1','2','3','4','5','6','7','8','9','10','11','12'];
-  const fact = [1180000,1220000,1050000,1310000,1280000,890000,920000,1340000,1290000,1180000,1220000,1150000];
-  const plan = Array(12).fill(1250000);
+  const branchMonths = ["Жовт'25","Лист'25","Груд'25","Січ'26","Лют'26","Бер'26","Квіт'26"];
+  const branchDatasets = [
+    { label:'ДП-1', data:[16917,25685,27700,20120,15496,34373,20191], borderColor:'#6366f1', bg:'rgba(99,102,241,0.08)' },
+    { label:'ДП-2', data:[27289,24300,24269,13505,12992,19944,20548], borderColor:'#a855f7', bg:'rgba(168,85,247,0.08)' },
+    { label:'ЗП',   data:[18881,13052,23666,12123,17441,16020,12219], borderColor:'#f59e0b', bg:'rgba(245,158,11,0.08)' },
+    { label:'КР',   data:[7654,17246,16326,13276,12576,1444,12331],   borderColor:'#ef4444', bg:'rgba(239,68,68,0.08)' },
+    { label:'ПЛ',   data:[13773,13855,15004,14698,17965,21790,18355], borderColor:'#10b981', bg:'rgba(16,185,129,0.08)' },
+    { label:'ВН',   data:[20396,14945,8000,12067,15670,13494,14495],  borderColor:'#0ea5e9', bg:'rgba(14,165,233,0.08)' },
+    { label:'ЛВ',   data:[null,null,7340,12445,6123,29970,37697],     borderColor:'#f97316', bg:'rgba(249,115,22,0.08)' },
+  ];
 
   new Chart(ctx, {
     type: 'line',
     data: {
-      labels: days,
-      datasets: [
-        {
-          label: 'Факт',
-          data: fact,
-          borderColor: '#F07000',
-          backgroundColor: 'rgba(240,112,0,0.07)',
-          borderWidth: 2.5,
-          fill: true,
-          tension: 0.4,
-          pointBackgroundColor: '#F07000',
-          pointBorderColor: '#141414',
-          pointBorderWidth: 2,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-        },
-        {
-          label: 'План',
-          data: plan,
-          borderColor: '#333333',
-          borderWidth: 1.5,
-          borderDash: [6, 4],
-          fill: false,
-          pointRadius: 0,
-          tension: 0,
-        }
-      ]
+      labels: branchMonths,
+      datasets: branchDatasets.map(d => ({
+        label: d.label,
+        data: d.data,
+        borderColor: d.borderColor,
+        backgroundColor: d.bg,
+        borderWidth: 2,
+        fill: false,
+        tension: 0.35,
+        pointBackgroundColor: d.borderColor,
+        pointBorderColor: '#141414',
+        pointBorderWidth: 1.5,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        spanGaps: false,
+      }))
     },
     options: {
       responsive: true,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
-          labels: { color: '#666', font: { size: 12, family: 'Inter' }, boxWidth: 14, padding: 20 }
+          labels: { color: '#888', font: { size: 11, family: 'Inter' }, boxWidth: 12, padding: 16, usePointStyle: true }
         },
         tooltip: {
           backgroundColor: '#1C1C1C',
           borderColor: 'rgba(255,255,255,0.07)',
           borderWidth: 1,
           titleColor: '#fff',
-          bodyColor: '#888',
+          bodyColor: '#aaa',
           padding: 12,
           callbacks: {
-            label: c => '  ' + c.dataset.label + ': ' + (c.raw/1000000).toFixed(2) + 'М грн'
+            label: c => c.raw == null ? '' : '  ' + c.dataset.label + ': ' + c.raw.toLocaleString('uk-UA') + ' грн'
           }
         }
       },
@@ -4924,7 +4921,7 @@
           ticks: {
             color: '#555',
             font: { size: 11, family: 'Inter' },
-            callback: v => (v/1000000).toFixed(1) + 'М'
+            callback: v => (v/1000).toFixed(0) + 'K'
           }
         }
       }
