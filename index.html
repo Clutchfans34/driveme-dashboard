@@ -1800,24 +1800,22 @@
 <main class="content" id="tab-dashboard">
 
   <!-- MONTH SELECTOR -->
-  <div class="month-bar">
-    <span class="month-year">2026</span>
-    <div class="month-pills">
-      <button class="mpill" disabled>Січень</button>
-      <button class="mpill" disabled>Лютий</button>
-      <button class="mpill" disabled>Березень</button>
-      <button class="mpill active" data-month="4" onclick="switchMonth(4)">Квітень</button>
-      <button class="mpill live-pill" data-month="5" onclick="switchMonth(5)">Травень <span class="live-dot"></span></button>
-      <button class="mpill" disabled>Червень</button>
-      <button class="mpill" disabled>Липень</button>
-      <button class="mpill" disabled>Серпень</button>
-      <button class="mpill" disabled>Вересень</button>
-      <button class="mpill" disabled>Жовтень</button>
-      <button class="mpill" disabled>Листопад</button>
-      <button class="mpill" disabled>Грудень</button>
-    </div>
-    <div class="live-badge" id="dash-live-badge">
-      <span class="live-dot"></span> LIVE · оновл. 15 трав.
+  <div class="pl-month-switcher" style="margin-bottom:20px">
+    <div class="pl-year-label">2026</div>
+    <button class="pl-mon-btn disabled" data-month="1">Січень</button>
+    <button class="pl-mon-btn disabled" data-month="2">Лютий</button>
+    <button class="pl-mon-btn disabled" data-month="3">Березень</button>
+    <button class="pl-mon-btn active"   data-month="4" onclick="switchMonth(4)">Квітень</button>
+    <button class="pl-mon-btn current"  data-month="5" onclick="switchMonth(5)">Травень ●</button>
+    <button class="pl-mon-btn disabled" data-month="6">Червень</button>
+    <button class="pl-mon-btn disabled" data-month="7">Липень</button>
+    <button class="pl-mon-btn disabled" data-month="8">Серпень</button>
+    <button class="pl-mon-btn disabled" data-month="9">Вересень</button>
+    <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
+    <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
+    <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+    <div class="live-badge" id="dash-live-badge" style="display:none">
+      <span class="live-dot"></span> LIVE · 15 трав.
     </div>
   </div>
 
@@ -4579,7 +4577,7 @@
     if (lbl) lbl.textContent = d.label;
 
     // Month pills active state
-    document.querySelectorAll('.mpill[data-month]').forEach(p => {
+    document.querySelectorAll('#tab-dashboard .pl-mon-btn[data-month]').forEach(p => {
       p.classList.remove('active');
       if (parseInt(p.dataset.month) === m) p.classList.add('active');
     });
