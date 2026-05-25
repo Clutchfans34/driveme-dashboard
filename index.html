@@ -1799,14 +1799,6 @@
 <!-- CONTENT -->
 <main class="content" id="tab-dashboard">
 
-  <!-- TOP ROW -->
-  <div class="section-row">
-    <div>
-      <div class="section-label" id="dash-month-label">Квітень 2026</div>
-      <div class="section-title">Загальний огляд</div>
-    </div>
-  </div>
-
   <!-- MONTH SELECTOR -->
   <div class="month-bar">
     <span class="month-year">2026</span>
@@ -4582,8 +4574,9 @@
     const d = monthData[m];
     if (!d) return;
 
-    // Section label
-    document.getElementById('dash-month-label').textContent = d.label;
+    // Section label (optional element)
+    const lbl = document.getElementById('dash-month-label');
+    if (lbl) lbl.textContent = d.label;
 
     // Month pills active state
     document.querySelectorAll('.mpill[data-month]').forEach(p => {
