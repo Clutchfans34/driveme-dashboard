@@ -1780,7 +1780,18 @@
 <nav class="nav">
   <div class="nav-tab">Новини</div>
   <div class="nav-tab active">Дашборд</div>
-  <div class="nav-tab">Філії</div>
+  <div class="nav-tab-wrap">
+    <div class="nav-tab">Філії</div>
+    <div class="nav-dropdown">
+      <div class="nav-dd-item" onclick="goToBranch('dp1')"><div class="nav-dd-dot" style="background:#F07000"></div>Дніпро<span class="nav-dd-meta">ДП-1 · 49 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('dp2')"><div class="nav-dd-dot" style="background:#3B82F6"></div>Дніпро 2<span class="nav-dd-meta">ДП-2 · 71 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('zp')"><div class="nav-dd-dot" style="background:#22c55e"></div>Запоріжжя<span class="nav-dd-meta">ЗП · 43 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('kr')"><div class="nav-dd-dot" style="background:#A855F7"></div>Кривий Ріг<span class="nav-dd-meta">КР · 50 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('pl')"><div class="nav-dd-dot" style="background:#F59E0B"></div>Полтава<span class="nav-dd-meta">ПЛ · 64 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('vn')"><div class="nav-dd-dot" style="background:#EC4899"></div>Вінниця<span class="nav-dd-meta">ВН · 30 авто</span></div>
+      <div class="nav-dd-item" onclick="goToBranch('lv')"><div class="nav-dd-dot" style="background:#06B6D4"></div>Львів<span class="nav-dd-meta">ЛВ · 41 авто</span></div>
+    </div>
+  </div>
   <div class="nav-tab-wrap">
     <div class="nav-tab">Флот</div>
     <div class="nav-dropdown">
@@ -2299,7 +2310,7 @@
     <div class="filii-grid">
 
       <!-- ДП-1: Дніпро -->
-      <div class="fil-card" style="border-top-color:#F07000">
+      <div class="fil-card" style="border-top-color:#F07000;cursor:pointer" onclick="goToBranch('dp1')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#F07000;color:#F07000"></div>
           <div><div class="fil-name">Дніпро</div><div class="fil-brand">DRIVE ME · ДП-1</div></div>
@@ -2317,7 +2328,7 @@
       </div>
 
       <!-- ДП-2: Дніпро 2 -->
-      <div class="fil-card" style="border-top-color:#3B82F6">
+      <div class="fil-card" style="border-top-color:#3B82F6;cursor:pointer" onclick="goToBranch('dp2')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#3B82F6;color:#3B82F6"></div>
           <div><div class="fil-name">Дніпро 2</div><div class="fil-brand">WAY UP DRIVE · ДП-2</div></div>
@@ -2335,7 +2346,7 @@
       </div>
 
       <!-- ЗП: Запоріжжя -->
-      <div class="fil-card" style="border-top-color:#22c55e">
+      <div class="fil-card" style="border-top-color:#22c55e;cursor:pointer" onclick="goToBranch('zp')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#22c55e;color:#22c55e"></div>
           <div><div class="fil-name">Запоріжжя</div><div class="fil-brand">DRIVE ME · ЗП</div></div>
@@ -2353,7 +2364,7 @@
       </div>
 
       <!-- КР: Кривий Ріг -->
-      <div class="fil-card" style="border-top-color:#A855F7">
+      <div class="fil-card" style="border-top-color:#A855F7;cursor:pointer" onclick="goToBranch('kr')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#A855F7;color:#A855F7"></div>
           <div><div class="fil-name">Кривий Ріг</div><div class="fil-brand">DRIVE ME · КР</div></div>
@@ -2371,7 +2382,7 @@
       </div>
 
       <!-- ПЛ: Полтава -->
-      <div class="fil-card" style="border-top-color:#F59E0B">
+      <div class="fil-card" style="border-top-color:#F59E0B;cursor:pointer" onclick="goToBranch('pl')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#F59E0B;color:#F59E0B"></div>
           <div><div class="fil-name">Полтава</div><div class="fil-brand">WAY UP DRIVE · ПЛ</div></div>
@@ -2389,7 +2400,7 @@
       </div>
 
       <!-- ВН: Вінниця -->
-      <div class="fil-card" style="border-top-color:#EC4899">
+      <div class="fil-card" style="border-top-color:#EC4899;cursor:pointer" onclick="goToBranch('vn')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#EC4899;color:#EC4899"></div>
           <div><div class="fil-name">Вінниця</div><div class="fil-brand">WAY UP DRIVE · ВН</div></div>
@@ -2407,7 +2418,7 @@
       </div>
 
       <!-- ЛВ: Львів -->
-      <div class="fil-card" style="border-top-color:#06B6D4">
+      <div class="fil-card" style="border-top-color:#06B6D4;cursor:pointer" onclick="goToBranch('lv')">
         <div class="fil-card-head">
           <div class="fil-dot-big" style="background:#06B6D4;color:#06B6D4"></div>
           <div><div class="fil-name">Львів</div><div class="fil-brand">DRIVE ME · ЛВ</div></div>
@@ -2528,6 +2539,13 @@
     </div><!-- close hidden SVG div -->
   </div><!-- /filii-wrapper -->
 </section><!-- /tab-filii -->
+
+<!-- ── ФІЛІЯ: ДЕТАЛІ ── -->
+<section class="tab-section" id="tab-filii-detail" style="display:none">
+<div id="filii-detail-content" style="padding:28px 32px;max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+  <!-- Заповнюється через JS функцію goToBranch() -->
+</div>
+</section>
 
 <section class="tab-section" id="tab-team">
 <div class="team-page">
@@ -4709,6 +4727,82 @@
   function openTasks()  { overlay.classList.add('open'); sidebar.classList.add('open'); }
   function closeTasks() { overlay.classList.remove('open'); sidebar.classList.remove('open'); }
 
+  // ── FILII BRANCH DATA ──
+  const filiiBranches = {
+    dp1: { name:'Дніпро',     brand:'DRIVE ME',    code:'ДП-1', color:'#F07000', cars:49, addr:'вул. Набережна Перемоги, 12',
+           manager:'Билиба Роман', deputy:'Шеремет Євген', recruiter:'Пугачова Анна',
+           metrics:[{lbl:'Вал',val:'95.6%',cls:'y'},{lbl:'Бренд',val:'66.7%',cls:'r'},{lbl:'Завантаж.',val:'82.9%',cls:''}] },
+    dp2: { name:'Дніпро 2',   brand:'WAY UP DRIVE',code:'ДП-2', color:'#3B82F6', cars:71, addr:'вул. Паторжинського, 39',
+           manager:'Бітюков Діма', deputy:'Гринченко Олег', recruiter:'Мусияка Іра',
+           metrics:[{lbl:'Вал',val:'90.0%',cls:'r'},{lbl:'Бренд',val:'64.2%',cls:'r'},{lbl:'Завантаж.',val:'76.0%',cls:'r'}] },
+    zp:  { name:'Запоріжжя',  brand:'DRIVE ME',    code:'ЗП',   color:'#22c55e', cars:43, addr:'пр. Соборний, 158',
+           manager:'Дуплий Діма', deputy:'Олефіренко Ярослав', recruiter:'Медовкіна Альона',
+           metrics:[{lbl:'Вал',val:'88.1%',cls:'r'},{lbl:'Бренд',val:'101.2% ✓',cls:'g'},{lbl:'Завантаж.',val:'75.1%',cls:'y'}] },
+    kr:  { name:'Кривий Ріг', brand:'DRIVE ME',    code:'КР',   color:'#A855F7', cars:50, addr:'вул. Визволення, 37',
+           manager:'Стьопін Роман', deputy:'Чорна Анна', recruiter:'Бугайова Юля',
+           metrics:[{lbl:'Вал',val:'94.7%',cls:'y'},{lbl:'Бренд',val:'91.1%',cls:'y'},{lbl:'Завантаж.',val:'81.0%',cls:''}] },
+    pl:  { name:'Полтава',    brand:'WAY UP DRIVE',code:'ПЛ',   color:'#F59E0B', cars:64, addr:'вул. Сінна, 12',
+           manager:'Крат Олег', deputy:'Войтенко Влад', recruiter:'Усенко Вероніка',
+           metrics:[{lbl:'Вал',val:'97.8%',cls:'y'},{lbl:'Бренд',val:'81.6%',cls:'y'},{lbl:'Завантаж.',val:'85.5%',cls:'g'}] },
+    vn:  { name:'Вінниця',    brand:'WAY UP DRIVE',code:'ВН',   color:'#EC4899', cars:30, addr:'вул. Хмельницьке шосе, 7',
+           manager:'Кабанов Сергій', deputy:'Романча Євген', recruiter:'Гонтарук Ангеліна',
+           metrics:[{lbl:'Вал',val:'84.8%',cls:'r'},{lbl:'Бренд',val:'54.1%',cls:'r'},{lbl:'Завантаж.',val:'71.9%',cls:'r'}] },
+    lv:  { name:'Львів',      brand:'DRIVE ME',    code:'ЛВ',   color:'#06B6D4', cars:41, addr:'вул. Городоцька, 213',
+           manager:'Мількевич Вадим', deputy:'Бабій Святослав', recruiter:'Грицан Соломія',
+           metrics:[{lbl:'Вал',val:'107.1% ✓',cls:'g'},{lbl:'Бренд',val:'127.5% 🏆',cls:'g'},{lbl:'Завантаж.',val:'88.7%',cls:'g'}] },
+  };
+
+  function goToBranch(branchKey) {
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+    if (branchKey) {
+      const b = filiiBranches[branchKey];
+      if (!b) return;
+      const clrMap = {g:'var(--green)',y:'var(--yellow)',r:'var(--red)','':'var(--text)'};
+      const metricsHtml = b.metrics.map(m =>
+        `<div style="background:var(--bg2);border-radius:10px;padding:14px 20px;text-align:center">
+          <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${m.lbl}</div>
+          <div style="font-size:22px;font-weight:900;color:${clrMap[m.cls]}">${m.val}</div>
+        </div>`).join('');
+      document.getElementById('filii-detail-content').innerHTML = `
+        <button onclick="goToBranch(null)" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:24px;transition:border-color .18s" onmouseover="this.style.borderColor='rgba(240,112,0,.5)'" onmouseout="this.style.borderColor=''">← Назад до Філій</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px">
+          <div style="display:flex;align-items:center;gap:14px">
+            <div style="width:14px;height:14px;border-radius:50%;background:${b.color};box-shadow:0 0 10px ${b.color}"></div>
+            <div>
+              <div style="font-size:26px;font-weight:900;letter-spacing:-.5px">${b.name}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.5px;text-transform:uppercase">${b.brand} · ${b.code} · Сторінка філії</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="padding:6px 16px;border-radius:10px;background:rgba(240,112,0,.12);color:var(--accent);font-size:14px;font-weight:800;border:1px solid rgba(240,112,0,.25)">${b.cars} авто</div>
+            <div style="padding:6px 16px;border-radius:10px;background:var(--bg3);color:var(--muted);font-size:13px;font-weight:600;border:1px solid var(--border)">📍 ${b.addr}</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">${metricsHtml}</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px">
+          ${[['👤 Керівник',b.manager],['📊 Заст. ефективності',b.deputy],['🎯 Рекрутер',b.recruiter]].map(([role,person])=>
+            `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px">
+              <div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">${role}</div>
+              <div style="font-size:15px;font-weight:700">${person}</div>
+            </div>`).join('')}
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:24px;text-align:center;color:var(--muted)">
+          <div style="font-size:32px;margin-bottom:10px">🚧</div>
+          <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px">Сторінка в розробці</div>
+          <div style="font-size:13px">Тут з'явиться детальна інформація по філії ${b.name}</div>
+        </div>`;
+      document.querySelectorAll('.nav-tab').forEach(t => {
+        t.classList.remove('active');
+        if (t.textContent.trim() === 'Філії') t.classList.add('active');
+      });
+      all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-filii-detail'?'block':'none'; });
+      window.scrollTo({ top:0, behavior:'smooth' });
+    } else {
+      all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-filii'?'block':'none'; });
+      window.scrollTo({ top:0 });
+    }
+  }
+
   // ── FLEET BRANCH DATA ──
   const fleetBranches = {
     dp1: { name:'Дніпро 1', brand:'DRIVE ME · ДП-1', color:'#F07000', roi:'88%', roiColor:'#f97316', cars:48, totalUsd:'$307 600', totalGrn:'13 226 800', op:'970 000',
@@ -4982,7 +5076,7 @@
     'Uklon':    'tab-uklon',
     'Аналітика':'tab-analytics',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
