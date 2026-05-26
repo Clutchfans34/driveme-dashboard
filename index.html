@@ -632,6 +632,16 @@
     .nav-tab:hover { color: var(--text); border-color: rgba(240,112,0,0.2); }
     .nav-tab.active { color: var(--accent); border-color: var(--accent); }
 
+    /* ── NAV DROPDOWN ── */
+    .nav-tab-wrap { position: relative; display: inline-flex; align-items: center; }
+    .nav-dropdown { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 6px; min-width: 200px; z-index: 300; display: none; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
+    .nav-tab-wrap:hover .nav-dropdown { display: block; }
+    .nav-dropdown::before { content:''; position:absolute; top:-5px; left:50%; transform:translateX(-50%); width:10px; height:10px; background:var(--bg2); border-left:1px solid var(--border); border-top:1px solid var(--border); rotate:45deg; }
+    .nav-dd-item { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background .15s; white-space: nowrap; }
+    .nav-dd-item:hover { background: var(--bg3); color: var(--accent); }
+    .nav-dd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .nav-dd-meta { font-size: 10px; color: var(--muted); font-weight: 500; margin-left: auto; }
+
     /* ── CONTENT ── */
     .content {
       padding: 44px 32px;
@@ -1772,7 +1782,18 @@
   <div class="nav-tab">Новини</div>
   <div class="nav-tab active">Дашборд</div>
   <div class="nav-tab">Філії</div>
-  <div class="nav-tab">Флот</div>
+  <div class="nav-tab-wrap">
+    <div class="nav-tab">Флот</div>
+    <div class="nav-dropdown">
+      <div class="nav-dd-item" onclick="goToFleetCard('dp1')"><div class="nav-dd-dot" style="background:#F07000"></div>Дніпро 1<span class="nav-dd-meta">ДП-1 · 48 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('dp2')"><div class="nav-dd-dot" style="background:#3B82F6"></div>Дніпро 2<span class="nav-dd-meta">ДП-2 · 71 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('zp')"><div class="nav-dd-dot" style="background:#22c55e"></div>Запоріжжя<span class="nav-dd-meta">ЗП · 43 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('kr')"><div class="nav-dd-dot" style="background:#A855F7"></div>Кривий Ріг<span class="nav-dd-meta">КР · 50 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('pl')"><div class="nav-dd-dot" style="background:#F59E0B"></div>Полтава<span class="nav-dd-meta">ПЛ · 65 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('vn')"><div class="nav-dd-dot" style="background:#EC4899"></div>Вінниця<span class="nav-dd-meta">ВН · 30 авто</span></div>
+      <div class="nav-dd-item" onclick="goToFleetCard('lv')"><div class="nav-dd-dot" style="background:#06B6D4"></div>Львів<span class="nav-dd-meta">ЛВ · 41 авто</span></div>
+    </div>
+  </div>
   <div class="nav-tab">СТО/ДТП</div>
   <div class="nav-tab">Водії</div>
   <div class="nav-tab">HR</div>
@@ -2885,9 +2906,9 @@
   <div class="fleet-grid">
 
     <!-- ДП-1 -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('dp1')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Дніпро 1</div><div class="fleet-brand">DRIVE ME · ДП-1</div></div>
+        <div><div class="fleet-city">Дніпро 1 <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">DRIVE ME · ДП-1</div></div>
         <div class="fleet-roi roi-orange">ROI 88%</div>
       </div>
       <table class="fleet-table">
@@ -2912,9 +2933,9 @@
     </div>
 
     <!-- ДП-2 -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('dp2')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Дніпро 2</div><div class="fleet-brand">WAY UP DRIVE · ДП-2</div></div>
+        <div><div class="fleet-city">Дніпро 2 <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">WAY UP DRIVE · ДП-2</div></div>
         <div class="fleet-roi roi-orange">ROI 87%</div>
       </div>
       <table class="fleet-table">
@@ -2942,9 +2963,9 @@
     </div>
 
     <!-- Запоріжжя -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('zp')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Запоріжжя</div><div class="fleet-brand">DRIVE ME · ЗП</div></div>
+        <div><div class="fleet-city">Запоріжжя <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">DRIVE ME · ЗП</div></div>
         <div class="fleet-roi roi-green">ROI 122% 🏆</div>
       </div>
       <table class="fleet-table">
@@ -2962,9 +2983,9 @@
     </div>
 
     <!-- Кривий Ріг -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('kr')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Кривий Ріг</div><div class="fleet-brand">DRIVE ME · КР</div></div>
+        <div><div class="fleet-city">Кривий Ріг <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">DRIVE ME · КР</div></div>
         <div class="fleet-roi roi-yellow">ROI 82%</div>
       </div>
       <table class="fleet-table">
@@ -2984,9 +3005,9 @@
     </div>
 
     <!-- Полтава -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('pl')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Полтава</div><div class="fleet-brand">WAY UP DRIVE · ПЛ</div></div>
+        <div><div class="fleet-city">Полтава <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">WAY UP DRIVE · ПЛ</div></div>
         <div class="fleet-roi roi-orange">ROI 90%</div>
       </div>
       <table class="fleet-table">
@@ -3009,7 +3030,7 @@
     </div>
 
     <!-- Вінниця -->
-    <div class="fleet-card clickable" id="fleet-vn" onclick="goToFleetCard('tab-fleet-vn')">
+    <div class="fleet-card clickable" id="fleet-vn" onclick="goToFleetCard('vn')">
       <div class="fleet-card-head">
         <div><div class="fleet-city">Вінниця <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">WAY UP DRIVE · ВН</div></div>
         <div class="fleet-roi roi-red">ROI 56% ⚠️</div>
@@ -3032,9 +3053,9 @@
     </div>
 
     <!-- Львів -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" onclick="goToFleetCard('lv')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Львів</div><div class="fleet-brand">DRIVE ME · ЛВ</div></div>
+        <div><div class="fleet-city">Львів <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">DRIVE ME · ЛВ</div></div>
         <div class="fleet-roi roi-yellow">ROI 62%</div>
       </div>
       <table class="fleet-table">
@@ -3056,150 +3077,9 @@
 </section><!-- /tab-fleet -->
 
 <!-- ── ФЛОТ: ВІННИЦЯ ДЕТАЛІ ── -->
-<section class="tab-section" id="tab-fleet-vn" style="display:none">
-<div style="padding:28px 32px;max-width:1100px;margin:0 auto;position:relative;z-index:1;">
-
-  <!-- Кнопка назад -->
-  <button onclick="goToFleetCard(null)" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:24px;transition:border-color .18s;" onmouseover="this.style.borderColor='rgba(240,112,0,.5)'" onmouseout="this.style.borderColor=''">
-    ← Назад до Флоту
-  </button>
-
-  <!-- Заголовок -->
-  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px;">
-    <div style="display:flex;align-items:center;gap:16px;">
-      <div>
-        <div style="font-size:26px;font-weight:900;letter-spacing:-.5px;">Вінниця</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;">WAY UP DRIVE · ВН · Флот філії</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div style="padding:6px 16px;border-radius:10px;background:rgba(239,68,68,.15);color:#ef4444;font-size:14px;font-weight:800;border:1px solid rgba(239,68,68,.3);">ROI 56% ⚠️</div>
-      <div style="padding:6px 16px;border-radius:10px;background:rgba(240,112,0,.12);color:var(--accent);font-size:14px;font-weight:800;border:1px solid rgba(240,112,0,.25);">30 авто</div>
-    </div>
-  </div>
-
-  <!-- KPI картки -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;">
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
-      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Активи ($)</div>
-      <div style="font-size:24px;font-weight:900;color:var(--accent);">$226 200</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px;">30 авто · 5 моделей</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
-      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Активи (грн)</div>
-      <div style="font-size:24px;font-weight:900;color:var(--text);">9.73М</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px;">курс 43 грн/$</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
-      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">ОП / місяць</div>
-      <div style="font-size:24px;font-weight:900;color:#22c55e;">450 000</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px;">грн · квітень 2026</div>
-    </div>
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
-      <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">ROI річний</div>
-      <div style="font-size:24px;font-weight:900;color:#ef4444;">56%</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px;">ціль: 80%+ (50 авто)</div>
-    </div>
-  </div>
-
-  <!-- Таблиця авто -->
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:20px;">
-    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-size:14px;font-weight:800;">🚙 Склад флоту</div>
-      <div style="font-size:11px;color:var(--muted);">станом на квітень 2026</div>
-    </div>
-    <table style="width:100%;border-collapse:collapse;font-size:13px;">
-      <thead>
-        <tr style="background:var(--bg2);">
-          <th style="text-align:left;padding:10px 20px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Модель</th>
-          <th style="text-align:center;padding:10px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Кіл.</th>
-          <th style="text-align:center;padding:10px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">$/од.</th>
-          <th style="text-align:center;padding:10px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Всього $</th>
-          <th style="text-align:center;padding:10px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Частка</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-top:1px solid var(--border);">
-          <td style="padding:12px 20px;font-weight:600;">Citroen Elysee</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:800;font-size:15px;">15</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">10 000</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:700;">150 000</td>
-          <td style="text-align:center;padding:12px 16px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;"><div style="width:66%;height:100%;background:#EC4899;border-radius:3px;"></div></div>
-              <span style="font-size:11px;color:var(--muted);min-width:30px;">50%</span>
-            </div>
-          </td>
-        </tr>
-        <tr style="border-top:1px solid var(--border);">
-          <td style="padding:12px 20px;font-weight:600;">Renault Sandero</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:800;font-size:15px;">4</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">7 000</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:700;">28 000</td>
-          <td style="text-align:center;padding:12px 16px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;"><div style="width:12%;height:100%;background:#6366f1;border-radius:3px;"></div></div>
-              <span style="font-size:11px;color:var(--muted);min-width:30px;">12%</span>
-            </div>
-          </td>
-        </tr>
-        <tr style="border-top:1px solid var(--border);">
-          <td style="padding:12px 20px;font-weight:600;">Hyundai Elantra</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:800;font-size:15px;">4</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">5 500</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:700;">22 000</td>
-          <td style="text-align:center;padding:12px 16px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;"><div style="width:10%;height:100%;background:#22c55e;border-radius:3px;"></div></div>
-              <span style="font-size:11px;color:var(--muted);min-width:30px;">10%</span>
-            </div>
-          </td>
-        </tr>
-        <tr style="border-top:1px solid var(--border);">
-          <td style="padding:12px 20px;font-weight:600;">Renault Logan</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:800;font-size:15px;">6</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">3 300</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:700;">19 800</td>
-          <td style="text-align:center;padding:12px 16px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;"><div style="width:9%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
-              <span style="font-size:11px;color:var(--muted);min-width:30px;">9%</span>
-            </div>
-          </td>
-        </tr>
-        <tr style="border-top:1px solid var(--border);">
-          <td style="padding:12px 20px;font-weight:600;">Sonata LF</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:800;font-size:15px;">1</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">6 400</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:700;">6 400</td>
-          <td style="text-align:center;padding:12px 16px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="flex:1;height:6px;background:var(--bg2);border-radius:3px;"><div style="width:3%;height:100%;background:#38bdf8;border-radius:3px;"></div></div>
-              <span style="font-size:11px;color:var(--muted);min-width:30px;">3%</span>
-            </div>
-          </td>
-        </tr>
-        <tr style="border-top:2px solid var(--border);background:rgba(240,112,0,.06);">
-          <td style="padding:12px 20px;font-weight:800;color:var(--accent);">РАЗОМ</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:900;font-size:16px;color:var(--accent);">30</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">—</td>
-          <td style="text-align:center;padding:12px 16px;font-weight:900;color:var(--accent);">$226 200</td>
-          <td style="text-align:center;padding:12px 16px;color:var(--muted);">100%</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Аналіз ROI -->
-  <div style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:14px;padding:18px 20px;">
-    <div style="font-size:13px;font-weight:800;color:#ef4444;margin-bottom:10px;">⚠️ Аналіз ROI — чому 56%?</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px;">
-      <div style="color:var(--muted);">📉 <strong style="color:var(--text);">Малий масштаб</strong><br>30 авто — недостатньо для покриття фіксованих витрат</div>
-      <div style="color:var(--muted);">💡 <strong style="color:var(--text);">Рішення</strong><br>Розширення до 50 авто → ROI ~85%</div>
-      <div style="color:var(--muted);">🎯 <strong style="color:var(--text);">Потенціал</strong><br>ОП/міс: 450К → 750К при +20 авто</div>
-    </div>
-  </div>
-
+<section class="tab-section" id="tab-fleet-detail" style="display:none">
+<div id="fleet-detail-content" style="padding:28px 32px;max-width:1100px;margin:0 auto;position:relative;z-index:1;">
+  <!-- Заповнюється через JS функцію goToFleetCard() -->
 </div>
 </section>
 
@@ -4830,25 +4710,94 @@
   function openTasks()  { overlay.classList.add('open'); sidebar.classList.add('open'); }
   function closeTasks() { overlay.classList.remove('open'); sidebar.classList.remove('open'); }
 
+  // ── FLEET BRANCH DATA ──
+  const fleetBranches = {
+    dp1: { name:'Дніпро 1', brand:'DRIVE ME · ДП-1', color:'#F07000', roi:'88%', roiColor:'#f97316', cars:48, totalUsd:'$307 600', totalGrn:'13 226 800', op:'970 000',
+      models:[['Peugeot 301',12,'5 200','62 400'],['Renault Logan',9,'3 300','29 700'],['Renault Sandero',9,'7 000','63 000'],['Sonata New Rise',5,'13 500','67 500'],['Sonata LF',8,'6 400','51 200'],['Hyundai Elantra',2,'5 500','11 000'],['Sonata YF',1,'6 400','6 400'],['KIA K5',1,'6 400','6 400'],['Citroen Elysee',1,'10 000','10 000']]},
+    dp2: { name:'Дніпро 2', brand:'WAY UP DRIVE · ДП-2', color:'#3B82F6', roi:'87%', roiColor:'#f97316', cars:71, totalUsd:'$482 000', totalGrn:'20 726 000', op:'1 500 000',
+      models:[['Sonata LF',18,'6 400','115 200'],['Peugeot 301',12,'5 200','62 400'],['Renault Logan',10,'3 300','33 000'],['Chevrolet Cobalt',9,'8 000','72 000'],['Toyota Prius',5,'9 000','45 000'],['Renault Sandero',5,'7 000','35 000'],['Citroen Elysee',5,'10 000','50 000'],['Sonata New Rise',2,'13 500','27 000'],['Tesla Model 3',1,'16 000','16 000'],['Nissan Leaf 2',1,'15 000','15 000'],['KIA K5',1,'6 400','6 400'],['Ford Fiesta',1,'5 000','5 000']]},
+    zp:  { name:'Запоріжжя', brand:'DRIVE ME · ЗП', color:'#22c55e', roi:'122% 🏆', roiColor:'#22c55e', cars:43, totalUsd:'$160 400', totalGrn:'6 897 200', op:'700 000',
+      models:[['Renault Logan',38,'3 300','125 400'],['Renault Sandero',5,'7 000','35 000']]},
+    kr:  { name:'Кривий Ріг', brand:'DRIVE ME · КР', color:'#A855F7', roi:'82%', roiColor:'#f59e0b', cars:50, totalUsd:'$259 800', totalGrn:'11 171 400', op:'760 000',
+      models:[['Renault Logan',26,'3 300','85 800'],['Renault Sandero',13,'7 000','91 000'],['Chevrolet Cobalt',9,'8 000','72 000'],['Hyundai Elantra',2,'5 500','11 000']]},
+    pl:  { name:'Полтава', brand:'WAY UP DRIVE · ПЛ', color:'#F59E0B', roi:'90%', roiColor:'#f97316', cars:65, totalUsd:'$336 600', totalGrn:'14 473 800', op:'1 080 000',
+      models:[['Renault Logan',38,'3 300','125 400'],['Citroen Elysee',8,'10 000','80 000'],['Renault Sandero',7,'7 000','49 000'],['Chevrolet Cobalt',6,'8 000','48 000'],['Peugeot 301',2,'5 200','10 400'],['Hyundai Elantra',2,'5 500','11 000'],['Sonata LF',2,'6 400','12 800']]},
+    vn:  { name:'Вінниця', brand:'WAY UP DRIVE · ВН', color:'#EC4899', roi:'56% ⚠️', roiColor:'#ef4444', cars:30, totalUsd:'$226 200', totalGrn:'9 726 600', op:'450 000',
+      models:[['Citroen Elysee',15,'10 000','150 000'],['Renault Sandero',4,'7 000','28 000'],['Hyundai Elantra',4,'5 500','22 000'],['Renault Logan',6,'3 300','19 800'],['Sonata LF',1,'6 400','6 400']]},
+    lv:  { name:'Львів', brand:'DRIVE ME · ЛВ', color:'#06B6D4', roi:'62% + CB 3%', roiColor:'#f59e0b', cars:41, totalUsd:'$527 500', totalGrn:'21 627 500', op:'1 121 479',
+      models:[['Sonata New Rise',37,'13 500','499 500'],['Renault Sandero',4,'7 000','28 000']]},
+  };
+
   // Навігація до сторінки флоту філії або назад до Флоту
-  function goToFleetCard(branchPageId) {
-    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-vn','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
-    if (branchPageId) {
+  function goToFleetCard(branchKey) {
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+    if (branchKey) {
+      const b = fleetBranches[branchKey];
+      if (!b) return;
+      // Будуємо HTML сторінки
+      const totalCars = b.models.reduce((s,m)=>s+m[1],0);
+      const rows = b.models.map(m => {
+        const pct = Math.round(m[1]/totalCars*100);
+        const barW = Math.round(parseInt(m[3].replace(/\s/g,'')) / parseInt(b.totalUsd.replace(/[$\s]/g,'')) * 100);
+        return `<tr style="border-top:1px solid var(--border)">
+          <td style="padding:11px 20px;font-weight:600">${m[0]}</td>
+          <td style="text-align:center;padding:11px 16px;font-weight:800;font-size:15px">${m[1]}</td>
+          <td style="text-align:center;padding:11px 16px;color:var(--muted)">${m[2]}</td>
+          <td style="text-align:center;padding:11px 16px;font-weight:700">${m[3]}</td>
+          <td style="padding:11px 16px"><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--bg2);border-radius:3px"><div style="width:${barW}%;height:100%;background:${b.color};border-radius:3px;opacity:.8"></div></div><span style="font-size:11px;color:var(--muted);min-width:28px">${pct}%</span></div></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('fleet-detail-content').innerHTML = `
+        <button onclick="goToFleetCard(null)" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:24px;transition:border-color .18s" onmouseover="this.style.borderColor='rgba(240,112,0,.5)'" onmouseout="this.style.borderColor=''">← Назад до Флоту</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:28px">
+          <div><div style="font-size:26px;font-weight:900;letter-spacing:-.5px">${b.name}</div><div style="font-size:12px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.5px;text-transform:uppercase">${b.brand} · Флот філії</div></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="padding:6px 16px;border-radius:10px;background:${b.roiColor}22;color:${b.roiColor};font-size:14px;font-weight:800;border:1px solid ${b.roiColor}44">ROI ${b.roi}</div>
+            <div style="padding:6px 16px;border-radius:10px;background:rgba(240,112,0,.12);color:var(--accent);font-size:14px;font-weight:800;border:1px solid rgba(240,112,0,.25)">${b.cars} авто</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px">
+          ${[['Активи ($)', b.totalUsd, 'var(--accent)',''],['Активи (грн)', b.totalGrn+' грн','var(--text)','курс 43 грн/$'],['ОП / місяць', b.op+' грн','#22c55e','квітень 2026'],['ROI річний','ROI '+b.roi,b.roiColor,'']].map(([lbl,val,clr,sub])=>`
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px">
+            <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">${lbl}</div>
+            <div style="font-size:22px;font-weight:900;color:${clr}">${val}</div>
+            ${sub?`<div style="font-size:11px;color:var(--muted);margin-top:4px">${sub}</div>`:''}
+          </div>`).join('')}
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-size:14px;font-weight:800">🚙 Склад флоту</div>
+            <div style="font-size:11px;color:var(--muted)">станом на квітень 2026</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead><tr style="background:var(--bg2)">
+              <th style="text-align:left;padding:9px 20px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Модель</th>
+              <th style="text-align:center;padding:9px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Кіл.</th>
+              <th style="text-align:center;padding:9px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">$/од.</th>
+              <th style="text-align:center;padding:9px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Всього $</th>
+              <th style="text-align:center;padding:9px 16px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Частка</th>
+            </tr></thead>
+            <tbody>${rows}
+              <tr style="border-top:2px solid var(--border);background:rgba(240,112,0,.06)">
+                <td style="padding:11px 20px;font-weight:800;color:var(--accent)">РАЗОМ</td>
+                <td style="text-align:center;padding:11px 16px;font-weight:900;font-size:16px;color:var(--accent)">${b.cars}</td>
+                <td style="text-align:center;padding:11px 16px;color:var(--muted)">—</td>
+                <td style="text-align:center;padding:11px 16px;font-weight:900;color:var(--accent)">${b.totalUsd}</td>
+                <td style="text-align:center;padding:11px 16px;color:var(--muted)">100%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>`;
+      // Показуємо сторінку
       document.querySelectorAll('.nav-tab').forEach(t => {
         t.classList.remove('active');
         if (t.textContent.trim() === 'Флот') t.classList.add('active');
       });
-      all.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = id === branchPageId ? 'block' : 'none';
-      });
+      all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-fleet-detail'?'block':'none'; });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       // Назад до Флоту
-      all.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = id === 'tab-fleet' ? 'block' : 'none';
-      });
+      all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-fleet'?'block':'none'; });
       window.scrollTo({ top: 0 });
     }
   }
@@ -5014,7 +4963,7 @@
     'Uklon':    'tab-uklon',
     'Аналітика':'tab-analytics',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-vn','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
