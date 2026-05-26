@@ -633,10 +633,9 @@
     .nav-tab.active { color: var(--accent); border-color: var(--accent); }
 
     /* ── NAV DROPDOWN ── */
-    .nav-tab-wrap { position: relative; display: inline-flex; align-items: center; }
-    .nav-dropdown { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 6px; min-width: 200px; z-index: 300; display: none; box-shadow: 0 12px 32px rgba(0,0,0,.5); }
-    .nav-tab-wrap:hover .nav-dropdown { display: block; }
-    .nav-dropdown::before { content:''; position:absolute; top:-5px; left:50%; transform:translateX(-50%); width:10px; height:10px; background:var(--bg2); border-left:1px solid var(--border); border-top:1px solid var(--border); rotate:45deg; }
+    .nav-tab-wrap { display: inline-flex; align-items: center; }
+    .nav-dropdown { position: fixed; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 6px; min-width: 210px; z-index: 9999; display: none; box-shadow: 0 12px 32px rgba(0,0,0,.6); }
+    .nav-dropdown.open { display: block; }
     .nav-dd-item { padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background .15s; white-space: nowrap; }
     .nav-dd-item:hover { background: var(--bg3); color: var(--accent); }
     .nav-dd-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
@@ -4801,6 +4800,26 @@
       window.scrollTo({ top: 0 });
     }
   }
+
+  // ── NAV DROPDOWN POSITIONING ──
+  document.querySelectorAll('.nav-tab-wrap').forEach(wrap => {
+    const dd = wrap.querySelector('.nav-dropdown');
+    if (!dd) return;
+    let closeTimer;
+    const show = () => {
+      clearTimeout(closeTimer);
+      const rect = wrap.getBoundingClientRect();
+      dd.style.top  = (rect.bottom + 6) + 'px';
+      dd.style.left = (rect.left + rect.width / 2) + 'px';
+      dd.style.transform = 'translateX(-50%)';
+      dd.classList.add('open');
+    };
+    const hide = () => { closeTimer = setTimeout(() => dd.classList.remove('open'), 120); };
+    wrap.addEventListener('mouseenter', show);
+    wrap.addEventListener('mouseleave', hide);
+    dd.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    dd.addEventListener('mouseleave', hide);
+  });
 
   document.getElementById('tasksBtn').addEventListener('click', openTasks);
   document.getElementById('tasksClose').addEventListener('click', closeTasks);
