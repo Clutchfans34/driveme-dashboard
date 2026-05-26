@@ -4728,99 +4728,184 @@
   function closeTasks() { overlay.classList.remove('open'); sidebar.classList.remove('open'); }
 
   // ── FILII BRANCH DATA ──
+  let _branchKey = null;
+
   const filiiBranches = {
     dp1: { name:'Дніпро', brand:'DRIVE ME', code:'ДП-1', color:'#F07000', cars:49, addr:'вул. Набережна Перемоги, 12',
            manager:'Билиба Роман', deputy:'Шеремет Євген', recruiter:'Пугачова Анна',
-           valFact:5590406, valPlan:5850000, valPct:95.56, valCls:'y',
-           brandFact:147000, brandPlan:220500, brandPct:66.67, brandCls:'r',
-           op:989347, finrez:842347, margin:15.88, marginCls:'y', takeRate:37.35,
-           roi:87.04, roiCls:'g', util:82.89, utilCls:'', downtime:3.95, downtimeCls:'g',
-           stoDto:13.16, stoDtoCls:'', revDay:1814, netCar:20191,
-           cac:1527, cacCls:'', retention:0.74, retCls:'r',
-           dtoAll:6, dtoG:5, dtoPct:83, dtoCls:'r',
-           slusar:19633, slusarCls:'r', kuzov:4632, kuzovCls:'r' },
+           months:{ apr:{
+             valFact:5590406,valPlan:5850000,valPct:95.56,valCls:'y',
+             brandFact:147000,brandPlan:220500,brandPct:66.67,brandCls:'r',
+             op:989347,finrez:842347,margin:15.88,marginCls:'y',takeRate:37.35,
+             roi:87.04,roiCls:'g',util:82.89,utilCls:'',downtime:3.95,downtimeCls:'g',
+             stoDto:13.16,stoDtoCls:'',revDay:1814,netCar:20191,
+             cac:1527,cacCls:'',retention:0.74,retCls:'r',
+             dtoAll:6,dtoG:5,dtoPct:83,dtoCls:'r',slusar:19633,slusarCls:'r',kuzov:4632,kuzovCls:'r',
+             iKasa:5590406,iBrand:147000,iIns:320655,iDfees:173945,iFines:20149,iTotal:6259631,
+             eDw:3502287,eAw:222741,eRep:961994,eBod:226948,eOsa:0,eTires:126030,
+             eAdm:43686,eMkt:30545,eFin:19376,eCo:236764,eTotal:5256763
+           }}},
     dp2: { name:'Дніпро 2', brand:'WAY UP DRIVE', code:'ДП-2', color:'#3B82F6', cars:71, addr:'вул. Паторжинського, 39',
            manager:'Бітюков Діма', deputy:'Гринченко Олег', recruiter:'Мусияка Іра',
-           valFact:7468478, valPlan:8300000, valPct:89.98, valCls:'r',
-           brandFact:205000, brandPlan:319500, brandPct:64.16, brandCls:'r',
-           op:1458894, finrez:1253894, margin:18.01, marginCls:'y', takeRate:37.79,
-           roi:77.53, roiCls:'y', util:76.01, utilCls:'r', downtime:7.32, downtimeCls:'y',
-           stoDto:16.66, stoDtoCls:'r', revDay:1839, netCar:20548,
-           cac:1387, cacCls:'', retention:1.21, retCls:'',
-           dtoAll:14, dtoG:7, dtoPct:50, dtoCls:'y',
-           slusar:14662, slusarCls:'y', kuzov:2323, kuzovCls:'g' },
+           months:{ apr:{
+             valFact:7468478,valPlan:8300000,valPct:89.98,valCls:'r',
+             brandFact:205000,brandPlan:319500,brandPct:64.16,brandCls:'r',
+             op:1458894,finrez:1253894,margin:18.01,marginCls:'y',takeRate:37.79,
+             roi:77.53,roiCls:'y',util:76.01,utilCls:'r',downtime:7.32,downtimeCls:'y',
+             stoDto:16.66,stoDtoCls:'r',revDay:1839,netCar:20548,
+             cac:1387,cacCls:'',retention:1.21,retCls:'',
+             dtoAll:14,dtoG:7,dtoPct:50,dtoCls:'y',slusar:14662,slusarCls:'y',kuzov:2323,kuzovCls:'g',
+             iKasa:7468478,iBrand:205000,iIns:280388,iDfees:156528,iFines:14018,iTotal:8125236,
+             eDw:4646429,eAw:208404,eRep:1040978,eBod:164899,eOsa:132520,eTires:286684,
+             eAdm:70034,eMkt:40221,eFin:22122,eCo:337139,eTotal:6687766
+           }}},
     zp:  { name:'Запоріжжя', brand:'DRIVE ME', code:'ЗП', color:'#22c55e', cars:43, addr:'пр. Соборний, 158',
            manager:'Дуплий Діма', deputy:'Олефіренко Ярослав', recruiter:'Медовкіна Альона',
-           valFact:4274125, valPlan:4850000, valPct:88.13, valCls:'r',
-           brandFact:156627, brandPlan:154800, brandPct:101.18, brandCls:'g',
-           op:525403, finrez:368776, margin:11.42, marginCls:'r', takeRate:38.82,
-           roi:91.41, roiCls:'g', util:75.08, utilCls:'r', downtime:11.51, downtimeCls:'r',
-           stoDto:12.89, stoDtoCls:'', revDay:1835, netCar:12219,
-           cac:4633, cacCls:'r', retention:0.86, retCls:'r',
-           dtoAll:6, dtoG:3, dtoPct:50, dtoCls:'y',
-           slusar:17346, slusarCls:'r', kuzov:3305, kuzovCls:'y' },
+           months:{ apr:{
+             valFact:4274125,valPlan:4850000,valPct:88.13,valCls:'r',
+             brandFact:156627,brandPlan:154800,brandPct:101.18,brandCls:'g',
+             op:525403,finrez:368776,margin:11.42,marginCls:'r',takeRate:38.82,
+             roi:91.41,roiCls:'g',util:75.08,utilCls:'r',downtime:11.51,downtimeCls:'r',
+             stoDto:12.89,stoDtoCls:'',revDay:1835,netCar:12219,
+             cac:4633,cacCls:'r',retention:0.86,retCls:'r',
+             dtoAll:6,dtoG:3,dtoPct:50,dtoCls:'y',slusar:17346,slusarCls:'r',kuzov:3305,kuzovCls:'y',
+             iKasa:4274125,iBrand:156627,iIns:100036,iDfees:103633,iFines:2619,iTotal:4644160,
+             eDw:2614735,eAw:146200,eRep:745866,eBod:142109,eOsa:149085,eTires:82616,
+             eAdm:43755,eMkt:27798,eFin:43048,eCo:204482,eTotal:4114620
+           }}},
     kr:  { name:'Кривий Ріг', brand:'DRIVE ME', code:'КР', color:'#A855F7', cars:50, addr:'вул. Визволення, 37',
            manager:'Стьопін Роман', deputy:'Чорна Анна', recruiter:'Бугайова Юля',
-           valFact:4496125, valPlan:4750000, valPct:94.66, valCls:'y',
-           brandFact:123000, brandPlan:135000, brandPct:91.11, brandCls:'y',
-           op:616541, finrez:493541, margin:12.60, marginCls:'r', takeRate:36.43,
-           roi:66.23, roiCls:'y', util:80.97, utilCls:'', downtime:2.97, downtimeCls:'g',
-           stoDto:16.06, stoDtoCls:'r', revDay:1431, netCar:12331,
-           cac:1071, cacCls:'g', retention:1.00, retCls:'',
-           dtoAll:4, dtoG:3, dtoPct:75, dtoCls:'r',
-           slusar:11889, slusarCls:'y', kuzov:3223, kuzovCls:'y' },
+           months:{ apr:{
+             valFact:4496125,valPlan:4750000,valPct:94.66,valCls:'y',
+             brandFact:123000,brandPlan:135000,brandPct:91.11,brandCls:'y',
+             op:616541,finrez:493541,margin:12.60,marginCls:'r',takeRate:36.43,
+             roi:66.23,roiCls:'y',util:80.97,utilCls:'',downtime:2.97,downtimeCls:'g',
+             stoDto:16.06,stoDtoCls:'r',revDay:1431,netCar:12331,
+             cac:1071,cacCls:'g',retention:1.00,retCls:'',
+             dtoAll:4,dtoG:3,dtoPct:75,dtoCls:'r',slusar:11889,slusarCls:'y',kuzov:3223,kuzovCls:'y',
+             iKasa:4496125,iBrand:123000,iIns:127830,iDfees:147034,iFines:10555,iTotal:4917453,
+             eDw:2858177,eAw:153170,eRep:594447,eBod:161162,eOsa:165650,eTires:88079,
+             eAdm:48503,eMkt:24626,eFin:27991,eCo:243416,eTotal:4304969
+           }}},
     pl:  { name:'Полтава', brand:'WAY UP DRIVE', code:'ПЛ', color:'#F59E0B', cars:64, addr:'вул. Сінна, 12',
            manager:'Крат Олег', deputy:'Войтенко Влад', recruiter:'Усенко Вероніка',
-           valFact:5671237, valPlan:5800000, valPct:97.78, valCls:'y',
-           brandFact:329000, brandPlan:403200, brandPct:81.60, brandCls:'y',
-           op:1174718, finrez:845718, margin:18.54, marginCls:'y', takeRate:36.47,
-           roi:96.12, roiCls:'g', util:85.47, utilCls:'g', downtime:2.42, downtimeCls:'g',
-           stoDto:12.11, stoDtoCls:'', revDay:1432, netCar:18355,
-           cac:679, cacCls:'g', retention:1.41, retCls:'g',
-           dtoAll:6, dtoG:3, dtoPct:50, dtoCls:'y',
-           slusar:9810, slusarCls:'g', kuzov:883, kuzovCls:'g' },
+           months:{ apr:{
+             valFact:5671237,valPlan:5800000,valPct:97.78,valCls:'y',
+             brandFact:329000,brandPlan:403200,brandPct:81.60,brandCls:'y',
+             op:1174718,finrez:845718,margin:18.54,marginCls:'y',takeRate:36.47,
+             roi:96.12,roiCls:'g',util:85.47,utilCls:'g',downtime:2.42,downtimeCls:'g',
+             stoDto:12.11,stoDtoCls:'',revDay:1432,netCar:18355,
+             cac:679,cacCls:'g',retention:1.41,retCls:'g',
+             dtoAll:6,dtoG:3,dtoPct:50,dtoCls:'y',slusar:9810,slusarCls:'g',kuzov:883,kuzovCls:'g',
+             iKasa:5671237,iBrand:329000,iIns:222354,iDfees:132571,iFines:22050,iTotal:6384688,
+             eDw:3602993,eAw:243790,eRep:627835,eBod:56506,eOsa:215345,eTires:82898,
+             eAdm:58421,eMkt:21038,eFin:55075,eCo:303059,eTotal:5215386
+           }}},
     vn:  { name:'Вінниця', brand:'WAY UP DRIVE', code:'ВН', color:'#EC4899', cars:30, addr:'вул. Хмельницьке шосе, 7',
            manager:'Кабанов Сергій', deputy:'Романча Євген', recruiter:'Гонтарук Ангеліна',
-           valFact:2034333, valPlan:2400000, valPct:84.76, valCls:'r',
-           brandFact:109500, brandPlan:202500, brandPct:54.07, brandCls:'r',
-           op:434859, finrez:325359, margin:17.85, marginCls:'y', takeRate:38.33,
-           roi:52.43, roiCls:'r', util:71.94, utilCls:'r', downtime:10.61, downtimeCls:'r',
-           stoDto:17.44, stoDtoCls:'r', revDay:1326, netCar:14495,
-           cac:1477, cacCls:'', retention:0.94, retCls:'r',
-           dtoAll:3, dtoG:2, dtoPct:67, dtoCls:'r',
-           slusar:12414, slusarCls:'y', kuzov:988, kuzovCls:'g' },
+           months:{ apr:{
+             valFact:2034333,valPlan:2400000,valPct:84.76,valCls:'r',
+             brandFact:109500,brandPlan:202500,brandPct:54.07,brandCls:'r',
+             op:434859,finrez:325359,margin:17.85,marginCls:'y',takeRate:38.33,
+             roi:52.43,roiCls:'r',util:71.94,utilCls:'r',downtime:10.61,downtimeCls:'r',
+             stoDto:17.44,stoDtoCls:'r',revDay:1326,netCar:14495,
+             cac:1477,cacCls:'',retention:0.94,retCls:'r',
+             dtoAll:3,dtoG:2,dtoPct:67,dtoCls:'r',slusar:12414,slusarCls:'y',kuzov:988,kuzovCls:'g',
+             iKasa:2034333,iBrand:109500,iIns:76910,iDfees:214942,iFines:6097,iTotal:2448903,
+             eDw:1254614,eAw:102190,eRep:372421,eBod:29643,eOsa:35449,eTires:302,
+             eAdm:44210,eMkt:22153,eFin:14040,eCo:140155,eTotal:2008070
+           }}},
     lv:  { name:'Львів', brand:'DRIVE ME', code:'ЛВ', color:'#06B6D4', cars:41, addr:'вул. Городоцька, 213',
            manager:'Мількевич Вадим', deputy:'Бабій Святослав', recruiter:'Грицан Соломія',
-           valFact:4817764, valPlan:4500000, valPct:107.06, valCls:'g',
-           brandFact:564620, brandPlan:442800, brandPct:127.51, brandCls:'g',
-           op:1545585, finrez:980965, margin:27.83, marginCls:'g', takeRate:35.13,
-           roi:79.91, roiCls:'y', util:88.66, utilCls:'g', downtime:8.21, downtimeCls:'y',
-           stoDto:3.13, stoDtoCls:'g', revDay:2011, netCar:37697,
-           cac:1048, cacCls:'g', retention:1.68, retCls:'g',
-           dtoAll:6, dtoG:3, dtoPct:50, dtoCls:'y',
-           slusar:6804, slusarCls:'g', kuzov:3254, kuzovCls:'y' },
+           months:{ apr:{
+             valFact:4817764,valPlan:4500000,valPct:107.06,valCls:'g',
+             brandFact:564620,brandPlan:442800,brandPct:127.51,brandCls:'g',
+             op:1545585,finrez:980965,margin:27.83,marginCls:'g',takeRate:35.13,
+             roi:79.91,roiCls:'y',util:88.66,utilCls:'g',downtime:8.21,downtimeCls:'y',
+             stoDto:3.13,stoDtoCls:'g',revDay:2011,netCar:37697,
+             cac:1048,cacCls:'g',retention:1.68,retCls:'g',
+             dtoAll:6,dtoG:3,dtoPct:50,dtoCls:'y',slusar:6804,slusarCls:'g',kuzov:3254,kuzovCls:'y',
+             iKasa:4817764,iBrand:564620,iIns:74700,iDfees:96500,iFines:11514,iTotal:5565098,
+             eDw:3125402,eAw:122726,eRep:278975,eBod:133409,eOsa:0,eTires:64786,
+             eAdm:50736,eMkt:33539,eFin:59043,eCo:201756,eTotal:4022036
+           }}},
   };
 
-  function goToBranch(branchKey) {
+  function goToBranch(branchKey, selMonth) {
     const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
     if (branchKey) {
+      _branchKey = branchKey;
+      const month = selMonth || 'apr';
       const b = filiiBranches[branchKey];
       if (!b) return;
+      const MONTHS = [{k:'jan',l:'Січень'},{k:'feb',l:'Лютий'},{k:'mar',l:'Березень'},{k:'apr',l:'Квітень'},{k:'may',l:'Травень'},{k:'jun',l:'Червень'},{k:'jul',l:'Липень'},{k:'aug',l:'Серпень'},{k:'sep',l:'Вересень'},{k:'oct',l:'Жовтень'},{k:'nov',l:'Листопад'},{k:'dec',l:'Грудень'}];
+      const CUR = 'may';
+      const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
       const clr = {g:'var(--green)',y:'var(--yellow)',r:'var(--red)','':'var(--text)'};
-      const fmt = n => Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-      const kc = (lbl, val, cls, sub) =>
-        '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px">' +
-        '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">' + lbl + '</div>' +
-        '<div style="font-size:19px;font-weight:900;color:' + (clr[cls]||'var(--text)') + ';line-height:1.1">' + val + '</div>' +
-        (sub ? '<div style="font-size:11px;color:var(--muted);margin-top:5px">' + sub + '</div>' : '') + '</div>';
-      const sh = (icon, title) =>
-        '<div style="display:flex;align-items:center;gap:10px;margin:28px 0 14px">' +
-        '<span style="font-size:13px">' + icon + '</span>' +
-        '<span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">' + title + '</span>' +
-        '<div style="flex:1;height:1px;background:var(--border);margin-left:6px"></div></div>';
+      const monthBar = '<div style="display:flex;align-items:center;gap:7px;padding:14px 0 20px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;-ms-overflow-style:none">' +
+        '<button style="flex-shrink:0;padding:5px 14px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:12px;font-weight:700;cursor:default;white-space:nowrap">2026 ▾</button>' +
+        MONTHS.map(m => {
+          const isSel = m.k === month, isCur = m.k === CUR, hasData = !!b.months[m.k];
+          const dot = isCur && !isSel ? '<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#22c55e;margin-left:5px;vertical-align:middle"></span>' : '';
+          let st = isSel && hasData ? 'background:#F07000;border:1px solid #F07000;color:#fff;font-weight:800'
+                 : isCur ? 'background:transparent;border:1px solid #22c55e;color:#22c55e;font-weight:700'
+                 : hasData ? 'background:var(--bg3);border:1px solid rgba(240,112,0,.4);color:var(--accent);font-weight:700'
+                 : 'background:transparent;border:1px solid var(--border);color:var(--muted);font-weight:500';
+          const oc = hasData ? 'onclick="goToBranch(\'' + branchKey + '\',\'' + m.k + '\')" ' : '';
+          return '<button ' + oc + 'style="flex-shrink:0;padding:5px 14px;border-radius:20px;' + st + ';font-size:12px;cursor:' + (hasData ? 'pointer' : 'default') + ';white-space:nowrap">' + m.l + dot + '</button>';
+        }).join('') + '</div>';
+      const md = b.months[month];
+      let content = '';
+      if (!md) {
+        content = '<div style="padding:60px 0;text-align:center"><div style="font-size:36px;margin-bottom:12px">📅</div><div style="font-size:16px;font-weight:700;margin-bottom:8px">Дані відсутні</div><div style="font-size:13px;color:var(--muted)">Статистика за цей місяць ще не завантажена</div></div>';
+      } else {
+        const kc = (lbl, val, cls, sub) =>
+          '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:13px 15px">' +
+          '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">' + lbl + '</div>' +
+          '<div style="font-size:17px;font-weight:900;color:' + (clr[cls]||'var(--text)') + ';line-height:1.1">' + val + '</div>' +
+          (sub ? '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + sub + '</div>' : '') + '</div>';
+        const sh = (icon, t) => '<div style="display:flex;align-items:center;gap:10px;margin:22px 0 11px"><span style="font-size:13px">' + icon + '</span><span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">' + t + '</span><div style="flex:1;height:1px;background:var(--border);margin-left:6px"></div></div>';
+        const fc = (lbl, fact, plan, pct, cls) => {
+          const bc = clr[cls] || 'var(--text)', bw = Math.min(pct, 100).toFixed(0);
+          return '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px">' +
+            '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">' + lbl + '</div>' +
+            '<div style="font-size:22px;font-weight:900;color:' + bc + ';margin-bottom:9px">' + fmt(fact) + ' <span style="font-size:13px;font-weight:500;opacity:.65">грн</span></div>' +
+            '<div style="height:3px;background:var(--bg2);border-radius:2px;margin-bottom:5px"><div style="width:' + bw + '%;height:100%;background:' + bc + ';border-radius:2px;max-width:100%"></div></div>' +
+            '<div style="display:flex;justify-content:space-between;font-size:11px"><span style="color:var(--muted)">план ' + fmt(plan) + ' грн</span><span style="font-weight:800;color:' + bc + '">' + pct.toFixed(1) + '%</span></div></div>';
+        };
+        const plr = (lbl, val) => '<tr><td style="padding:7px 14px;font-size:12px;color:var(--muted)">' + lbl + '</td><td style="padding:7px 14px;text-align:right;font-size:12px;font-weight:600">' + (val > 0 ? fmt(val) + ' грн' : '—') + '</td></tr>';
+        content =
+          sh('💰', 'Фінансові результати') +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px">' + fc('Вал факт / план', md.valFact, md.valPlan, md.valPct, md.valCls) + fc('Бренд факт / план', md.brandFact, md.brandPlan, md.brandPct, md.brandCls) + '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
+          '<div style="background:var(--bg3);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">ОП з брендом</div><div style="font-size:22px;font-weight:900;color:var(--green)">' + fmt(md.op) + ' <span style="font-size:13px;font-weight:500;opacity:.65">грн</span></div></div><div style="font-size:24px">🏆</div></div>' +
+          '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between"><div><div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Фінрез без бренду</div><div style="font-size:22px;font-weight:900">' + fmt(md.finrez) + ' <span style="font-size:13px;font-weight:500;opacity:.65">грн</span></div></div><div style="font-size:24px">💰</div></div>' +
+          '</div>' +
+          sh('⚙️', 'Операційні показники') +
+          '<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:9px">' +
+          kc('Завантаж.', md.util.toFixed(2)+'%', md.utilCls) + kc('Простій', md.downtime.toFixed(2)+'%', md.downtimeCls) + kc('СТО+ДТП', md.stoDto.toFixed(2)+'%', md.stoDtoCls) + kc('Take Rate', md.takeRate.toFixed(2)+'%', '') + kc('Op.Margin', md.margin.toFixed(2)+'%', md.marginCls) + kc('ROI рік', md.roi.toFixed(2)+'%', md.roiCls) +
+          '</div>' +
+          sh('📈', 'Ефективність') +
+          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">' +
+          kc('Каса/авто/день', fmt(md.revDay)+' грн', '') + kc('Net Profit/Car', fmt(md.netCar)+' грн', '') + kc('CAC', fmt(md.cac)+' грн', md.cacCls) + kc('Retention', md.retention.toFixed(2), md.retCls) +
+          '</div>' +
+          sh('🔧', 'ДТП та ремонти') +
+          '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">' +
+          kc('ДТП всього', md.dtoAll+' шт', '') + kc('Винних', md.dtoG+' ('+md.dtoPct+'%)', md.dtoCls) + kc('Слюсарний/авто', fmt(md.slusar)+' грн', md.slusarCls) + kc('Кузовний/авто', fmt(md.kuzov)+' грн', md.kuzovCls) +
+          '</div>' +
+          sh('📋', 'P&L — Звіт про прибутки та збитки') +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px">' +
+          '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden"><div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--green)">📥 Доходи</div><table style="width:100%;border-collapse:collapse">' +
+          plr('Каса Uklon', md.iKasa) + plr('Бренд Uklon', md.iBrand) + plr('Страхові виплати', md.iIns) + plr('Утримання з водіїв', md.iDfees) + plr('Штрафи з водіїв', md.iFines) +
+          '<tr style="background:var(--bg2)"><td style="padding:9px 14px;font-size:12px;font-weight:800">Разом доходи</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:900;color:var(--green)">' + fmt(md.iTotal) + ' грн</td></tr></table></div>' +
+          '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden"><div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--red)">📤 Витрати</div><table style="width:100%;border-collapse:collapse">' +
+          plr('ЗП водіїв', md.eDw) + plr('ЗП адмін', md.eAw) + plr('Слюсарний ремонт', md.eRep) + plr('Кузовний ремонт', md.eBod) + plr('ОСАГО', md.eOsa) + plr('Шиномонтаж/шини', md.eTires) + plr('Адмін витрати', md.eAdm) + plr('Маркетинг', md.eMkt) + plr('Фінансові витрати', md.eFin) + plr('ЦО (перевиставлені)', md.eCo) +
+          '<tr style="background:var(--bg2)"><td style="padding:9px 14px;font-size:12px;font-weight:800">Разом витрати</td><td style="padding:9px 14px;text-align:right;font-size:13px;font-weight:900;color:var(--red)">' + fmt(md.eTotal) + ' грн</td></tr></table></div>' +
+          '</div>';
+      }
       document.getElementById('filii-detail-content').innerHTML = `
-        <button onclick="goToBranch(null)" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:24px;transition:border-color .18s" onmouseover="this.style.borderColor='rgba(240,112,0,.5)'" onmouseout="this.style.borderColor=''">← Назад до Філій</button>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px">
+        <button onclick="goToBranch(null)" style="display:inline-flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:20px;transition:border-color .18s" onmouseover="this.style.borderColor='rgba(240,112,0,.5)'" onmouseout="this.style.borderColor=''">← Назад до Філій</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:4px">
           <div style="display:flex;align-items:center;gap:14px">
             <div style="width:14px;height:14px;border-radius:50%;background:${b.color};box-shadow:0 0 10px ${b.color}"></div>
             <div>
@@ -4833,42 +4918,17 @@
             <div style="padding:6px 16px;border-radius:10px;background:var(--bg3);color:var(--muted);font-size:13px;font-weight:600;border:1px solid var(--border)">📍 ${b.addr}</div>
           </div>
         </div>
-        ${sh('💰','Фінансові результати — квітень 2026')}
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-          ${kc('Вал факт / план', fmt(b.valFact)+' грн', b.valCls, 'план '+fmt(b.valPlan)+' грн · '+b.valPct.toFixed(1)+'%')}
-          ${kc('Бренд факт / план', fmt(b.brandFact)+' грн', b.brandCls, 'план '+fmt(b.brandPlan)+' грн · '+b.brandPct.toFixed(1)+'%')}
-          ${kc('ОП з брендом', fmt(b.op)+' грн', '', '')}
-          ${kc('Фінрез без бренду', fmt(b.finrez)+' грн', '', '')}
+        ${monthBar}${content}
+        <div style="display:flex;align-items:center;gap:10px;margin:22px 0 11px">
+          <span style="font-size:13px">👥</span>
+          <span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted)">Команда філії</span>
+          <div style="flex:1;height:1px;background:var(--border);margin-left:6px"></div>
         </div>
-        ${sh('⚙️','Операційні показники')}
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
-          ${kc('Завантаження', b.util.toFixed(2)+'%', b.utilCls, '')}
-          ${kc('Простій', b.downtime.toFixed(2)+'%', b.downtimeCls, '')}
-          ${kc('СТО + ДТП', b.stoDto.toFixed(2)+'%', b.stoDtoCls, '')}
-          ${kc('Take Rate', b.takeRate.toFixed(2)+'%', '', '')}
-          ${kc('Op. Margin', b.margin.toFixed(2)+'%', b.marginCls, '')}
-        </div>
-        ${sh('📈','Ефективність флоту')}
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px">
-          ${kc('Каса/авто/день', fmt(b.revDay)+' грн', '', '')}
-          ${kc('Net Profit/Car', fmt(b.netCar)+' грн', '', '')}
-          ${kc('ROI рік', b.roi.toFixed(2)+'%', b.roiCls, '')}
-          ${kc('CAC', fmt(b.cac)+' грн', b.cacCls, '')}
-          ${kc('Retention Rate', b.retention.toFixed(2), b.retCls, '')}
-        </div>
-        ${sh('🔧','ДТП та ремонти')}
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
-          ${kc('ДТП всього', b.dtoAll+' шт', '', '')}
-          ${kc('Винних ДТП', b.dtoG+' ('+b.dtoPct+'%)', b.dtoCls, '')}
-          ${kc('Слюсарний/авто', fmt(b.slusar)+' грн', b.slusarCls, '')}
-          ${kc('Кузовний/авто', fmt(b.kuzov)+' грн', b.kuzovCls, '')}
-        </div>
-        ${sh('👥','Команда філії')}
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px">
           ${[['👤 Керівник',b.manager],['📊 Заст. ефективності',b.deputy],['🎯 Рекрутер',b.recruiter]].map(([role,person])=>
-            '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:16px 18px">' +
-            '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">' + role + '</div>' +
-            '<div style="font-size:15px;font-weight:700">' + person + '</div></div>').join('')}
+            '<div style="background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px">' +
+            '<div style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">' + role + '</div>' +
+            '<div style="font-size:14px;font-weight:700">' + person + '</div></div>').join('')}
         </div>`;
       document.querySelectorAll('.nav-tab').forEach(t => {
         t.classList.remove('active');
@@ -4877,6 +4937,7 @@
       all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-filii-detail'?'block':'none'; });
       window.scrollTo({ top:0, behavior:'smooth' });
     } else {
+      _branchKey = null;
       all.forEach(id => { const el=document.getElementById(id); if(el) el.style.display=id==='tab-filii'?'block':'none'; });
       window.scrollTo({ top:0 });
     }
