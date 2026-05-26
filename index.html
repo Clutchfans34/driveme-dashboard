@@ -1390,9 +1390,13 @@
       border: 1px solid var(--border);
       border-radius: var(--r);
       overflow: hidden;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
     .fleet-card:hover { border-color: rgba(240,112,0,.35); }
+    .fleet-card.clickable { cursor: pointer; }
+    .fleet-card.clickable:hover { border-color: rgba(240,112,0,.6); box-shadow: 0 0 0 2px rgba(240,112,0,.15); }
+    .fleet-card-link-icon { font-size:11px; color:var(--muted); margin-left:6px; opacity:0; transition:opacity .18s; }
+    .fleet-card.clickable:hover .fleet-card-link-icon { opacity:1; }
 
     .fleet-card-head {
       padding: 14px 16px 10px;
@@ -3005,9 +3009,9 @@
     </div>
 
     <!-- Вінниця -->
-    <div class="fleet-card">
+    <div class="fleet-card clickable" id="fleet-vn" onclick="goToFleetCard('fleet-vn')">
       <div class="fleet-card-head">
-        <div><div class="fleet-city">Вінниця</div><div class="fleet-brand">WAY UP DRIVE · ВН</div></div>
+        <div><div class="fleet-city">Вінниця <span class="fleet-card-link-icon">↗</span></div><div class="fleet-brand">WAY UP DRIVE · ВН</div></div>
         <div class="fleet-roi roi-red">ROI 56% ⚠️</div>
       </div>
       <table class="fleet-table">
@@ -4677,6 +4681,25 @@
 
   function openTasks()  { overlay.classList.add('open'); sidebar.classList.add('open'); }
   function closeTasks() { overlay.classList.remove('open'); sidebar.classList.remove('open'); }
+
+  // Навігація до конкретної картки флоту
+  function goToFleetCard(anchorId) {
+    const allSections = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+    document.querySelectorAll('.nav-tab').forEach(t => {
+      t.classList.remove('active');
+      if (t.textContent.trim() === 'Флот') t.classList.add('active');
+    });
+    allSections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === 'tab-fleet' ? 'block' : 'none';
+    });
+    if (anchorId) {
+      setTimeout(() => {
+        const el = document.getElementById(anchorId);
+        if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); el.style.boxShadow = '0 0 0 3px rgba(240,112,0,.5)'; setTimeout(() => el.style.boxShadow = '', 1800); }
+      }, 120);
+    }
+  }
 
   document.getElementById('tasksBtn').addEventListener('click', openTasks);
   document.getElementById('tasksClose').addEventListener('click', closeTasks);
