@@ -4068,19 +4068,32 @@
 
   <!-- MONTH SWITCHER -->
   <div class="pl-month-switcher">
-    <div class="pl-year-label">2026</div>
-    <button class="pl-mon-btn disabled" data-month="01">Січень</button>
-    <button class="pl-mon-btn disabled" data-month="02">Лютий</button>
-    <button class="pl-mon-btn disabled" data-month="03">Березень</button>
-    <button class="pl-mon-btn active"   data-month="04">Квітень</button>
-    <button class="pl-mon-btn current"  data-month="05">Травень ●</button>
-    <button class="pl-mon-btn disabled" data-month="06">Червень</button>
-    <button class="pl-mon-btn disabled" data-month="07">Липень</button>
-    <button class="pl-mon-btn disabled" data-month="08">Серпень</button>
-    <button class="pl-mon-btn disabled" data-month="09">Вересень</button>
-    <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
-    <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
-    <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+    <!-- Year picker -->
+    <div class="dash-year-wrap" id="plYearWrap">
+      <div class="dash-year-btn" onclick="togglePlYearPicker()">
+        <span id="plYearVal">2026</span> <span class="dash-year-arrow">▾</span>
+      </div>
+      <div class="dash-year-dropdown" id="plYearDropdown">
+        <div class="dash-year-opt selected" onclick="selectPlYear(2026)">2026</div>
+        <div class="dash-year-opt" onclick="selectPlYear(2025)">2025</div>
+        <div class="dash-year-opt" onclick="selectPlYear(2024)">2024</div>
+      </div>
+    </div>
+    <!-- Month buttons -->
+    <div id="plMonthBtns" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="pl-mon-btn disabled" data-month="01">Січень</button>
+      <button class="pl-mon-btn disabled" data-month="02">Лютий</button>
+      <button class="pl-mon-btn disabled" data-month="03">Березень</button>
+      <button class="pl-mon-btn active"   data-month="04">Квітень</button>
+      <button class="pl-mon-btn current"  data-month="05">Травень ●</button>
+      <button class="pl-mon-btn disabled" data-month="06">Червень</button>
+      <button class="pl-mon-btn disabled" data-month="07">Липень</button>
+      <button class="pl-mon-btn disabled" data-month="08">Серпень</button>
+      <button class="pl-mon-btn disabled" data-month="09">Вересень</button>
+      <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
+      <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
+      <button class="pl-mon-btn disabled" data-month="12">Грудень</button>
+    </div>
   </div>
 
   <!-- NO DATA PLACEHOLDER -->
@@ -5498,35 +5511,59 @@
   });
   renderDynTable('finrez');
 
-  // P&L Month Switcher
-  const plMonths = { '04': true }; // місяці з даними
-
-  document.querySelectorAll('.pl-mon-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const m = btn.getAttribute('data-month');
-      if (btn.classList.contains('disabled')) return;
-
-      // оновити активну кнопку
-      document.querySelectorAll('.pl-mon-btn').forEach(b => {
-        b.classList.remove('active');
-        if (b.classList.contains('current')) {
-          // прибрати active але залишити current стиль
-        }
-      });
-      btn.classList.add('active');
-
-      // показати потрібний контент
-      document.querySelectorAll('.pl-content').forEach(c => c.classList.remove('show'));
-      const noData = document.getElementById('plNoData');
-      const content = document.getElementById('pl-content-' + m);
-
-      if (content) {
-        content.classList.add('show');
-        noData.classList.remove('show');
-      } else {
-        noData.classList.add('show');
-      }
+  // ── P&L YEAR PICKER ──────────────────────────────────────────
+  function togglePlYearPicker() {
+    document.getElementById('plYearWrap').classList.toggle('open');
+  }
+  function selectPlYear(y) {
+    document.getElementById('plYearVal').textContent = y;
+    document.getElementById('plYearWrap').classList.remove('open');
+    document.querySelectorAll('#plYearDropdown .dash-year-opt').forEach(o => {
+      o.classList.toggle('selected', parseInt(o.textContent) === y);
     });
+    const container = document.getElementById('plMonthBtns');
+    const mNames = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+    if (y === 2026) {
+      container.innerHTML = mNames.map((m, i) => {
+        const mon = String(i + 1).padStart(2, '0');
+        if (mon === '04') return `<button class="pl-mon-btn active" data-month="${mon}">${m}</button>`;
+        if (mon === '05') return `<button class="pl-mon-btn current" data-month="${mon}">Травень ●</button>`;
+        return `<button class="pl-mon-btn disabled" data-month="${mon}">${m}</button>`;
+      }).join('');
+      document.querySelectorAll('.pl-content').forEach(c => c.classList.remove('show'));
+      document.getElementById('pl-content-04').classList.add('show');
+      document.getElementById('plNoData').classList.remove('show');
+    } else {
+      container.innerHTML = mNames.map((m, i) =>
+        `<button class="pl-mon-btn disabled" data-month="${String(i + 1).padStart(2, '0')}">${m}</button>`
+      ).join('');
+      document.querySelectorAll('.pl-content').forEach(c => c.classList.remove('show'));
+      document.getElementById('plNoData').classList.add('show');
+      document.getElementById('plNoData').querySelector('.pl-no-data-title').textContent = `Дані за ${y} рік в розробці`;
+    }
+  }
+  // Close P&L year dropdown on outside click
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('plYearWrap');
+    if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+  });
+
+  // P&L Month Switcher — event delegation (works for re-rendered buttons too)
+  document.getElementById('plMonthBtns').addEventListener('click', e => {
+    const btn = e.target.closest('.pl-mon-btn');
+    if (!btn || btn.classList.contains('disabled')) return;
+    const m = btn.getAttribute('data-month');
+    document.querySelectorAll('#plMonthBtns .pl-mon-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.pl-content').forEach(c => c.classList.remove('show'));
+    const noData = document.getElementById('plNoData');
+    const content = document.getElementById('pl-content-' + m);
+    if (content) {
+      content.classList.add('show');
+      noData.classList.remove('show');
+    } else {
+      noData.classList.add('show');
+    }
   });
 
   // ── Theme toggle ──────────────────────────────────────────
