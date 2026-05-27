@@ -803,7 +803,7 @@
     /* ── KPI GRID ── */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       gap: 12px;
       margin-bottom: 20px;
     }
@@ -1934,6 +1934,7 @@
   <!-- KPI CARDS -->
   <div class="kpi-grid">
 
+    <!-- [0] Вал місяць -->
     <div class="kpi-card">
       <div class="kpi-card-top">
         <div class="kpi-tag">Вал місяць</div>
@@ -1947,6 +1948,7 @@
       <div class="kpi-bar"><div class="kpi-bar-fill" style="width:91.6%"></div></div>
     </div>
 
+    <!-- [1] Бренд Uklon -->
     <div class="kpi-card">
       <div class="kpi-card-top">
         <div class="kpi-tag">Бренд Uklon</div>
@@ -1960,6 +1962,7 @@
       <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:66.8%"></div></div>
     </div>
 
+    <!-- [2] Авто в роботі -->
     <div class="kpi-card">
       <div class="kpi-card-top">
         <div class="kpi-tag">Авто в роботі</div>
@@ -1973,23 +1976,11 @@
       <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:80.45%"></div></div>
     </div>
 
-    <div class="kpi-card">
-      <div class="kpi-card-top">
-        <div class="kpi-tag">Фінрез з брендом</div>
-        <div class="kpi-icon">📈</div>
-      </div>
-      <div class="kpi-num">6.75<span class="unit">М</span></div>
-      <div class="kpi-footer">
-        <span class="badge up">↑ 19.7%</span>
-        <span class="kpi-desc">ОП</span>
-      </div>
-      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:71.2%"></div></div>
-    </div>
-
+    <!-- [3] Утримання -->
     <div class="kpi-card">
       <div class="kpi-card-top">
         <div class="kpi-tag">Утримання</div>
-        <div class="kpi-icon">🔧</div>
+        <div class="kpi-icon">🔩</div>
       </div>
       <div class="kpi-num">1.03<span class="unit">М</span></div>
       <div class="kpi-footer">
@@ -1999,6 +1990,7 @@
       <div class="kpi-bar"><div class="kpi-bar-fill yellow" style="width:92%"></div></div>
     </div>
 
+    <!-- [4] Заходи від СК -->
     <div class="kpi-card">
       <div class="kpi-card-top">
         <div class="kpi-tag">Заходи від СК</div>
@@ -2010,6 +2002,38 @@
         <span class="kpi-desc">страхові виплати</span>
       </div>
       <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:75%"></div></div>
+    </div>
+
+    <!-- [5] Ремонти (слюсарний + кузовний) -->
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Ремонти</div>
+        <div class="kpi-icon">🛠️</div>
+      </div>
+      <div class="kpi-num">5.54<span class="unit">М</span></div>
+      <div class="kpi-footer" style="flex-direction:column;align-items:flex-start;gap:3px">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="badge neu" style="font-size:9px;padding:2px 7px">🔩 Слюс 4.62М</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px">
+          <span class="badge down" style="font-size:9px;padding:2px 7px">🚗 Кузов 0.91М</span>
+        </div>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill red" style="width:78%"></div></div>
+    </div>
+
+    <!-- [6] Фінрез з брендом (останній) -->
+    <div class="kpi-card">
+      <div class="kpi-card-top">
+        <div class="kpi-tag">Фінрез з брендом</div>
+        <div class="kpi-icon">📈</div>
+      </div>
+      <div class="kpi-num">6.75<span class="unit">М</span></div>
+      <div class="kpi-footer">
+        <span class="badge up">↑ 19.7%</span>
+        <span class="kpi-desc">ОП</span>
+      </div>
+      <div class="kpi-bar"><div class="kpi-bar-fill green" style="width:71.2%"></div></div>
     </div>
 
   </div>
@@ -5173,10 +5197,13 @@
       isLive: false,
       liveDate: null,
       kpi: [
-        { num: '34.35<span class="unit">М</span>', badgeClass: 'badge up',   badgeText: '↑ 2.1%',    desc: 'vs березень',                barWidth: '91.6%',  barExtra: '' },
-        { num: '280<span class="unit">/348</span>', badgeClass: 'badge neu',  badgeText: '80.45%',    desc: 'завантаженість',              barWidth: '80.45%', barExtra: 'yellow' },
-        { num: '6.75<span class="unit">М</span>',  badgeClass: 'badge up',   badgeText: '↑ 19.7%',   desc: 'операційний прибуток',        barWidth: '71.2%',  barExtra: 'green' },
-        { num: '1.63<span class="unit">М</span>',  badgeClass: 'badge down', badgeText: '↓ 33%',     desc: 'від плану 2.44М',             barWidth: '66.8%',  barExtra: 'red' }
+        { num: '34.35<span class="unit">М</span>', badgeClass: 'badge up',   badgeText: '↑ 2.1%',   desc: 'vs березень',             barWidth: '91.6%',  barExtra: '' },
+        { num: '1.63<span class="unit">М</span>',  badgeClass: 'badge down', badgeText: '↓ 33%',    desc: 'від плану 2.44М',         barWidth: '66.8%',  barExtra: 'red' },
+        { num: '280<span class="unit">/348</span>', badgeClass: 'badge neu',  badgeText: '80.45%',   desc: 'завантаженість',          barWidth: '80.45%', barExtra: 'yellow' },
+        { num: '1.03<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: '92%',      desc: 'від нарахованих 1.12М',   barWidth: '92%',    barExtra: 'yellow' },
+        { num: '1.20<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: '45 ДТП',   desc: 'страхові виплати',        barWidth: '75%',    barExtra: '' },
+        { num: '5.54<span class="unit">М</span>',  badgeClass: 'badge down', badgeText: '🔩 4.62М', desc: '🚗 Кузов 0.91М',          barWidth: '78%',    barExtra: 'red' },
+        { num: '6.75<span class="unit">М</span>',  badgeClass: 'badge up',   badgeText: '↑ 19.7%', desc: 'ОП',                      barWidth: '71.2%',  barExtra: 'green' }
       ],
       tableChip: 'Квітень 2026 · 348 авто'
     },
@@ -5185,10 +5212,13 @@
       isLive: true,
       liveDate: '15 трав.',
       kpi: [
-        { num: '35.0<span class="unit">М</span>',  badgeClass: 'badge up',   badgeText: '↑ 1.8%',    desc: 'прогноз · 95.65% плану',     barWidth: '95.65%', barExtra: '' },
-        { num: '274<span class="unit">/348</span>', badgeClass: 'badge neu',  badgeText: '78.57%',    desc: 'завантаженість',              barWidth: '78.57%', barExtra: 'yellow' },
-        { num: '~6.5<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: 'оцінка',    desc: 'підсумок в кінці місяця',    barWidth: '68%',    barExtra: 'green' },
-        { num: '1.25<span class="unit">М</span>',  badgeClass: 'badge down', badgeText: '↓ 33.5%',   desc: 'від плану 1.88М (66.6%)',    barWidth: '66.6%',  barExtra: 'red' }
+        { num: '35.0<span class="unit">М</span>',  badgeClass: 'badge up',   badgeText: '↑ 1.8%',   desc: 'прогноз · 95.65% плану',  barWidth: '95.65%', barExtra: '' },
+        { num: '1.25<span class="unit">М</span>',  badgeClass: 'badge down', badgeText: '↓ 33.5%',  desc: 'від плану 1.88М (66.6%)', barWidth: '66.6%',  barExtra: 'red' },
+        { num: '274<span class="unit">/348</span>', badgeClass: 'badge neu',  badgeText: '78.57%',   desc: 'завантаженість',          barWidth: '78.57%', barExtra: 'yellow' },
+        { num: '1.03<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: '92%',      desc: 'від нарахованих 1.12М',   barWidth: '92%',    barExtra: 'yellow' },
+        { num: '1.20<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: '45 ДТП',   desc: 'страхові виплати',        barWidth: '75%',    barExtra: '' },
+        { num: '~5.5<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: 'оцінка',   desc: 'прогноз місяця',          barWidth: '78%',    barExtra: 'red' },
+        { num: '~6.5<span class="unit">М</span>',  badgeClass: 'badge neu',  badgeText: 'оцінка',   desc: 'підсумок в кінці місяця', barWidth: '68%',    barExtra: 'green' }
       ],
       tableChip: 'Травень 2026 · 348 авто · LIVE'
     }
