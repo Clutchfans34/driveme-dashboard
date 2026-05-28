@@ -1784,54 +1784,137 @@
   }
   .agent-item.active .agent-name { color: var(--agent-clr, var(--accent)); }
 
-  /* Agent popup card */
-  .agent-popup {
+  /* ── AGENT CHAT WINDOW ──────────────────────────────────── */
+  .agent-chat {
     position: fixed;
-    left: 80px; bottom: 24px;
-    width: 258px;
+    left: 80px; bottom: 20px;
+    width: 360px; height: 500px;
     background: var(--bg2);
     border: 1.5px solid var(--border);
-    border-radius: 14px;
+    border-radius: 16px;
     z-index: 96;
-    box-shadow: 0 8px 32px rgba(0,0,0,.45);
-    padding: 16px;
-    display: none;
+    box-shadow: 0 16px 48px rgba(0,0,0,.55);
+    display: none; flex-direction: column; overflow: hidden;
   }
-  .agent-popup.show {
-    display: block;
-    animation: agentPopIn .2s cubic-bezier(.4,0,.2,1);
+  .agent-chat.show {
+    display: flex;
+    animation: agentPopIn .22s cubic-bezier(.4,0,.2,1);
   }
   @keyframes agentPopIn {
-    from { opacity:0; transform:translateX(-10px); }
-    to   { opacity:1; transform:translateX(0); }
+    from { opacity:0; transform:translateX(-12px) scale(.97); }
+    to   { opacity:1; transform:translateX(0) scale(1); }
   }
-  .agent-popup-head {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 12px;
+
+  /* Header */
+  .ac-header {
+    display:flex; align-items:center; gap:10px;
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
   }
-  .agent-popup-emoji { font-size: 30px; line-height: 1; }
-  .agent-popup-name { font-size: 14px; font-weight: 900; }
-  .agent-popup-role { font-size: 10px; color: var(--muted); margin-top: 1px; }
-  .agent-popup-close {
-    margin-left: auto; flex-shrink: 0;
-    width: 24px; height: 24px;
-    background: var(--bg3); border-radius: 6px;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: var(--muted); transition: background .15s;
+  .ac-emoji { font-size:26px; line-height:1; }
+  .ac-name  { font-size:13px; font-weight:900; }
+  .ac-role  { font-size:9px; color:var(--muted); margin-top:1px;
+              text-transform:uppercase; letter-spacing:.5px; }
+  .ac-actions { margin-left:auto; display:flex; gap:6px; align-items:center; flex-shrink:0; }
+  .ac-tab-btn {
+    padding:4px 10px;
+    background:transparent; border:1px solid var(--border); border-radius:6px;
+    color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.3px;
+    cursor:pointer; transition:border-color .15s, color .15s; white-space:nowrap;
   }
-  .agent-popup-close:hover { background: var(--bg4); color: var(--text); }
-  .agent-popup-tab-btn {
-    display: block; width: 100%;
-    padding: 9px 12px;
-    background: rgba(240,112,0,.1);
-    border: 1.5px solid var(--accent);
-    border-radius: 8px;
-    color: var(--accent);
-    font-size: 12px; font-weight: 800; letter-spacing: .5px;
-    cursor: pointer; text-align: center;
-    transition: background .18s;
+  .ac-tab-btn:hover { color:var(--text); border-color:var(--text); }
+  .ac-close {
+    width:26px; height:26px; flex-shrink:0;
+    background:var(--bg3); border-radius:6px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:var(--muted); transition:background .15s;
   }
-  .agent-popup-tab-btn:hover { background: rgba(240,112,0,.2); }
+  .ac-close:hover { background:var(--bg4); color:var(--text); }
+
+  /* API key prompt */
+  .ac-key-prompt {
+    flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:11px; padding:24px 20px;
+  }
+  .ac-key-title { font-size:14px; font-weight:800; text-align:center; }
+  .ac-key-desc  { font-size:11px; color:var(--muted); text-align:center; line-height:1.5; }
+  .ac-key-input {
+    width:100%; padding:10px 12px;
+    background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); font-size:12px; font-family:monospace; outline:none;
+    transition:border-color .15s;
+  }
+  .ac-key-input:focus { border-color:var(--accent); }
+  .ac-key-save {
+    width:100%; padding:10px;
+    background:var(--accent); border:none; border-radius:8px;
+    color:#fff; font-size:13px; font-weight:800; cursor:pointer;
+    transition:opacity .15s;
+  }
+  .ac-key-save:hover { opacity:.85; }
+  .ac-key-reset {
+    font-size:10px; color:var(--muted); cursor:pointer;
+    text-decoration:underline; background:none; border:none;
+  }
+  .ac-key-reset:hover { color:var(--text); }
+
+  /* Messages */
+  .ac-msgs {
+    flex:1; overflow-y:auto; padding:12px 14px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .ac-msgs::-webkit-scrollbar { width:3px; }
+  .ac-msgs::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  .ac-msg { display:flex; flex-direction:column; gap:2px; }
+  .ac-msg.user      { align-items:flex-end; }
+  .ac-msg.assistant { align-items:flex-start; }
+  .ac-bubble {
+    max-width:88%; padding:9px 12px; border-radius:12px;
+    font-size:12.5px; line-height:1.55; word-break:break-word;
+  }
+  .ac-msg.user      .ac-bubble { background:var(--accent); color:#fff; border-bottom-right-radius:3px; }
+  .ac-msg.assistant .ac-bubble { background:var(--bg3); color:var(--text); border-bottom-left-radius:3px; }
+
+  /* Typing dots */
+  .ac-typing { display:inline-flex; gap:4px; align-items:center; padding:2px 2px; }
+  .ac-typing span {
+    width:5px; height:5px; background:var(--muted); border-radius:50%;
+    animation:acDot 1.2s ease-in-out infinite;
+  }
+  .ac-typing span:nth-child(2) { animation-delay:.2s; }
+  .ac-typing span:nth-child(3) { animation-delay:.4s; }
+  @keyframes acDot {
+    0%,60%,100% { transform:translateY(0); opacity:.5; }
+    30%          { transform:translateY(-4px); opacity:1; }
+  }
+
+  /* Welcome */
+  .ac-welcome { text-align:center; padding:16px 8px; color:var(--muted); font-size:12px; line-height:1.6; }
+
+  /* Input */
+  .ac-input-wrap {
+    display:flex; gap:8px; align-items:flex-end;
+    padding:10px 12px; border-top:1px solid var(--border); flex-shrink:0;
+  }
+  .ac-input {
+    flex:1; resize:none; min-height:36px; max-height:100px;
+    padding:8px 10px;
+    background:var(--bg3); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); font-size:12.5px; font-family:'Inter',sans-serif;
+    line-height:1.4; outline:none; overflow-y:auto; transition:border-color .15s;
+  }
+  .ac-input:focus { border-color:var(--accent); }
+  .ac-send {
+    width:36px; height:36px; flex-shrink:0;
+    background:var(--accent); border:none; border-radius:8px;
+    color:#fff; font-size:17px; font-weight:900;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:opacity .15s;
+  }
+  .ac-send:hover { opacity:.85; }
+  .ac-send:disabled { opacity:.35; cursor:default; }
 
   /* Highlight glow on agent-relevant elements */
   .agent-glow {
@@ -1938,17 +2021,40 @@
   </div>
 </div>
 
-<!-- AGENT POPUP -->
-<div class="agent-popup" id="agentPopup">
-  <div class="agent-popup-head">
-    <div class="agent-popup-emoji" id="apEmoji"></div>
+<!-- AGENT CHAT WINDOW -->
+<div class="agent-chat" id="agentChat">
+
+  <!-- Header -->
+  <div class="ac-header">
+    <div class="ac-emoji" id="acEmoji"></div>
     <div>
-      <div class="agent-popup-name" id="apName"></div>
-      <div class="agent-popup-role" id="apRole"></div>
+      <div class="ac-name" id="acName"></div>
+      <div class="ac-role" id="acRole"></div>
     </div>
-    <div class="agent-popup-close" onclick="closeAgent()">✕</div>
+    <div class="ac-actions">
+      <button class="ac-tab-btn" id="acTabBtn"></button>
+      <div class="ac-close" onclick="closeAgent()">✕</div>
+    </div>
   </div>
-  <button class="agent-popup-tab-btn" id="apTabBtn"></button>
+
+  <!-- API key prompt -->
+  <div class="ac-key-prompt" id="acKeyPrompt" style="display:none">
+    <div style="font-size:28px">🔑</div>
+    <div class="ac-key-title">Anthropic API ключ</div>
+    <div class="ac-key-desc">Зберігається лише у вашому браузері.<br>Ніколи не передається нікуди.</div>
+    <input class="ac-key-input" id="acKeyInput" type="password" placeholder="sk-ant-api03-...">
+    <button class="ac-key-save" onclick="saveAgentApiKey()">Підключити →</button>
+  </div>
+
+  <!-- Chat messages -->
+  <div class="ac-msgs" id="acMsgs" style="display:none"></div>
+
+  <!-- Input area -->
+  <div class="ac-input-wrap" id="acInputWrap" style="display:none">
+    <textarea class="ac-input" id="acInput" placeholder="Запитайте агента…" rows="1"></textarea>
+    <button class="ac-send" id="acSend" title="Надіслати (Enter)">↑</button>
+  </div>
+
 </div>
 
 <!-- AI OVERLAY + PANEL -->
@@ -6653,8 +6759,136 @@
     },
   };
 
+  // ── AGENT SYSTEM PROMPTS ─────────────────────────────────
+  const AGENT_PROMPTS = {
+    khrystia: `Ти Христя — CFO (Фінансовий директор) компанії DriveMe. DriveMe — автопарк 348 авто, 7 філій (Дніпро ДП-1 49авт/ДП-2 71авт, Запоріжжя 43авт, Кривий Ріг 50авт, Полтава 64авт, Вінниця 30авт, Львів 41авт). Платформа Uklon. Квітень 2026: Вал 34.35М грн, Фінрез з брендом 6.75М грн, Бренд 1.63М (план 2.44М, 66.8%), Завантаженість 80.45% (ціль 90%). Take rate: 37-39%. Ціль фінрез: 9.48М/міс. Мотивація CEO Андрія: 3% від фінрез (~222К грн/міс зараз). Відповідай стисло і по-діловому, з конкретними цифрами. Мова — тільки українська.`,
+    yoda: `Ти Йода — CMO / Head of Growth компанії DriveMe. DriveMe — автопарк 348 авто, 7 філій, платформа Uklon. Квітень 2026: Бренд Uklon 1.63М (план 2.44М, виконання 66.8% — критично), Завантаженість 80.45% (ціль 90%). CAC водія ~1 309 грн (ціль 500 грн). Канал "Приведи друга" — конверсія 95%, найдешевший. Retention: ЛВ 1.71 міс (лідер), ВН 0.59 міс (критично). Ціль: 387 авто до грудня 2026, фінрез 9.48М/міс. Відповідай стратегічно, з ідеями та ентузіазмом. Мова — тільки українська.`,
+    harry: `Ти Гаррі — CIO / Інвестиційний директор компанії DriveMe. DriveMe — автопарк 348 авто, активи $2.3М ($97.85М грн). ROI по філіях: Запоріжжя 122% (лідер), Вінниця 55% (найнижчий). DCF оцінка ~690М грн. Модель: revenue share 35-40% парку. Плани: Одеса (50 авто, вересень 2026), Ташкент (міжнар., в розробці), Львів +50 авто. Відповідай аналітично, з цифрами, ROI-орієнтовано. Мова — тільки українська.`,
+    hermione: `Ти Герміона — HRG / HR-директор компанії DriveMe. DriveMe — 348 авто, 7 філій. Воронка рекрутингу квітень: 591 заявка → 156 нових водіїв. CAC ~1 309 грн (ціль 500 грн). Retention: ЛВ 1.71 міс (найкращий), ВН 0.59 міс (критично). За рік звільнилось 138. Команда 50+ людей. Бонусна система: керівники, заступники, рекрутери. Відповідай тепло і по-людськи, з турботою про команду. Мова — тільки українська.`,
+    vasyl: `Ти Василь — CLO / Юридичний радник компанії DriveMe. DriveMe — 348 авто, 7 філій, платформа Uklon. Ключові ризики: ДТП (45 шт квітень, страхові виплати 1.2М грн), договори оренди з водіями (ЦК/КТУ), відносини з Uklon, трудові спори. Відповідай точно, обережно, виділяй юридичні ризики. Мова — тільки українська.`,
+    tony: `Ти Тоні Старк — CTO / Технічний директор компанії DriveMe. DriveMe — 348 авто: Logan 147, Sonata LF 98, Cobalt 68, New Rise 35. Слюсарний ремонт квітень 4.62М грн, кузовний 0.91М. Профіль ремонту/авто/міс: Logan 10 699грн, Sonata LF 13 661грн, New Rise 6 870грн. 7 хронічних авто потребують уваги. Кореляція ДТП↔СТО. Відповідай технічно і конкретно. Мова — тільки українська.`,
+    kobe: `Ти Кобі — COO / Операційний директор компанії DriveMe. DriveMe — 348 авто, 7 філій. Завантаженість 80.45% (ціль 90%, gap -9.55pp). Простій: 19.55% = немає водія. Ціль: ДТП 2%, СТО 5.5%. Операційний ритм: щоденні Telegram-звіти CEO→Власник, щотижневі оперативки, щомісячна рада. 5 mini-games для мотивації філій. Вузькі місця: КР і ДП-2 критично по завантаженості. Відповідай рішуче і операційно. Мова — тільки українська.`,
+    guru: `Ти Guru — Data Analyst компанії DriveMe. DriveMe — 348 авто, 7 філій, платформа Uklon. Квітень 2026: Вал 34.35М грн, Фінрез 6.75М, Бренд 1.63М (66.8%), Завантаженість 80.45%. Аномалії: СТО +2.5pp, Простій +3pp vs березень. P&L деталі: ЛВ найкращий Take Rate, КР критично. Вмієш читати дані, знаходити аномалії, будувати таблиці. Відповідай з цифрами і структурованими таблицями коли доречно. Мова — тільки українська.`,
+    zinochka: `Ти Зіночка — Driver Success / відповідальна за утримання водіїв DriveMe. DriveMe — 348 авто, 7 філій, платформа Uklon. Lifecycle водія: день 0 (94%) → тиждень 1 (88%) → тиждень 2 (82%) → місяць 4 (78%). 5 Kernel Moments критичні. CAC ~1 309 грн. Retention: ЛВ 1.71 міс (кращий), ВН 0.59 міс (критично). Програма амбасадорів: потенціал 1.2М/рік. Відповідай з турботою, людяно, з фокусом на водіїв. Мова — тільки українська.`,
+    kolya: `Ти Коля — Chief of Staff і Персональний асистент Андрія П'яних, CEO компанії DriveMe. DriveMe — автопарк 348 авто, 7 філій, платформа Uklon. Квітень 2026: Вал 34.35М, Фінрез 6.75М (ціль 9.48М). Стратегія: 387 авто до грудня 2026, Одеса вересень, Ташкент в розробці. Команда: COO Волчан Іван, CFO Омельченко Людмила, CTO Лебедєв Максим. Ти допомагаєш планувати, розставляти пріоритети, готувати звіти, організовувати зустрічі. Відповідай чітко і практично. Мова — тільки українська.`,
+  };
+
+  const agentConversations = {};
   let activeAgent = null;
 
+  // ── HELPERS ──────────────────────────────────────────────
+  function getApiKey() { return localStorage.getItem('dm_anthropic_key') || ''; }
+
+  function escHtml(t) {
+    return String(t)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\n/g,'<br>');
+  }
+
+  function appendMsg(role, text) {
+    const msgs = document.getElementById('acMsgs');
+    msgs.querySelector('.ac-welcome')?.remove();
+    const div = document.createElement('div');
+    div.className = `ac-msg ${role}`;
+    div.innerHTML = `<div class="ac-bubble">${escHtml(text)}</div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function appendTyping() {
+    const msgs = document.getElementById('acMsgs');
+    const id   = 'act-' + Date.now();
+    const div  = document.createElement('div');
+    div.id = id; div.className = 'ac-msg assistant';
+    div.innerHTML = `<div class="ac-bubble"><div class="ac-typing"><span></span><span></span><span></span></div></div>`;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return id;
+  }
+
+  function showKeyPrompt() {
+    document.getElementById('acKeyPrompt').style.display = 'flex';
+    document.getElementById('acMsgs').style.display      = 'none';
+    document.getElementById('acInputWrap').style.display = 'none';
+  }
+
+  function showChatUI() {
+    document.getElementById('acKeyPrompt').style.display = 'none';
+    document.getElementById('acMsgs').style.display      = 'flex';
+    document.getElementById('acInputWrap').style.display = 'flex';
+    const msgs = document.getElementById('acMsgs');
+    if (!msgs.children.length) {
+      const a = AGENTS[activeAgent];
+      msgs.innerHTML = `<div class="ac-welcome">${a.emoji}<br><br>Привіт! Я <b>${a.name}</b> — ${a.role}.<br><br>Задайте будь-яке питання про DriveMe.</div>`;
+    }
+    setTimeout(() => document.getElementById('acInput')?.focus(), 50);
+  }
+
+  // ── API KEY SAVE ─────────────────────────────────────────
+  window.saveAgentApiKey = function() {
+    const inp = document.getElementById('acKeyInput');
+    const key = inp.value.trim();
+    if (!key.startsWith('sk-')) {
+      inp.style.borderColor = '#ef4444'; return;
+    }
+    localStorage.setItem('dm_anthropic_key', key);
+    showChatUI();
+  };
+
+  // ── SEND MESSAGE ─────────────────────────────────────────
+  window.sendAgentMsg = async function() {
+    const input = document.getElementById('acInput');
+    const text  = input.value.trim();
+    if (!text || !activeAgent) return;
+
+    const send = document.getElementById('acSend');
+    input.value = ''; input.style.height = 'auto';
+    send.disabled = true;
+
+    appendMsg('user', text);
+    if (!agentConversations[activeAgent]) agentConversations[activeAgent] = [];
+    agentConversations[activeAgent].push({ role:'user', content: text });
+
+    const typingId = appendTyping();
+
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': getApiKey(),
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 1024,
+          system: AGENT_PROMPTS[activeAgent] || '',
+          messages: agentConversations[activeAgent],
+        }),
+      });
+
+      document.getElementById(typingId)?.remove();
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        appendMsg('assistant', `⚠️ Помилка API: ${err.error?.message || resp.status}`);
+      } else {
+        const data   = await resp.json();
+        const answer = data.content?.[0]?.text || '—';
+        agentConversations[activeAgent].push({ role:'assistant', content: answer });
+        appendMsg('assistant', answer);
+      }
+    } catch(e) {
+      document.getElementById(typingId)?.remove();
+      appendMsg('assistant', `⚠️ Помилка з'єднання: ${e.message}`);
+    }
+
+    send.disabled = false;
+    document.getElementById('acMsgs').scrollTop = 99999;
+  };
+
+  // ── OPEN / CLOSE ─────────────────────────────────────────
   window.toggleAgent = function(id) {
     if (activeAgent === id) { closeAgent(); return; }
     openAgentView(id);
@@ -6666,35 +6900,40 @@
     clearHighlights();
     activeAgent = id;
 
-    // Sidebar active state
     document.querySelectorAll('.agent-item').forEach(el =>
       el.classList.toggle('active', el.dataset.agent === id));
 
-    // Populate popup
-    document.getElementById('apEmoji').textContent = a.emoji;
-    document.getElementById('apName').textContent  = a.name;
-    document.getElementById('apRole').textContent  = a.role;
-    const popup = document.getElementById('agentPopup');
-    popup.style.borderColor = a.color;
-    const btn = document.getElementById('apTabBtn');
-    btn.textContent       = `→ ${a.tab}`;
-    btn.style.borderColor = a.color;
-    btn.style.color       = a.color;
-    btn.style.background  = a.color + '18';
-    btn.onclick = () => goToAgentTab(a.tab);
-    popup.classList.add('show');
+    document.getElementById('acEmoji').textContent = a.emoji;
+    document.getElementById('acName').textContent  = a.name;
+    document.getElementById('acRole').textContent  = a.role;
 
-    // Apply highlights
+    const chat = document.getElementById('agentChat');
+    chat.style.borderColor = a.color;
+
+    const btn = document.getElementById('acTabBtn');
+    btn.textContent = `→ ${a.tab}`;
+    btn.onclick = () => goToAgentTab(a.tab);
+
+    // Restore previous conversation
+    const msgs = document.getElementById('acMsgs');
+    msgs.innerHTML = '';
+    if (agentConversations[id]?.length) {
+      agentConversations[id].forEach(m => appendMsg(m.role, m.content));
+    }
+
+    chat.classList.add('show');
+    getApiKey() ? showChatUI() : showKeyPrompt();
     applyHighlights(a);
   }
 
   window.closeAgent = function() {
     activeAgent = null;
     document.querySelectorAll('.agent-item').forEach(el => el.classList.remove('active'));
-    document.getElementById('agentPopup').classList.remove('show');
+    document.getElementById('agentChat').classList.remove('show');
     clearHighlights();
   };
 
+  // ── HIGHLIGHTS ───────────────────────────────────────────
   function clearHighlights() {
     document.querySelectorAll('.agent-glow').forEach(el => {
       el.classList.remove('agent-glow');
@@ -6704,12 +6943,10 @@
 
   function applyHighlights(a) {
     a.selectors.forEach(sel => {
-      try {
-        document.querySelectorAll(sel).forEach(el => {
-          el.classList.add('agent-glow');
-          el.style.setProperty('--glow', a.color);
-        });
-      } catch(e) {}
+      try { document.querySelectorAll(sel).forEach(el => {
+        el.classList.add('agent-glow');
+        el.style.setProperty('--glow', a.color);
+      }); } catch(e) {}
     });
   }
 
@@ -6718,26 +6955,48 @@
       .find(t => t.textContent.trim() === tabName);
     if (tab) {
       tab.click();
-      if (activeAgent && AGENTS[activeAgent]) {
+      if (activeAgent && AGENTS[activeAgent])
         setTimeout(() => applyHighlights(AGENTS[activeAgent]), 120);
-      }
     }
   }
 
-  // ESC closes agent popup
+  // ── KEYBOARD / CLICK OUTSIDE ─────────────────────────────
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && activeAgent) closeAgent();
   });
 
-  // Click outside popup closes it
   document.addEventListener('click', e => {
     if (!activeAgent) return;
-    const popup   = document.getElementById('agentPopup');
+    const chat    = document.getElementById('agentChat');
     const sidebar = document.getElementById('agentsSidebar');
-    if (!popup.contains(e.target) && !sidebar.contains(e.target)) {
-      closeAgent();
-    }
+    if (!chat.contains(e.target) && !sidebar.contains(e.target)) closeAgent();
   });
+
+  // Enter to send, Shift+Enter for new line
+  document.addEventListener('DOMContentLoaded', () => {
+    const inp = document.getElementById('acInput');
+    if (!inp) return;
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAgentMsg(); }
+    });
+    inp.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+  });
+
+  // Wire up Enter key immediately (DOMContentLoaded may have already fired)
+  (() => {
+    const inp = document.getElementById('acInput');
+    if (!inp) return;
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAgentMsg(); }
+    });
+    inp.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+    });
+  })();
 </script>
 
 <!-- ═══════════════════════════════
