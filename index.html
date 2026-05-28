@@ -1724,6 +1724,128 @@
   body.light .news-form-input,
   body.light .news-form-textarea,
   body.light .news-form-select { background:var(--bg3); color:var(--text); }
+
+  /* ── AI AGENTS SIDEBAR ─────────────────────────────────────── */
+  .agents-sidebar {
+    position: fixed;
+    left: 0; top: 64px; bottom: 0;
+    width: 72px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    z-index: 95;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0 16px;
+    gap: 2px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .agents-sidebar::-webkit-scrollbar { width: 0; }
+
+  .agents-sidebar-lbl {
+    font-size: 8px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 4px 0 8px;
+    text-align: center;
+  }
+  .agents-sidebar-divider {
+    width: 36px; height: 1px;
+    background: var(--border);
+    margin: 4px 0; flex-shrink: 0;
+  }
+
+  .agent-item {
+    width: 56px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 3px; padding: 7px 4px;
+    border-radius: 10px; cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: background .18s, border-color .18s;
+    position: relative;
+    user-select: none;
+  }
+  .agent-item:hover { background: var(--bg3); }
+  .agent-item.active {
+    background: var(--bg3);
+    border-color: var(--agent-clr, var(--accent));
+  }
+  .agent-emoji { font-size: 22px; line-height: 1; transition: filter .2s; }
+  .agent-item.active .agent-emoji {
+    filter: drop-shadow(0 0 5px var(--agent-clr, var(--accent)));
+  }
+  .agent-name {
+    font-size: 7.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .4px;
+    color: var(--muted); text-align: center; line-height: 1.2;
+  }
+  .agent-item.active .agent-name { color: var(--agent-clr, var(--accent)); }
+
+  /* Agent popup card */
+  .agent-popup {
+    position: fixed;
+    left: 80px; top: 80px;
+    width: 258px;
+    background: var(--bg2);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    z-index: 96;
+    box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    padding: 16px;
+    display: none;
+  }
+  .agent-popup.show {
+    display: block;
+    animation: agentPopIn .2s cubic-bezier(.4,0,.2,1);
+  }
+  @keyframes agentPopIn {
+    from { opacity:0; transform:translateX(-10px); }
+    to   { opacity:1; transform:translateX(0); }
+  }
+  .agent-popup-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+  .agent-popup-emoji { font-size: 30px; line-height: 1; }
+  .agent-popup-name { font-size: 14px; font-weight: 900; }
+  .agent-popup-role { font-size: 10px; color: var(--muted); margin-top: 1px; }
+  .agent-popup-close {
+    margin-left: auto; flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--bg3); border-radius: 6px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--muted); transition: background .15s;
+  }
+  .agent-popup-close:hover { background: var(--bg4); color: var(--text); }
+  .agent-popup-tab-btn {
+    display: block; width: 100%;
+    padding: 9px 12px;
+    background: rgba(240,112,0,.1);
+    border: 1.5px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-size: 12px; font-weight: 800; letter-spacing: .5px;
+    cursor: pointer; text-align: center;
+    transition: background .18s;
+  }
+  .agent-popup-tab-btn:hover { background: rgba(240,112,0,.2); }
+
+  /* Highlight glow on agent-relevant elements */
+  .agent-glow {
+    outline: 2px solid var(--glow, var(--accent));
+    outline-offset: 3px;
+    border-radius: inherit;
+    transition: outline .25s;
+    position: relative; z-index: 2;
+  }
+
+  /* Shift nav + content right to make room for sidebar */
+  .nav { margin-left: 72px; }
+  main.content { margin-left: 72px; margin-right: auto; }
+  .tab-section { margin-left: 72px; }
   </style>
 </head>
 <body>
@@ -1757,6 +1879,77 @@
     <div class="header-date" id="hDate"></div>
   </div>
 </header>
+
+<!-- AI AGENTS SIDEBAR -->
+<div class="agents-sidebar" id="agentsSidebar">
+  <div class="agents-sidebar-lbl">ШІ</div>
+  <div class="agents-sidebar-divider"></div>
+
+  <div class="agent-item" data-agent="khrystia" style="--agent-clr:#22c55e" onclick="toggleAgent('khrystia')" title="Христя — CFO">
+    <div class="agent-emoji">💰</div>
+    <div class="agent-name">Христя</div>
+  </div>
+
+  <div class="agent-item" data-agent="yoda" style="--agent-clr:#A855F7" onclick="toggleAgent('yoda')" title="Йода — Growth">
+    <div class="agent-emoji">📈</div>
+    <div class="agent-name">Йода</div>
+  </div>
+
+  <div class="agent-item" data-agent="harry" style="--agent-clr:#F59E0B" onclick="toggleAgent('harry')" title="Гаррі — Інвестиції">
+    <div class="agent-emoji">💎</div>
+    <div class="agent-name">Гаррі</div>
+  </div>
+
+  <div class="agent-item" data-agent="hermione" style="--agent-clr:#3B82F6" onclick="toggleAgent('hermione')" title="Герміона — HR">
+    <div class="agent-emoji">👥</div>
+    <div class="agent-name">Герміона</div>
+  </div>
+
+  <div class="agent-item" data-agent="vasyl" style="--agent-clr:#94A3B8" onclick="toggleAgent('vasyl')" title="Василь — Legal">
+    <div class="agent-emoji">⚖️</div>
+    <div class="agent-name">Василь</div>
+  </div>
+
+  <div class="agent-item" data-agent="tony" style="--agent-clr:#F07000" onclick="toggleAgent('tony')" title="Тоні Старк — CTO">
+    <div class="agent-emoji">🔧</div>
+    <div class="agent-name">Тоні</div>
+  </div>
+
+  <div class="agent-item" data-agent="kobe" style="--agent-clr:#EF4444" onclick="toggleAgent('kobe')" title="Кобі — COO">
+    <div class="agent-emoji">🏀</div>
+    <div class="agent-name">Кобі</div>
+  </div>
+
+  <div class="agents-sidebar-divider"></div>
+
+  <div class="agent-item" data-agent="guru" style="--agent-clr:#06B6D4" onclick="toggleAgent('guru')" title="Guru — Data Analyst">
+    <div class="agent-emoji">📊</div>
+    <div class="agent-name">Guru</div>
+  </div>
+
+  <div class="agent-item" data-agent="zinochka" style="--agent-clr:#EC4899" onclick="toggleAgent('zinochka')" title="Зіночка — Driver Success">
+    <div class="agent-emoji">🚗</div>
+    <div class="agent-name">Зіночка</div>
+  </div>
+
+  <div class="agent-item" data-agent="kolya" style="--agent-clr:#CBD5E1" onclick="toggleAgent('kolya')" title="Коля — Chief of Staff">
+    <div class="agent-emoji">📋</div>
+    <div class="agent-name">Коля</div>
+  </div>
+</div>
+
+<!-- AGENT POPUP -->
+<div class="agent-popup" id="agentPopup">
+  <div class="agent-popup-head">
+    <div class="agent-popup-emoji" id="apEmoji"></div>
+    <div>
+      <div class="agent-popup-name" id="apName"></div>
+      <div class="agent-popup-role" id="apRole"></div>
+    </div>
+    <div class="agent-popup-close" onclick="closeAgent()">✕</div>
+  </div>
+  <button class="agent-popup-tab-btn" id="apTabBtn"></button>
+</div>
 
 <!-- AI OVERLAY + PANEL -->
 <div class="ai-overlay" id="aiOverlay"></div>
@@ -6390,6 +6583,161 @@
     ]);
   }
   renderNews();
+
+  // ── AI AGENTS SIDEBAR ──────────────────────────────────────
+  const AGENTS = {
+    khrystia: {
+      emoji:'💰', name:'Христя', role:'CFO · Фінансовий директор',
+      color:'#22c55e', tab:'P&L',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(1)',
+                 '#tab-dashboard .kpi-grid .kpi-card:nth-child(7)',
+                 '#tab-pl .pl-kpi',
+                 '#tab-pl .pl-table']
+    },
+    yoda: {
+      emoji:'📈', name:'Йода', role:'CMO · Head of Growth',
+      color:'#A855F7', tab:'Дашборд',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(2)',
+                 '#tab-dashboard .kpi-grid .kpi-card:nth-child(4)',
+                 '.fil-card']
+    },
+    harry: {
+      emoji:'💎', name:'Гаррі', role:'CIO · Інвестиційний директор',
+      color:'#F59E0B', tab:'Флот',
+      selectors:['#tab-fleet .fleet-sum-card',
+                 '#tab-fleet .fleet-branch-card']
+    },
+    hermione: {
+      emoji:'👥', name:'Герміона', role:'HRG · HR-директор',
+      color:'#3B82F6', tab:'HR',
+      selectors:['#tab-hr','#tab-team .branch-team-card','#tab-team .office-card']
+    },
+    vasyl: {
+      emoji:'⚖️', name:'Василь', role:'CLO · Юридичний радник',
+      color:'#94A3B8', tab:'СТО/ДТП',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(5)',
+                 '#tab-sto']
+    },
+    tony: {
+      emoji:'🔧', name:'Тоні Старк', role:'CTO · Технічний директор',
+      color:'#F07000', tab:'СТО/ДТП',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(6)',
+                 '#tab-sto',
+                 '#tab-fleet .fleet-branch-card']
+    },
+    kobe: {
+      emoji:'🏀', name:'Кобі', role:'COO · Операційний директор',
+      color:'#EF4444', tab:'Філії',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(3)',
+                 '.fil-card',
+                 '#tab-filii .filii-chip']
+    },
+    guru: {
+      emoji:'📊', name:'Guru', role:'Data Analyst · Аналітика',
+      color:'#06B6D4', tab:'P&L',
+      selectors:['#tab-pl',
+                 '#tab-pl table',
+                 '.fil-card']
+    },
+    zinochka: {
+      emoji:'🚗', name:'Зіночка', role:'Driver Success · Водії',
+      color:'#EC4899', tab:'Водії',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card:nth-child(4)',
+                 '#tab-drivers',
+                 '#tab-dashboard .kpi-grid .kpi-card:nth-child(3)']
+    },
+    kolya: {
+      emoji:'📋', name:'Коля', role:'Chief of Staff · Асистент',
+      color:'#CBD5E1', tab:'Дашборд',
+      selectors:['#tab-dashboard .kpi-grid .kpi-card']
+    },
+  };
+
+  let activeAgent = null;
+
+  window.toggleAgent = function(id) {
+    if (activeAgent === id) { closeAgent(); return; }
+    openAgentView(id);
+  };
+
+  function openAgentView(id) {
+    const a = AGENTS[id];
+    if (!a) return;
+    clearHighlights();
+    activeAgent = id;
+
+    // Sidebar active state
+    document.querySelectorAll('.agent-item').forEach(el =>
+      el.classList.toggle('active', el.dataset.agent === id));
+
+    // Populate popup
+    document.getElementById('apEmoji').textContent = a.emoji;
+    document.getElementById('apName').textContent  = a.name;
+    document.getElementById('apRole').textContent  = a.role;
+    const popup = document.getElementById('agentPopup');
+    popup.style.borderColor = a.color;
+    const btn = document.getElementById('apTabBtn');
+    btn.textContent       = `→ ${a.tab}`;
+    btn.style.borderColor = a.color;
+    btn.style.color       = a.color;
+    btn.style.background  = a.color + '18';
+    btn.onclick = () => goToAgentTab(a.tab);
+    popup.classList.add('show');
+
+    // Apply highlights
+    applyHighlights(a);
+  }
+
+  window.closeAgent = function() {
+    activeAgent = null;
+    document.querySelectorAll('.agent-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('agentPopup').classList.remove('show');
+    clearHighlights();
+  };
+
+  function clearHighlights() {
+    document.querySelectorAll('.agent-glow').forEach(el => {
+      el.classList.remove('agent-glow');
+      el.style.removeProperty('--glow');
+    });
+  }
+
+  function applyHighlights(a) {
+    a.selectors.forEach(sel => {
+      try {
+        document.querySelectorAll(sel).forEach(el => {
+          el.classList.add('agent-glow');
+          el.style.setProperty('--glow', a.color);
+        });
+      } catch(e) {}
+    });
+  }
+
+  function goToAgentTab(tabName) {
+    const tab = Array.from(document.querySelectorAll('.nav-tab'))
+      .find(t => t.textContent.trim() === tabName);
+    if (tab) {
+      tab.click();
+      if (activeAgent && AGENTS[activeAgent]) {
+        setTimeout(() => applyHighlights(AGENTS[activeAgent]), 120);
+      }
+    }
+  }
+
+  // ESC closes agent popup
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && activeAgent) closeAgent();
+  });
+
+  // Click outside popup closes it
+  document.addEventListener('click', e => {
+    if (!activeAgent) return;
+    const popup   = document.getElementById('agentPopup');
+    const sidebar = document.getElementById('agentsSidebar');
+    if (!popup.contains(e.target) && !sidebar.contains(e.target)) {
+      closeAgent();
+    }
+  });
 </script>
 
 <!-- ═══════════════════════════════
