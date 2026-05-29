@@ -1906,6 +1906,10 @@
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       Автопарк Team
     </a>
+    <button class="sheets-btn" id="sheetsBtn" onclick="openSheetsSettings()" title="Підключення до Google Sheets">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Sheets
+    </button>
     <button class="ai-btn" id="aiBtn" title="AI-аналіз поточного екрану">
       <span class="ai-btn-icon">✦</span> ШІ
     </button>
@@ -7253,6 +7257,204 @@ ${pageCtx}
     const inp = document.getElementById('libSearch');
     if (inp) { inp.value = ''; libFilter(''); inp.focus(); }
   }
+
+  // ═══════════════════════════════════════════════════
+  // GOOGLE SHEETS INTEGRATION
+  // ═══════════════════════════════════════════════════
+
+  const SHEETS_BASE = 'https://sheets.googleapis.com/v4/spreadsheets';
+
+  function getSheetsConfig() {
+    return {
+      id:  localStorage.getItem('dm_sheet_id')  || '',
+      key: localStorage.getItem('dm_sheet_key') || ''
+    };
+  }
+
+  function openSheetsSettings() {
+    const cfg = getSheetsConfig();
+    document.getElementById('sheetsIdInput').value  = cfg.id;
+    document.getElementById('sheetsApiInput').value = cfg.key;
+    document.getElementById('sheetsStatus').style.display = 'none';
+    document.getElementById('sheetsOverlay').classList.add('open');
+    document.getElementById('sheetsModal').classList.add('open');
+  }
+
+  function closeSheetsSettings() {
+    document.getElementById('sheetsOverlay').classList.remove('open');
+    document.getElementById('sheetsModal').classList.remove('open');
+  }
+
+  function saveSheetsSettings() {
+    const id  = document.getElementById('sheetsIdInput').value.trim();
+    const key = document.getElementById('sheetsApiInput').value.trim();
+    if (!id || !key) {
+      showSheetsStatus('Заповни обидва поля', 'err');
+      return;
+    }
+    localStorage.setItem('dm_sheet_id',  id);
+    localStorage.setItem('dm_sheet_key', key);
+    showSheetsStatus('Збережено! Перевіряємо підключення…', 'loading');
+    testSheetsConnection(true);
+  }
+
+  function clearSheetsSettings() {
+    localStorage.removeItem('dm_sheet_id');
+    localStorage.removeItem('dm_sheet_key');
+    document.getElementById('sheetsIdInput').value  = '';
+    document.getElementById('sheetsApiInput').value = '';
+    updateSheetsBadge(false);
+    closeSheetsSettings();
+  }
+
+  function showSheetsStatus(msg, type) {
+    const el = document.getElementById('sheetsStatus');
+    el.textContent = msg;
+    el.className = 'sheets-status ' + type;
+    el.style.display = 'block';
+  }
+
+  async function fetchSheet(sheetName, range) {
+    const cfg = getSheetsConfig();
+    if (!cfg.id || !cfg.key) return null;
+    const url = `${SHEETS_BASE}/${cfg.id}/values/${encodeURIComponent(sheetName + '!' + range)}?key=${cfg.key}`;
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      return data.values || [];
+    } catch(e) {
+      console.error('Sheets fetch error:', e);
+      return null;
+    }
+  }
+
+  function parseSheetRows(values) {
+    if (!values || values.length < 2) return [];
+    const headers = values[0];
+    return values.slice(1).map(row => {
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = row[i] !== undefined ? row[i] : ''; });
+      return obj;
+    });
+  }
+
+  async function testSheetsConnection(afterSave) {
+    const cfg = getSheetsConfig();
+    if (!cfg.id || !cfg.key) {
+      showSheetsStatus('Спочатку заповни Sheet ID і API Key', 'err');
+      return;
+    }
+    showSheetsStatus('Перевіряємо підключення…', 'loading');
+    const values = await fetchSheet('НАЛАШТУВАННЯ', 'A1:B6');
+    if (values && values.length > 0) {
+      const rows = parseSheetRows(values);
+      const monthRow = rows.find(r => r['Параметр'] === 'Відображати як');
+      const period = monthRow ? monthRow['Значення'] : 'OK';
+      showSheetsStatus(`✅ Підключено! Поточний період: ${period}`, 'ok');
+      updateSheetsBadge(true, period);
+      if (afterSave) {
+        setTimeout(() => { closeSheetsSettings(); syncDashboardFromSheets(); }, 1200);
+      }
+    } else {
+      showSheetsStatus('❌ Помилка підключення. Перевір Sheet ID, API Key і що таблиця публічна.', 'err');
+      updateSheetsBadge(false);
+    }
+  }
+
+  function updateSheetsBadge(connected, period) {
+    const btn = document.getElementById('sheetsBtn');
+    if (!btn) return;
+    if (connected) {
+      btn.classList.add('connected');
+      btn.title = `Google Sheets підключено · ${period || ''}`;
+    } else {
+      btn.classList.remove('connected');
+      btn.title = 'Підключення до Google Sheets';
+    }
+  }
+
+  async function syncDashboardFromSheets() {
+    const cfg = getSheetsConfig();
+    if (!cfg.id || !cfg.key) return;
+
+    // Fetch KPI per branch
+    const kpiValues = await fetchSheet('КРІ_ФІЛІЇ', 'A:S');
+    if (!kpiValues) return;
+    const rows = parseSheetRows(kpiValues);
+
+    // Get current period from НАЛАШТУВАННЯ
+    const cfgValues = await fetchSheet('НАЛАШТУВАННЯ', 'A:B');
+    const cfgRows   = parseSheetRows(cfgValues || []);
+    const monthRow  = cfgRows.find(r => r['Параметр'] === 'Поточний місяць');
+    const yearRow   = cfgRows.find(r => r['Параметр'] === 'Поточний рік');
+    const curMonth  = monthRow ? monthRow['Значення'] : '';
+    const curYear   = yearRow  ? yearRow['Значення']  : '';
+
+    // Filter rows for current period
+    const periodRows = rows.filter(r => r['Місяць'] === curMonth && r['Рік'] == curYear);
+    if (!periodRows.length) {
+      console.log('Sheets: no data for', curMonth, curYear);
+      return;
+    }
+
+    // Aggregate across branches
+    const agg = periodRows.reduce((acc, r) => {
+      acc.val     += parseNum(r['Вал_грн']);
+      acc.brand   += parseNum(r['Бренд_грн']);
+      acc.revenue += parseNum(r['Revenue_грн']);
+      acc.op      += parseNum(r['ОП_грн']);
+      acc.cars    += parseNum(r['Авто']);
+      acc.drivers += parseNum(r['Водії']);
+      acc.trips   += parseNum(r['Поїздки']);
+      return acc;
+    }, {val:0, brand:0, revenue:0, op:0, cars:0, drivers:0, trips:0});
+
+    agg.margin = agg.revenue > 0 ? (agg.op / agg.revenue * 100) : 0;
+
+    // Update DOM elements that have data-sheets attribute
+    updateKpiEl('dm-val',     fmt(agg.val/1000000, 2) + 'М');
+    updateKpiEl('dm-brand',   fmt(agg.brand/1000000, 2) + 'М');
+    updateKpiEl('dm-op',      fmt(agg.op/1000000, 2) + 'М');
+    updateKpiEl('dm-margin',  fmt(agg.margin, 1) + '%');
+    updateKpiEl('dm-cars',    String(agg.cars));
+    updateKpiEl('dm-drivers', String(agg.drivers));
+    updateKpiEl('dm-trips',   fmt(agg.trips/1000, 1) + 'К');
+
+    // Update period label
+    const periodLabel = document.getElementById('dm-period-label');
+    if (periodLabel) periodLabel.textContent = `${curMonth} ${curYear} · Sheets ✓`;
+
+    console.log('✅ Dashboard synced from Google Sheets:', curMonth, curYear);
+  }
+
+  function updateKpiEl(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  function parseNum(v) {
+    if (!v) return 0;
+    return parseFloat(String(v).replace(/\s/g,'').replace(',','.')) || 0;
+  }
+
+  function fmt(n, dec) {
+    return n.toFixed(dec).replace('.', '.');
+  }
+
+  // Auto-init on load
+  (function initSheets() {
+    const cfg = getSheetsConfig();
+    if (cfg.id && cfg.key) {
+      updateSheetsBadge(true);
+      syncDashboardFromSheets();
+    }
+  })();
+
+  // ESC closes sheets modal
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeSheetsSettings();
+  });
 </script>
 
 <!-- ═══════════════════════════════
@@ -7316,6 +7518,109 @@ ${pageCtx}
   }
   .yoda-quote { color: var(--accent); font-style: italic; font-weight: 600; margin-bottom: 4px; }
   .yoda-role  { color: #666; font-size: 10px; }
+
+    /* ══ GOOGLE SHEETS BTN ══ */
+    .sheets-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 0 13px; height: 34px;
+      background: rgba(52,168,83,.12);
+      border: 1px solid rgba(52,168,83,.35);
+      border-radius: 10px;
+      color: #34a853; font-size: 12px; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      transition: background .18s;
+    }
+    .sheets-btn:hover { background: rgba(52,168,83,.22); }
+    .sheets-btn.connected { background: rgba(52,168,83,.18); border-color: #34a853; }
+
+    /* ══ SHEETS MODAL ══ */
+    .sheets-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.65); backdrop-filter: blur(4px);
+      z-index: 950; opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .sheets-overlay.open { opacity: 1; pointer-events: all; }
+    .sheets-modal {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%,-52%) scale(.96);
+      width: 520px; max-width: calc(100vw - 32px);
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6);
+      z-index: 951; padding: 28px 32px;
+      opacity: 0; pointer-events: none;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1), opacity .22s;
+    }
+    .sheets-modal.open {
+      transform: translate(-50%,-50%) scale(1);
+      opacity: 1; pointer-events: all;
+    }
+    .sheets-modal-title {
+      font-size: 17px; font-weight: 900; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sheets-modal-sub { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+    .sheets-field { margin-bottom: 16px; }
+    .sheets-label {
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px;
+    }
+    .sheets-input {
+      width: 100%; box-sizing: border-box;
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: var(--text); outline: none;
+      transition: border-color .2s;
+      font-family: monospace;
+    }
+    .sheets-input:focus { border-color: #34a853; }
+    .sheets-input-hint { font-size: 11px; color: var(--muted); margin-top: 5px; }
+    .sheets-actions {
+      display: flex; gap: 10px; margin-top: 22px; align-items: center;
+    }
+    .sheets-save-btn {
+      flex: 1; padding: 11px; background: #34a853; color: #fff;
+      border: none; border-radius: 10px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: opacity .2s;
+    }
+    .sheets-save-btn:hover { opacity: .88; }
+    .sheets-test-btn {
+      padding: 11px 18px; background: var(--bg3);
+      border: 1px solid var(--border); color: var(--text);
+      border-radius: 10px; font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+    }
+    .sheets-test-btn:hover { background: var(--bg2); }
+    .sheets-clear-btn {
+      padding: 11px 14px; background: transparent;
+      border: 1px solid rgba(239,68,68,.4); color: #ef4444;
+      border-radius: 10px; font-size: 12px; font-weight: 700;
+      cursor: pointer;
+    }
+    .sheets-status {
+      margin-top: 14px; padding: 10px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: 600;
+      display: none;
+    }
+    .sheets-status.ok { background: rgba(52,168,83,.12); color: #34a853; border: 1px solid rgba(52,168,83,.3); }
+    .sheets-status.err { background: rgba(239,68,68,.12); color: #ef4444; border: 1px solid rgba(239,68,68,.3); }
+    .sheets-status.loading { background: rgba(99,102,241,.1); color: var(--accent); border: 1px solid rgba(99,102,241,.3); }
+    .sheets-how {
+      margin-top: 18px; padding: 14px;
+      background: var(--bg3); border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .sheets-how-title { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+    .sheets-how ol { margin: 0; padding-left: 18px; }
+    .sheets-how li { font-size: 11px; color: var(--muted); line-height: 1.7; }
+    .sheets-how a { color: var(--accent); }
+    .sheets-sync-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700; color: #34a853;
+      background: rgba(52,168,83,.1); border: 1px solid rgba(52,168,83,.3);
+      border-radius: 20px; padding: 2px 9px; margin-left: 8px;
+    }
 </style>
 
 <div id="yoda-mascot" title="Йода — CMO · Growth" onclick="document.querySelectorAll('.nav-tab').forEach(t=>{if(t.textContent.trim()==='Команда')t.click()})">
@@ -7324,6 +7629,51 @@ ${pageCtx}
     <div class="yoda-role">Йода · CMO · Head of Growth · /yoda</div>
   </div>
   <img src="yoda2.png?v=4" alt="Йода">
+</div>
+
+
+<!-- GOOGLE SHEETS MODAL -->
+<div class="sheets-overlay" id="sheetsOverlay" onclick="closeSheetsSettings()"></div>
+<div class="sheets-modal" id="sheetsModal">
+  <div class="sheets-modal-title">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:#34a853"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    Google Sheets — Джерело даних
+  </div>
+  <div class="sheets-modal-sub">Підключи свою Google Таблицю — дашборд буде брати дані автоматично</div>
+
+  <div class="sheets-field">
+    <div class="sheets-label">Sheet ID</div>
+    <input class="sheets-input" id="sheetsIdInput" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms" />
+    <div class="sheets-input-hint">Знайди в URL таблиці: docs.google.com/spreadsheets/d/<strong>ТУТ_ID</strong>/edit</div>
+  </div>
+
+  <div class="sheets-field">
+    <div class="sheets-label">Google API Key</div>
+    <input class="sheets-input" id="sheetsApiInput" type="password" placeholder="AIzaSy..." />
+    <div class="sheets-input-hint">
+      <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--accent)">console.cloud.google.com</a>
+       → Create credentials → API key → обмеж до Sheets API
+    </div>
+  </div>
+
+  <div class="sheets-status" id="sheetsStatus"></div>
+
+  <div class="sheets-actions">
+    <button class="sheets-save-btn" onclick="saveSheetsSettings()">💾 Зберегти і підключити</button>
+    <button class="sheets-test-btn" onclick="testSheetsConnection()">🔌 Тест</button>
+    <button class="sheets-clear-btn" onclick="clearSheetsSettings()">✕</button>
+  </div>
+
+  <div class="sheets-how">
+    <div class="sheets-how-title">Як налаштувати (5 хвилин)</div>
+    <ol>
+      <li>Відкрий <strong>setup-google-sheets.gs</strong> на script.google.com → запусти <code>createDriveMeSheet()</code> → скопіюй Sheet ID</li>
+      <li>Зроби таблицю публічною: <em>Поділитись → Усі хто має посилання → Переглядач</em></li>
+      <li>Отримай API Key: <a href="https://console.cloud.google.com/apis/credentials" target="_blank">console.cloud.google.com</a> → Credentials → Create API key</li>
+      <li>Увімкни Google Sheets API у своєму проєкті Google Cloud</li>
+      <li>Встав Sheet ID і API Key вище → Зберегти</li>
+    </ol>
+  </div>
 </div>
 
 </body>
