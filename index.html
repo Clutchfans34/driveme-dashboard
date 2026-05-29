@@ -5913,10 +5913,14 @@
     btn.addEventListener('click', () => {
       document.querySelectorAll('.dyn-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
+      window._dm_currentMetric = btn.dataset.m;
       renderDynTable(btn.dataset.m);
     });
   });
   renderDynTable('finrez');
+  window._dm_currentMetric = 'finrez';
+  window._dm_dynMetrics = dynMetrics;
+  window._dm_renderDynTable = renderDynTable;
 
   // ── P&L YEAR PICKER ──────────────────────────────────────────
   function togglePlYearPicker() {
@@ -7425,7 +7429,57 @@ ${pageCtx}
     const periodLabel = document.getElementById('dm-period-label');
     if (periodLabel) periodLabel.textContent = `${curMonth} ${curYear} · Sheets ✓`;
 
+    // Оновлення таблиці динаміки з аркуша ДИНАМІКА
+    try {
+      const dynValues = await fetchSheet('ДИНАМІКА', 'A:P');
+      if (dynValues && dynValues.length > 1) {
+        applyDynamicsFromSheets(dynValues.slice(1));
+      }
+    } catch(e) {
+      console.log('ДИНАМІКА sync skipped:', e);
+    }
+
     console.log('✅ Dashboard synced from Google Sheets:', curMonth, curYear);
+  }
+
+  // Оновлення dynMetrics з даних ДИНАМІКА sheet
+  function applyDynamicsFromSheets(rows) {
+    const dm = window._dm_dynMetrics;
+    const render = window._dm_renderDynTable;
+    if (!dm || !render) return;
+
+    const orderedCodes = ['apr25','may25','jun25','jul25','aug25','sep25','oct25','nov25','dec25','jan26','feb26','mar26','apr26'];
+    const branches = ['ДП-1','ДП-2','ЗП','КР','ПЛ','ВН','ЛВ'];
+
+    // Будуємо lookup: code|branch → row
+    const lookup = {};
+    rows.forEach(r => {
+      if (r.length < 6) return;
+      const code = r[2]; // Місяць_Код
+      const branch = r[4]; // Код
+      if (code && branch) lookup[code + '|' + branch] = r;
+    });
+
+    const p = v => (v === '' || v === undefined || v === null) ? null : (parseFloat(String(v).replace(',','.')) || null);
+
+    branches.forEach(bKey => {
+      const vals = orderedCodes.map(mc => lookup[mc + '|' + bKey] || null);
+      if (dm.finrez && dm.finrez.data) dm.finrez.data[bKey]     = vals.map(r => r ? p(r[5])  : null);
+      if (dm.util && dm.util.data)     dm.util.data[bKey]        = vals.map(r => r ? p(r[6])  : null);
+      if (dm.val && dm.val.data)       dm.val.data[bKey]         = vals.map(r => r ? p(r[7])  : null);
+      if (dm.plan && dm.plan.data)     dm.plan.data[bKey]        = vals.map(r => r ? p(r[8])  : null);
+      if (dm.brand && dm.brand.data)   dm.brand.data[bKey]       = vals.map(r => r ? p(r[9])  : null);
+      if (dm.dtp && dm.dtp.data)       dm.dtp.data[bKey]         = vals.map(r => r ? {all: p(r[10])||0, own: p(r[11])||0} : null);
+      if (dm.drivers && dm.drivers.data) dm.drivers.data[bKey]   = vals.map(r => r ? p(r[12]) : null);
+      if (dm.slusarny && dm.slusarny.data) dm.slusarny.data[bKey] = vals.map(r => r ? p(r[13]) : null);
+      if (dm.kuzovny && dm.kuzovny.data) dm.kuzovny.data[bKey]   = vals.map(r => r ? p(r[14]) : null);
+      if (dm.utrymannya && dm.utrymannya.data) dm.utrymannya.data[bKey] = vals.map(r => r ? p(r[15]) : null);
+    });
+
+    // Перемальовуємо поточний metric
+    const cur = window._dm_currentMetric || 'finrez';
+    render(cur);
+    console.log('✅ Dynamics table synced from Sheets (' + rows.length + ' rows)');
   }
 
   function updateKpiEl(id, val) {
