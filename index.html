@@ -2507,6 +2507,21 @@
     </div>
   </div>
 
+  <!-- ПОШУК -->
+  <div style="position:relative;margin-bottom:22px;">
+    <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.5;">🔍</span>
+    <input id="libSearch"
+      type="text"
+      placeholder="Пошук по назві, автору, опису…"
+      oninput="libFilter(this.value)"
+      style="width:100%;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px 11px 40px;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;"
+      onfocus="this.style.borderColor='rgba(99,102,241,.6)'"
+      onblur="this.style.borderColor='var(--border)'"
+    />
+    <button id="libSearchClear" onclick="libClear()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;">✕</button>
+  </div>
+  <div id="libNoResults" style="display:none;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;">Нічого не знайдено 🔎</div>
+
   <!-- 3 КОЛОНКИ -->
   <div class="lib-3cols">
 
@@ -7132,6 +7147,35 @@ ${pageCtx}
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && aiPanel.classList.contains('open')) closeAiPanel();
   });
+
+  // Library search
+  function libFilter(q) {
+    q = q.trim().toLowerCase();
+    const clear = document.getElementById('libSearchClear');
+    if (clear) clear.style.display = q ? 'block' : 'none';
+    let anyVisible = false;
+    document.querySelectorAll('.lib-book-row').forEach(row => {
+      const title  = (row.querySelector('.lib-book-title')?.textContent || '').toLowerCase();
+      const author = (row.querySelector('.lib-book-author')?.textContent || '').toLowerCase();
+      const desc   = (row.querySelector('.lib-book-desc')?.textContent || '').toLowerCase();
+      const match  = !q || title.includes(q) || author.includes(q) || desc.includes(q);
+      row.style.display = match ? '' : 'none';
+      if (match) anyVisible = true;
+    });
+    // hide/show empty columns
+    document.querySelectorAll('.lib-col').forEach(col => {
+      const visible = [...col.querySelectorAll('.lib-book-row')].some(r => r.style.display !== 'none');
+      col.style.display = (!q || visible) ? '' : 'none';
+    });
+    const noRes = document.getElementById('libNoResults');
+    if (noRes) noRes.style.display = (q && !anyVisible) ? 'block' : 'none';
+    const grid = document.querySelector('.lib-3cols');
+    if (grid) grid.style.display = (q && !anyVisible) ? 'none' : '';
+  }
+  function libClear() {
+    const inp = document.getElementById('libSearch');
+    if (inp) { inp.value = ''; libFilter(''); inp.focus(); }
+  }
 </script>
 
 <!-- ═══════════════════════════════
