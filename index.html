@@ -1935,6 +1935,7 @@
   <div class="nav-tab">P&amp;L</div>
   <div class="nav-tab">Uklon</div>
   <div class="nav-tab">Аналітика</div>
+  <div class="nav-tab">📚 Бібліотека</div>
   <button class="nav-tasks-btn" id="tasksBtn">ЗАДАЧІ</button>
 </nav>
 
@@ -2430,6 +2431,50 @@
     </div>
   </div>
 
+
+
+<!-- ═══════════════════════════════
+     БІБЛІОТЕКА
+═══════════════════════════════ -->
+<section class="tab-section" id="tab-library" style="display:none">
+
+  <!-- HEADER -->
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
+    <div style="width:44px;height:44px;background:rgba(99,102,241,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📚</div>
+    <div>
+      <div style="font-size:20px;font-weight:900;letter-spacing:-.3px;">Бібліотека знань</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Книги · Навчання · Методології</div>
+    </div>
+  </div>
+
+  <!-- ПРОЧИТАНІ КНИГИ -->
+  <div style="margin-bottom:24px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Прочитані агентами</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;">
+
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
+        <div style="display:flex;align-items:flex-start;gap:14px;">
+          <div style="font-size:32px;flex-shrink:0;">📖</div>
+          <div>
+            <div style="font-size:13px;font-weight:800;margin-bottom:4px;">The Power of Moments</div>
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Chip &amp; Dan Heath · Зіночка (Driver Success)</div>
+            <div style="font-size:12px;color:var(--text);line-height:1.5;">4 типи Kernel Moments. Правило "Пік–Кінець". День 0 водія = ритуал, День 30 = святкування. +15% утримання.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- В ЧЕРЗІ -->
+  <div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">В черзі на читання</div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;color:var(--muted);font-size:13px;text-align:center;">
+      Додайте книги до черги читання через ШІ-асистента
+    </div>
+  </div>
+
+</section>
 
 </main>
 
@@ -4939,7 +4984,7 @@
   };
 
   function goToBranch(branchKey, selMonth) {
-    const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
     if (branchKey) {
       _branchKey = branchKey;
       const month = selMonth || 'apr';
@@ -5077,7 +5122,7 @@
 
   // Навігація до сторінки флоту філії або назад до Флоту
   function goToFleetCard(branchKey) {
-    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
     if (branchKey) {
       const b = fleetBranches[branchKey];
       if (!b) return;
@@ -5353,8 +5398,9 @@
     'P&L':      'tab-pl',
     'Uklon':    'tab-uklon',
     'Аналітика':'tab-analytics',
+    '📚 Бібліотека':'tab-library',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
