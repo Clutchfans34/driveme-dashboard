@@ -5544,13 +5544,22 @@
         <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
         <button class="pl-mon-btn disabled" data-month="12">Грудень</button>`;
       switchMonth(4);
+    } else if (y === 2025) {
+      // 2025: April–December have data in ДИНАМІКА
+      const months = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+      btns.innerHTML = months.map((m,i) => {
+        const mon = i + 1;
+        return mon >= 4
+          ? `<button class="pl-mon-btn" data-month="${mon}" onclick="switchMonthHistory(${mon},2025)">${m}</button>`
+          : `<button class="pl-mon-btn disabled" data-month="${mon}">${m}</button>`;
+      }).join('');
+      switchMonthHistory(4, 2025);
     } else {
-      // Other years — all disabled, show no-data message
+      // Other years — all disabled
       const months = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
       btns.innerHTML = months.map((m,i) =>
         `<button class="pl-mon-btn disabled" data-month="${i+1}">${m}</button>`
       ).join('');
-      // Show no-data state in KPI cards
       document.querySelectorAll('#tab-dashboard .kpi-num').forEach(el => el.innerHTML = '—');
       document.querySelectorAll('#tab-dashboard .kpi-desc').forEach(el => el.textContent = `Дані ${y} року в розробці`);
       document.querySelectorAll('#tab-dashboard .badge').forEach(el => { el.className = 'badge neu'; el.textContent = '—'; });
@@ -5641,6 +5650,89 @@
     // Branches table chip
     const chip = document.querySelector('#tab-dashboard .chip');
     if (chip) chip.textContent = d.tableChip;
+  }
+
+  // switchMonthHistory — shows historical data from ДИНАМІКА (2025 months)
+  function switchMonthHistory(month, year) {
+    const dm = window._dm_dynMetrics;
+    const mNamesMap = {
+      4:'Квітень',5:'Травень',6:'Червень',7:'Липень',8:'Серпень',9:'Вересень',
+      10:'Жовтень',11:'Листопад',12:'Грудень',1:'Січень',2:'Лютий',3:'Березень'
+    };
+    // Map month+year → dynMetrics array index (0–12)
+    const toIdx = {
+      '2025-4':0,'2025-5':1,'2025-6':2,'2025-7':3,'2025-8':4,'2025-9':5,
+      '2025-10':6,'2025-11':7,'2025-12':8,'2026-1':9,'2026-2':10,'2026-3':11
+    };
+    const idx = toIdx[year+'-'+month];
+    const monName = mNamesMap[month] || String(month);
+
+    // Active state on buttons
+    document.querySelectorAll('#tab-dashboard .pl-mon-btn[data-month]').forEach(p => {
+      p.classList.remove('active');
+      if (parseInt(p.dataset.month) === month) p.classList.add('active');
+    });
+
+    const lbl = document.getElementById('dash-month-label');
+    if (lbl) lbl.textContent = monName + ' ' + year;
+    document.getElementById('dash-live-badge').style.display = 'none';
+
+    if (idx === undefined || !dm) {
+      document.querySelectorAll('#tab-dashboard .kpi-num').forEach(el => el.innerHTML = '—');
+      return;
+    }
+
+    // Car counts (April 2026 as proxy)
+    const cars = {'ДП-1':49,'ДП-2':71,'ЗП':43,'КР':50,'ПЛ':64,'ВН':30,'ЛВ':41};
+    const branches = ['ДП-1','ДП-2','ЗП','КР','ПЛ','ВН','ЛВ'];
+    let totalVal=0, totalBrand=0, totalOP=0, totalCars=0, wtUtil=0, totalDtp=0, totalSlusar=0, totalKuzov=0;
+
+    branches.forEach(b => {
+      const val    = dm.val.data[b]      ? dm.val.data[b][idx]      : null;
+      const brand  = dm.brand.data[b]    ? dm.brand.data[b][idx]    : null;
+      const finrez = dm.finrez.data[b]   ? dm.finrez.data[b][idx]   : null;
+      const util   = dm.util.data[b]     ? dm.util.data[b][idx]     : null;
+      const dtp    = dm.dtp.data[b]      ? dm.dtp.data[b][idx]      : null;
+      const slus   = dm.slusarny.data[b] ? dm.slusarny.data[b][idx] : null;
+      const kuzov  = dm.kuzovny.data[b]  ? dm.kuzovny.data[b][idx]  : null;
+      if (val === null) return;
+      const c = cars[b];
+      totalVal   += val;
+      if (brand  !== null) totalBrand  += brand;
+      if (finrez !== null) { totalOP += finrez * c; totalCars += c; }
+      if (util   !== null) wtUtil      += util * c;
+      if (dtp    !== null) totalDtp    += dtp.all || 0;
+      if (slus   !== null) totalSlusar += slus;
+      if (kuzov  !== null) totalKuzov  += kuzov;
+    });
+
+    const avgUtil = totalCars > 0 ? wtUtil / totalCars : 0;
+    const fmtM = n => (n/1000000).toFixed(2)+'М';
+
+    const kpiData = [
+      { num: fmtM(totalVal)+'<span class="unit">М</span>',    badgeClass:'badge neu', badgeText: monName+' '+year, desc:'загальний вал',          barWidth: Math.min(totalVal/360000,100).toFixed(1)+'%',  barExtra:'' },
+      { num: fmtM(totalBrand)+'<span class="unit">М</span>',  badgeClass:'badge neu', badgeText: year,             desc:'бренд Uklon',             barWidth: Math.min(totalBrand/24000,100).toFixed(1)+'%', barExtra:'' },
+      { num: avgUtil.toFixed(1)+'<span class="unit">%</span>', badgeClass:'badge neu', badgeText: 'завантаженість', desc: monName+' '+year,         barWidth: avgUtil.toFixed(1)+'%',                        barExtra:'yellow' },
+      { num: '—',                                              badgeClass:'badge neu', badgeText:'—',               desc:'деталі в аркуші ДИНАМІКА',barWidth:'0%',                                           barExtra:'' },
+      { num: totalDtp+'<span class="unit"> ДТП</span>',       badgeClass:'badge neu', badgeText: totalDtp,         desc:'аварій за місяць',         barWidth:'75%',                                          barExtra:'' },
+      { num: fmtM(totalSlusar+totalKuzov)+'<span class="unit">М</span>', badgeClass:'badge neu', badgeText:'🔩 '+fmtM(totalSlusar), desc:'🚗 Кузов '+fmtM(totalKuzov), barWidth:'78%', barExtra:'yellow' },
+      { num: fmtM(totalOP)+'<span class="unit">М</span>',     badgeClass:'badge neu', badgeText:'ОП',              desc:'операційний прибуток',     barWidth: Math.min(totalOP/90000,100).toFixed(1)+'%',    barExtra:'green' }
+    ];
+
+    const kpiCards = document.querySelectorAll('#tab-dashboard .kpi-card');
+    kpiData.forEach((k,i) => {
+      const card = kpiCards[i]; if (!card) return;
+      card.querySelector('.kpi-num').innerHTML = k.num;
+      const badge = card.querySelector('.badge');
+      badge.className = k.badgeClass; badge.textContent = k.badgeText;
+      card.querySelector('.kpi-desc').textContent = k.desc;
+      const fill = card.querySelector('.kpi-bar-fill');
+      fill.style.width = k.barWidth;
+      fill.className = 'kpi-bar-fill' + (k.barExtra ? ' '+k.barExtra : '');
+    });
+
+    const chip = document.querySelector('#tab-dashboard .chip');
+    if (chip) chip.textContent = monName + ' ' + year;
   }
 
   // Init: April is default (confirmed static data). Live badge hidden.
