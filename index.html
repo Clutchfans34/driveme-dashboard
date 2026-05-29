@@ -2510,14 +2510,9 @@
   <!-- ПОШУК -->
   <div style="position:relative;margin-bottom:22px;">
     <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.5;">🔍</span>
-    <input id="libSearch"
-      type="text"
-      placeholder="Пошук по назві, автору, опису…"
-      oninput="libFilter(this.value)"
+    <input id="libSearch" type="text" placeholder="Пошук по назві, автору, опису…" oninput="libFilter(this.value)"
       style="width:100%;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px 11px 40px;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;"
-      onfocus="this.style.borderColor='rgba(99,102,241,.6)'"
-      onblur="this.style.borderColor='var(--border)'"
-    />
+      onfocus="this.style.borderColor='rgba(99,102,241,.6)'" onblur="this.style.borderColor='var(--border)'"/>
     <button id="libSearchClear" onclick="libClear()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;">✕</button>
   </div>
   <div id="libNoResults" style="display:none;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;">Нічого не знайдено 🔎</div>
@@ -2530,10 +2525,10 @@
       <div class="lib-col-head">
         <span class="lib-col-icon">🧠</span>
         <span class="lib-col-title">Особистий розвиток</span>
-        <span class="lib-col-badge">5 книг</span>
+        <span class="lib-col-badge">6 книг</span>
       </div>
       <div class="lib-book-list">
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Атомні звички</div>
@@ -2542,7 +2537,25 @@
           </div>
           <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/atomic-habits-james-clear.fb2" download>↓ FB2</a>
         </div>
-
+        
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">К чорта все! Берись і роби!</div>
+            <div class="lib-book-author">Річард Бренсон · FB2 · 905 KB</div>
+            <div class="lib-book-desc">Кредо Бренсона — брати від життя все. Підприємництво без страху, нестандартні рішення і як побудувати Virgin з нуля.</div>
+          </div>
+          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/branson-screw-it-lets-do-it.fb2" download>↓ FB2</a>
+        </div>
+        
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Драйв</div>
+            <div class="lib-book-author">Деніель Пінк · FB2 · 1.7 MB</div>
+            <div class="lib-book-desc">Що насправді мотивує: автономія, майстерність, мета. Чому зовнішні стимули (гроші, бонуси) руйнують внутрішню мотивацію.</div>
+          </div>
+          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/pink-drive-motivation.fb2" download>↓ FB2</a>
+        </div>
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">The Power of Moments</div>
@@ -2551,16 +2564,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Drive</div>
-            <div class="lib-book-author">Daniel H. Pink</div>
-            <div class="lib-book-desc">Що насправді мотивує людей: автономія, майстерність, мета. Не гроші — а сенс.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Thinking, Fast and Slow</div>
@@ -2569,16 +2573,15 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
-            <div class="lib-book-title">Atomic Habits (EN)</div>
-            <div class="lib-book-author">James Clear</div>
-            <div class="lib-book-desc">Мікрозміни що дають великий результат. Оригінальне видання англійською.</div>
+            <div class="lib-book-title">Нескучная работа</div>
+            <div class="lib-book-author">Роман Тарасенко</div>
+            <div class="lib-book-desc">Як зробити роботу командою цікавою та натхненною. Практичні інструменти для менеджерів.</div>
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
       </div>
     </div>
 
@@ -2587,28 +2590,28 @@
       <div class="lib-col-head">
         <span class="lib-col-icon">💼</span>
         <span class="lib-col-title">Бізнес-literatura</span>
-        <span class="lib-col-badge">7 книг</span>
+        <span class="lib-col-badge">10 книг</span>
       </div>
       <div class="lib-book-list">
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Культурний код</div>
             <div class="lib-book-author">Деніел Койл · FB2 · 1.4 MB</div>
-            <div class="lib-book-desc">3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу — що насправді об'єднує людей.</div>
+            <div class="lib-book-desc">3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу.</div>
           </div>
           <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/culture-code-daniel-coyle.fb2" download>↓ FB2</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Ніяких правил. Культура Netflix</div>
             <div class="lib-book-author">Рід Хастінгс, Ерін Мейєр · FB2 · 3.0 MB</div>
-            <div class="lib-book-desc">Свобода і відповідальність як корпоративна культура. Як Netflix виріс з DVD-прокату в медіагіганта — і чому відсутність правил працює краще.</div>
+            <div class="lib-book-desc">Свобода і відповідальність як культура. Як Netflix виріс з DVD-прокату в медіагіганта — і чому відсутність правил працює.</div>
           </div>
           <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/no-rules-netflix-hastings.fb2" download>↓ FB2</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Інноваційний менеджмент</div>
@@ -2617,7 +2620,34 @@
           </div>
           <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/hbr-innovation-management.fb2" download>↓ FB2</a>
         </div>
-
+        
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Чому не всі люблять ходити на роботу</div>
+            <div class="lib-book-author">Патрік Ленсіоні · FB2 · 699 KB</div>
+            <div class="lib-book-desc">Три причини незадоволеності роботою: анонімність, нерелевантність, невимірюваність. CEO рятує піцерію і знаходить справжню мотивацію.</div>
+          </div>
+          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/lencioni-miserable-job.fb2" download>↓ FB2</a>
+        </div>
+        
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Велика гра в бізнес</div>
+            <div class="lib-book-author">Джек Стек, Бо Бьорлінгем · FB2 · 2.5 MB</div>
+            <div class="lib-book-desc">Open-book management — управління як командна гра. Як зробити так, щоб кожен співробітник думав як власник.</div>
+          </div>
+          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/stack-great-game-business.fb2" download>↓ FB2</a>
+        </div>
+        
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Смерть від нарад</div>
+            <div class="lib-book-author">Патрік Ленсіоні · FB2 · 1.0 MB</div>
+            <div class="lib-book-desc">Нарада — не неминуче зло, а інструмент управління. Чотири типи зустрічей і як зробити їх результативними.</div>
+          </div>
+          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/lencioni-death-by-meeting.fb2" download>↓ FB2</a>
+        </div>
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Good to Great</div>
@@ -2626,7 +2656,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Traction</div>
@@ -2635,7 +2665,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Scaling Up</div>
@@ -2644,7 +2674,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">The Hard Thing About Hard Things</div>
@@ -2653,7 +2683,6 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
       </div>
     </div>
 
@@ -2665,7 +2694,7 @@
         <span class="lib-col-badge">Файли для скачування</span>
       </div>
       <div class="lib-book-list">
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Excel для бізнес-аналітики</div>
@@ -2674,7 +2703,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Фінансова модель автопарку</div>
@@ -2683,7 +2712,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">KPI Dashboard — шаблон CEO</div>
@@ -2692,7 +2721,7 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
+        
         <div class="lib-book-row">
           <div class="lib-book-info">
             <div class="lib-book-title">Uklon — тарифна документація 2026</div>
@@ -2701,7 +2730,6 @@
           </div>
           <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
-
       </div>
     </div>
 
