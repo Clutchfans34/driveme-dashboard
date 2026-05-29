@@ -5735,6 +5735,10 @@
     if (chip) chip.textContent = monName + ' ' + year;
   }
 
+  // Expose to global scope (called via onclick= in HTML)
+  window.switchMonthHistory = switchMonthHistory;
+  window.switchMonth = switchMonth;
+
   // Init: April is default (confirmed static data). Live badge hidden.
   document.getElementById('dash-live-badge').style.display = 'none';
 
