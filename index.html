@@ -1738,88 +1738,58 @@
 
 
   /* ── БІБЛІОТЕКА ───────────────────────────────────────── */
-  .lib-block { }
-
-  .lib-block-header {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 16px;
-  }
-  .lib-block-icon { font-size: 20px; }
-  .lib-block-title {
-    font-size: 14px; font-weight: 900; letter-spacing: -.2px;
-    flex: 1;
-  }
-  .lib-block-count {
-    font-size: 11px; color: var(--muted);
-    background: var(--bg3); border: 1px solid var(--border);
-    padding: 2px 10px; border-radius: 20px; font-weight: 600;
-  }
-
-  .lib-grid {
+  .lib-3cols {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 14px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: start;
   }
-
-  .lib-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 14px; padding: 18px 20px;
-    display: flex; gap: 16px; align-items: flex-start;
-    transition: border-color .2s, transform .15s;
+  .lib-col {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
   }
-  .lib-card:hover { border-color: var(--accent); transform: translateY(-1px); }
-
-  .lib-card-empty {
-    flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 32px 20px;
-    color: var(--muted); border-style: dashed;
+  .lib-col-head {
+    padding: 14px 18px;
+    background: rgba(99,102,241,.08);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
   }
-
-  .lib-card-emoji { font-size: 36px; flex-shrink: 0; }
-
-  .lib-card-body { flex: 1; min-width: 0; }
-  .lib-card-title { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
-  .lib-card-author { font-size: 12px; color: var(--accent); margin-bottom: 4px; font-weight: 600; }
-  .lib-card-meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
-  .lib-card-desc { font-size: 12px; color: var(--text); line-height: 1.55; margin-bottom: 10px; }
-  .lib-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-  .lib-tag {
-    font-size: 10px; font-weight: 700; padding: 2px 8px;
-    background: rgba(99,102,241,.12); color: #818cf8;
-    border-radius: 20px; letter-spacing: .3px;
+  .lib-col-icon { font-size: 20px; }
+  .lib-col-title { font-size: 13px; font-weight: 900; flex: 1; letter-spacing: -.2px; }
+  .lib-col-badge {
+    font-size: 10px; color: var(--muted);
+    background: var(--bg3); border: 1px solid var(--border);
+    padding: 2px 8px; border-radius: 20px; font-weight: 600;
   }
-
-  /* Files block */
-  .lib-files {
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .lib-file-empty {
-    background: var(--bg2); border: 1px dashed var(--border);
-    border-radius: 14px; padding: 40px 20px;
-    display: flex; flex-direction: column; align-items: center;
-    color: var(--muted);
-  }
-  .lib-file-row {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: 12px; padding: 14px 18px;
+  .lib-book-list { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .lib-book-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 13px;
+    background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px;
     transition: border-color .2s;
   }
-  .lib-file-row:hover { border-color: var(--accent); }
-  .lib-file-icon { font-size: 26px; flex-shrink: 0; }
-  .lib-file-info { flex: 1; min-width: 0; }
-  .lib-file-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
-  .lib-file-meta { font-size: 11px; color: var(--muted); }
-  .lib-file-btn {
-    display: flex; align-items: center; gap: 5px;
+  .lib-book-row:hover { border-color: rgba(99,102,241,.5); }
+  .lib-book-info { flex: 1; min-width: 0; }
+  .lib-book-title { font-size: 12px; font-weight: 800; margin-bottom: 2px; line-height: 1.3; }
+  .lib-book-author { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+  .lib-book-desc { font-size: 11px; color: var(--muted); line-height: 1.45; }
+  .lib-dl-btn {
+    display: inline-flex; align-items: center; gap: 4px;
     background: var(--accent); color: #fff;
-    border: none; border-radius: 8px;
-    padding: 7px 14px; font-size: 12px; font-weight: 700;
+    border: none; border-radius: 7px;
+    padding: 6px 11px; font-size: 11px; font-weight: 700;
     cursor: pointer; white-space: nowrap; flex-shrink: 0;
-    text-decoration: none;
-    transition: opacity .2s;
+    text-decoration: none; transition: opacity .2s;
   }
-  .lib-file-btn:hover { opacity: .85; }
+  .lib-dl-btn:hover { opacity: .82; }
+  .lib-dl-btn.soon {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); cursor: default;
+  }
+  .lib-dl-btn.soon:hover { opacity: 1; }
 
 
   /* ── AI PANEL CHAT (modal) ─────────────────────────────── */
@@ -2527,74 +2497,163 @@
      БІБЛІОТЕКА
 ═══════════════════════════════ -->
 <section class="tab-section" id="tab-library" style="display:none">
-
   <!-- HEADER -->
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:32px;">
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
     <div style="width:44px;height:44px;background:rgba(99,102,241,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📚</div>
     <div>
       <div style="font-size:20px;font-weight:900;letter-spacing:-.3px;">Бібліотека знань</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Особистий розвиток · Бізнес · Корисна література</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Особистий розвиток · Бізнес · Корисна literatura</div>
     </div>
   </div>
 
-  <!-- ── БЛОК 1: ОСОБИСТИЙ РОЗВИТОК ── -->
-  <div class="lib-block" style="margin-bottom:32px;">
-    <div class="lib-block-header">
-      <span class="lib-block-icon">🧠</span>
-      <span class="lib-block-title">Особистий розвиток</span>
-      <span class="lib-block-count" id="lib-count-personal">1 книга</span>
-    </div>
-    <div class="lib-grid" id="lib-personal">
+  <!-- 3 КОЛОНКИ -->
+  <div class="lib-3cols">
 
-      <div class="lib-card">
-        <div class="lib-card-emoji">📖</div>
-        <div class="lib-card-body">
-          <div class="lib-card-title">The Power of Moments</div>
-          <div class="lib-card-author">Chip &amp; Dan Heath</div>
-          <div class="lib-card-meta">Читала: Зіночка (Driver Success)</div>
-          <div class="lib-card-desc">4 типи Kernel Moments. Правило «Пік–Кінець». День 0 водія = ритуал, День 30 = святкування. +15% утримання.</div>
-          <div class="lib-card-tags"><span class="lib-tag">Психологія</span><span class="lib-tag">Мотивація</span><span class="lib-tag">Утримання</span></div>
+    <!-- ── КОЛОНКА 1: ОСОБИСТИЙ РОЗВИТОК ── -->
+    <div class="lib-col">
+      <div class="lib-col-head">
+        <span class="lib-col-icon">🧠</span>
+        <span class="lib-col-title">Особистий розвиток</span>
+        <span class="lib-col-badge">4 книги</span>
+      </div>
+      <div class="lib-book-list">
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">The Power of Moments</div>
+            <div class="lib-book-author">Chip &amp; Dan Heath</div>
+            <div class="lib-book-desc">4 типи моментів що змінюють поведінку. Правило «Пік–Кінець». Онбординг водія як ритуал.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
         </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Atomic Habits</div>
+            <div class="lib-book-author">James Clear</div>
+            <div class="lib-book-desc">Мікрозміни що дають великий результат. 1% щодня — як формувати звички команди.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Drive</div>
+            <div class="lib-book-author">Daniel H. Pink</div>
+            <div class="lib-book-desc">Що насправді мотивує людей: автономія, майстерність, мета. Не гроші — а сенс.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Thinking, Fast and Slow</div>
+            <div class="lib-book-author">Daniel Kahneman</div>
+            <div class="lib-book-desc">Система 1 і Система 2. Когнітивні пастки у прийнятті рішень. Упередження менеджера.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  <!-- ── БЛОК 2: БІЗНЕС ЛІТЕРАТУРА ── -->
-  <div class="lib-block" style="margin-bottom:32px;">
-    <div class="lib-block-header">
-      <span class="lib-block-icon">💼</span>
-      <span class="lib-block-title">Бізнес-література</span>
-      <span class="lib-block-count" id="lib-count-business">0 книг</span>
-    </div>
-    <div class="lib-grid" id="lib-business">
-
-      <div class="lib-card lib-card-empty">
-        <div style="font-size:28px;margin-bottom:8px;">📥</div>
-        <div style="font-size:13px;font-weight:700;margin-bottom:4px;">Ще немає книг</div>
-        <div style="font-size:12px;color:var(--muted);">Додайте першу книгу з бізнес-тематики</div>
+    <!-- ── КОЛОНКА 2: БІЗНЕС-LITERATURA ── -->
+    <div class="lib-col">
+      <div class="lib-col-head">
+        <span class="lib-col-icon">💼</span>
+        <span class="lib-col-title">Бізнес-literatura</span>
+        <span class="lib-col-badge">4 книги</span>
       </div>
+      <div class="lib-book-list">
 
-    </div>
-  </div>
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Good to Great</div>
+            <div class="lib-book-author">Jim Collins</div>
+            <div class="lib-book-desc">Чому деякі компанії роблять стрибок. Flywheel ефект. Потрібні правильні люди в автобусі.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
 
-  <!-- ── БЛОК 3: КОРИСНА ЛІТЕРАТУРА (завантаження) ── -->
-  <div class="lib-block">
-    <div class="lib-block-header">
-      <span class="lib-block-icon">📂</span>
-      <span class="lib-block-title">Корисна література</span>
-      <span class="lib-block-count">Файли для завантаження</span>
-    </div>
-    <div class="lib-files" id="lib-files">
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Traction</div>
+            <div class="lib-book-author">Gino Wickman</div>
+            <div class="lib-book-desc">EOS — операційна система для малого бізнесу. Rocks, Scorecard, Level 10 Meeting.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
 
-      <div class="lib-file-empty">
-        <div style="font-size:32px;margin-bottom:10px;">📄</div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:6px;">Файли ще не додані</div>
-        <div style="font-size:12px;color:var(--muted);max-width:320px;text-align:center;">Завантажте PDF або EPUB — вони з'являться тут як кнопки для скачування прямо з командного центру</div>
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Scaling Up</div>
+            <div class="lib-book-author">Verne Harnish</div>
+            <div class="lib-book-desc">Як масштабувати бізнес: 4 рішення — люди, стратегія, виконання, гроші.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">The Hard Thing About Hard Things</div>
+            <div class="lib-book-author">Ben Horowitz</div>
+            <div class="lib-book-desc">Правда про управління: звільнення, кризи, рішення без підказок. Для CEO без ілюзій.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
       </div>
-
     </div>
-  </div>
+
+    <!-- ── КОЛОНКА 3: КОРИСНА LITERATURA ── -->
+    <div class="lib-col">
+      <div class="lib-col-head">
+        <span class="lib-col-icon">📂</span>
+        <span class="lib-col-title">Корисна literatura</span>
+        <span class="lib-col-badge">Файли для скачування</span>
+      </div>
+      <div class="lib-book-list">
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Excel для бізнес-аналітики</div>
+            <div class="lib-book-author">PDF · 2.4 MB</div>
+            <div class="lib-book-desc">Практичний гайд по зведених таблицях, формулах і дашбордах у Excel.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Фінансова модель автопарку</div>
+            <div class="lib-book-author">XLSX · DriveMe Internal</div>
+            <div class="lib-book-desc">Шаблон P&amp;L, розрахунок ROI, unit economics — адаптований під DriveMe.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">KPI Dashboard — шаблон CEO</div>
+            <div class="lib-book-author">PDF · 1.1 MB</div>
+            <div class="lib-book-desc">Готовий шаблон для щомісячного звіту власнику: Revenue, ОП, Margin, Retention.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+        <div class="lib-book-row">
+          <div class="lib-book-info">
+            <div class="lib-book-title">Uklon — тарифна документація 2026</div>
+            <div class="lib-book-author">PDF · Uklon Partner</div>
+            <div class="lib-book-desc">Офіційні тарифи Бренду по містах, умови виплат, критерії кваліфікації авто.</div>
+          </div>
+          <a class="lib-dl-btn soon" href="#">Скоро</a>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /lib-3cols -->
 
 </section>
 
