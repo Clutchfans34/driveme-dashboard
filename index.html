@@ -7829,7 +7829,7 @@ const empDB = {
     competencies:['Стратегія','M&A','Бізнес-розвиток','Фінанси'],
     ceoNote:'' },
 
-  "Андрій П'яних": { pos:'CEO', branch:'DriveMe Group', code:'GROUP', color:'#F07000',
+  "Андрій П'яних": { pos:'CEO', branch:'DriveMe Group', code:'GROUP', color:'#F07000', photo:'andrii.jpg',
     bday:'', age:0, tenure:0,
     ceoRating:10, loyalty:10, potential:10, efficiency:10, reliability:10, communication:10, initiative:10,
     strengths:['Системне мислення','Операційна міцність','Команда'],
@@ -8191,6 +8191,10 @@ function openEmployeeCard(name) {
   if (!e) return;
   const c = e.color;
   const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  const avatarHTML = e.photo
+    ? `<img class="emp-avatar-img" src="${e.photo}" alt="${initials}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+      + `<div class="emp-avatar-init" style="background:linear-gradient(135deg,${e.color},${e.color}66);display:none">${initials}</div>`
+    : `<div class="emp-avatar-init" style="background:linear-gradient(135deg,${e.color},${e.color}66)">${initials}</div>`;
 
   // ── LEFT ──
   const infoRows = [
@@ -8207,7 +8211,7 @@ function openEmployeeCard(name) {
 
   document.getElementById('empLeft').innerHTML = `
     <div class="emp-avatar-wrap">
-      <div class="emp-avatar-init" style="background:linear-gradient(135deg,${c},${c}66)">${initials}</div>
+      ${avatarHTML}
       <div class="emp-photo-ring" style="--ec:${c}"></div>
     </div>
     <div class="emp-l-name">${name}</div>
