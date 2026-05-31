@@ -8034,49 +8034,142 @@ ${pageCtx}
 
 <script>
 // ── Employee Data ─────────────────────────────────────────
-// loyalty, potential, efficiency, reliability — 1–10 (можна оновити)
+// Fields: pos, branch, code, color, bday, age, tenure
+//         ceoRating, loyalty, potential, efficiency, reliability, ceoNote
 const empDB = {
-  'Билиба Роман':    { pos:'Керівник філії', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+
+  // ══ ТОП МЕНЕДЖМЕНТ ══════════════════════════════════════
+  'Роман Маслов':      { pos:'Власник', branch:'DriveMe Group', code:'CEO', color:'#F59E0B',
+    bday:'', age:0, tenure:0,
+    ceoRating:10, loyalty:10, potential:10, efficiency:10, reliability:10,
+    ceoNote:'' },
+
+  "Андрій П'яних":     { pos:'CEO', branch:'DriveMe Group', code:'CEO', color:'#6366F1',
+    bday:'', age:0, tenure:0,
+    ceoRating:10, loyalty:10, potential:10, efficiency:10, reliability:10,
+    ceoNote:'' },
+
+  'Волчан Іван':       { pos:'COO', branch:'DriveMe Group', code:'TOP', color:'#3B82F6',
+    bday:'', age:0, tenure:0,
+    ceoRating:9, loyalty:9, potential:8, efficiency:9, reliability:9,
+    ceoNote:'' },
+
+  'Омельченко Людмила':{ pos:'CFO', branch:'DriveMe Group', code:'TOP', color:'#10B981',
+    bday:'', age:0, tenure:0,
+    ceoRating:9, loyalty:9, potential:8, efficiency:9, reliability:9,
+    ceoNote:'' },
+
+  'Лебедєв Максим':    { pos:'CTO', branch:'DriveMe Group', code:'TOP', color:'#8B5CF6',
+    bday:'', age:0, tenure:0,
+    ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Таміла':            { pos:'Головний бухгалтер', branch:'DriveMe Group', code:'TOP', color:'#F59E0B',
+    bday:'', age:0, tenure:0,
+    ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:9,
+    ceoNote:'' },
+
+  // ══ ЦЕНТРАЛЬНИЙ ОФІС ════════════════════════════════════
+  'Авраменко Ксенія':  { pos:'Менеджер зі страхування', branch:'Центральний офіс', code:'ЦО', color:'#22C55E',
+    bday:'', age:0, tenure:0,
+    ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Пишун Ігор':        { pos:'Голова відділу контролю', branch:'Центральний офіс', code:'ЦО', color:'#0EA5E9',
+    bday:'', age:0, tenure:0,
+    ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Кучеров Микола':    { pos:'Менеджер відділу контролю', branch:'Центральний офіс', code:'ЦО', color:'#0EA5E9',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:8,
+    ceoNote:'' },
+
+  'Скочеляс Олеся':    { pos:'Аналітик', branch:'Центральний офіс', code:'ЦО', color:'#A78BFA',
+    bday:'', age:0, tenure:0,
+    ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Шабанова Аліна':    { pos:'Аналітик', branch:'Центральний офіс', code:'ЦО', color:'#A78BFA',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:8, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Тимошенко Олена':   { pos:'SMM', branch:'Центральний офіс', code:'ЦО', color:'#F472B6',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:7, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Туменко Валентина': { pos:'Економіст', branch:'Центральний офіс', code:'ЦО', color:'#34D399',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:7, efficiency:7, reliability:8,
+    ceoNote:'' },
+
+  'Гержан Олена':      { pos:'Фінансист', branch:'Центральний офіс', code:'ЦО', color:'#10B981',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:7, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Шандиба Оксана':    { pos:'Фінансист', branch:'Центральний офіс', code:'ЦО', color:'#10B981',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:7, efficiency:7, reliability:8,
+    ceoNote:'' },
+
+  'Хохлова Катерина':  { pos:'Бухгалтер', branch:'Центральний офіс', code:'ЦО', color:'#FBBF24',
+    bday:'', age:0, tenure:0,
+    ceoRating:7, loyalty:8, potential:6, efficiency:7, reliability:8,
+    ceoNote:'' },
+
+  // ══ HRG (також у топ-менеджменті) ══════════════════════
+  'Усенко Вероніка':   { pos:'HRG / Рекрутер', branch:'DriveMe Group', code:'HRG', color:'#EC4899',
+    bday:'', age:0, tenure:6,
+    ceoRating:8, loyalty:9, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  // ══ ФІЛІЇ — ДНІПРО DM (ДП-1) ═══════════════════════════
+  'Билиба Роман':      { pos:'Керівник філії', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
     bday:'15.03.1988', age:36, tenure:18,
     ceoRating:8, loyalty:8, potential:7, efficiency:9, reliability:8,
     ceoNote:'Сильний операційний керівник. Фінрез стабільний, команда керована. Потенціал до зростання мережі.' },
 
-  'Шеремет Євген':   { pos:'Заст. з ефективності', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+  'Шеремет Євген':     { pos:'Заст. з ефективності', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
     bday:'', age:0, tenure:12,
     ceoRating:9, loyalty:9, potential:8, efficiency:9, reliability:9,
     ceoNote:'Топ заст. у мережі. Аналітика та виконання — на рівні.' },
 
-  'Пугачова Анна':   { pos:'Рекрутер', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+  'Пугачова Анна':     { pos:'Рекрутер', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
     bday:'', age:0, tenure:9,
     ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Батурін Сергій':  { pos:'Керівник філії', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+  // ══ ФІЛІЇ — ДНІПРО WU (ДП-2) ═══════════════════════════
+  'Батурін Сергій':    { pos:'Керівник філії', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
     bday:'22.07.1985', age:39, tenure:24,
     ceoRating:7, loyalty:7, potential:8, efficiency:7, reliability:7,
     ceoNote:'Досвідчений. Потребує підтягнути маржу по ДП-2.' },
 
-  'Бітюков Діма':    { pos:'Заст. з ефективності', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+  'Бітюков Діма':      { pos:'Заст. з ефективності', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
     bday:'', age:0, tenure:14,
     ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Гринченко Олег':  { pos:'Заст. з тех. частини', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+  'Гринченко Олег':    { pos:'Заст. з тех. частини', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
     bday:'', age:0, tenure:10,
     ceoRating:7, loyalty:7, potential:6, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Мусияка Іра':     { pos:'Рекрутер', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+  'Мусияка Іра':       { pos:'Рекрутер', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
     bday:'', age:0, tenure:8,
     ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Безпалько Сергій':{ pos:'Керівник філії', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
+  // ══ ФІЛІЇ — ЗАПОРІЖЖЯ (ЗП) ══════════════════════════════
+  'Безпалько Сергій':  { pos:'Керівник філії', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
     bday:'10.11.1990', age:33, tenure:20,
     ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
     ceoNote:'Стабільний. ROI/авто один з найвищих у мережі (122%).' },
 
-  'Дуплий Діма':     { pos:'Заст. з ефективності', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
+  'Дуплий Діма':       { pos:'Заст. з ефективності', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
     bday:'', age:0, tenure:11,
     ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
     ceoNote:'' },
@@ -8086,87 +8179,86 @@ const empDB = {
     ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Медовкіна Альона':{ pos:'Керівник філії', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+  // ══ ФІЛІЇ — КРИВИЙ РІГ (КР) ═════════════════════════════
+  'Медовкіна Альона':  { pos:'Керівник філії', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
     bday:'05.06.1992', age:31, tenure:16,
     ceoRating:8, loyalty:8, potential:7, efficiency:8, reliability:8,
     ceoNote:'Добрі результати попри складний регіон.' },
 
-  'Лисенко Владислав':{ pos:'Заст. з ефективності', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+  'Лисенко Владислав': { pos:'Заст. з ефективності', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
     bday:'', age:0, tenure:10,
     ceoRating:7, loyalty:7, potential:8, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Стьопін Роман':   { pos:'Заст. з тех. частини', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+  'Стьопін Роман':     { pos:'Заст. з тех. частини', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
     bday:'', age:0, tenure:13,
     ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Чорна Анна':      { pos:'Рекрутер', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+  'Чорна Анна':        { pos:'Рекрутер', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
     bday:'', age:0, tenure:6,
     ceoRating:7, loyalty:8, potential:6, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Бугайова Юля':    { pos:'Керівник філії', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  // ══ ФІЛІЇ — ПОЛТАВА (ПЛ) ════════════════════════════════
+  'Бугайова Юля':      { pos:'Керівник філії', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'28.02.1989', age:35, tenure:19,
     ceoRating:7, loyalty:8, potential:7, efficiency:7, reliability:7,
     ceoNote:'Полтава з потенціалом зростання. Retention покращується.' },
 
-  'Міхович Вадим':   { pos:'Заст. з ефективності', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  'Міхович Вадим':     { pos:'Заст. з ефективності', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'', age:0, tenure:9,
     ceoRating:8, loyalty:8, potential:7, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Крат Олег':       { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  'Крат Олег':         { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'', age:0, tenure:8,
     ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Войтенко Влад':   { pos:'Рекрутер', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  'Войтенко Влад':     { pos:'Рекрутер', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'', age:0, tenure:7,
     ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Усенко Вероніка': { pos:'Рекрутер', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'', age:0, tenure:6,
-    ceoRating:8, loyalty:9, potential:8, efficiency:8, reliability:8,
-    ceoNote:'' },
-
-  'Школьний Руслан': { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  'Школьний Руслан':   { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'', age:0, tenure:11,
     ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Біленко Ігор':    { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+  'Біленко Ігор':      { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
     bday:'', age:0, tenure:6,
     ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
     ceoNote:'' },
 
-  'Кабанов Сергій':  { pos:'Керівник філії', branch:'Вінниця', code:'ВН', color:'#EC4899',
+  // ══ ФІЛІЇ — ВІННИЦЯ (ВН) ════════════════════════════════
+  'Кабанов Сергій':    { pos:'Керівник філії', branch:'Вінниця', code:'ВН', color:'#EC4899',
     bday:'03.01.1989', age:35, tenure:15,
     ceoRating:6, loyalty:5, potential:5, efficiency:6, reliability:6,
     ceoNote:'Критичний простій 10.6%. Водій/авто=1.09 — ризик. Потребує підтримки.' },
 
-  'Романча Євген':   { pos:'Заст. з ефективності', branch:'Вінниця', code:'ВН', color:'#EC4899',
+  'Романча Євген':     { pos:'Заст. з ефективності', branch:'Вінниця', code:'ВН', color:'#EC4899',
     bday:'', age:0, tenure:11,
     ceoRating:6, loyalty:6, potential:6, efficiency:6, reliability:6,
     ceoNote:'' },
 
-  'Гонтарук Ангеліна':{ pos:'Рекрутер', branch:'Вінниця', code:'ВН', color:'#EC4899',
+  'Гонтарук Ангеліна': { pos:'Рекрутер', branch:'Вінниця', code:'ВН', color:'#EC4899',
     bday:'', age:0, tenure:8,
     ceoRating:6, loyalty:7, potential:6, efficiency:6, reliability:6,
     ceoNote:'' },
 
-  'Мількевич Вадим': { pos:'Керівник філії', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+  // ══ ФІЛІЇ — ЛЬВІВ (ЛВ) ══════════════════════════════════
+  'Мількевич Вадим':   { pos:'Керівник філії', branch:'Львів', code:'ЛВ', color:'#06B6D4',
     bday:'20.08.1990', age:34, tenure:8,
     ceoRating:10, loyalty:10, potential:10, efficiency:10, reliability:10,
     ceoNote:'Найкращий фінрез/авто по мережі (37 697 грн). Margin 27.8%. Абсолютний лідер.' },
 
-  'Бабій Святослав': { pos:'Заст. з ефективності', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+  'Бабій Святослав':   { pos:'Заст. з ефективності', branch:'Львів', code:'ЛВ', color:'#06B6D4',
     bday:'', age:0, tenure:6,
     ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
     ceoNote:'' },
 
-  'Грицан Соломія':  { pos:'Рекрутер', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+  'Грицан Соломія':    { pos:'Рекрутер', branch:'Львів', code:'ЛВ', color:'#06B6D4',
     bday:'', age:0, tenure:5,
     ceoRating:8, loyalty:9, potential:8, efficiency:8, reliability:9,
     ceoNote:'Retention 1.68 — найкраще в компанії.' },
@@ -8197,7 +8289,7 @@ function openEmployeeCard(name) {
   // ── LEFT PANEL ──
   const infoRows = [
     e.bday  ? `<div class="emp-l-row"><span>🎂</span><span>${e.bday}${e.age ? ' · ' + e.age + ' р.' : ''}</span></div>` : '',
-    `<div class="emp-l-row"><span>📅</span><span>${e.tenure} міс. в компанії</span></div>`,
+    e.tenure ? `<div class="emp-l-row"><span>📅</span><span>${e.tenure} міс. в компанії</span></div>` : '',
     `<div class="emp-l-row"><span>🏢</span><span>${e.branch}</span></div>`,
   ].filter(Boolean).join('');
 
@@ -8215,14 +8307,14 @@ function openEmployeeCard(name) {
   // ── RIGHT PANEL ──
   const rClr = empMetricClr(e.ceoRating);
   const stars = Array.from({length:10}, (_, i) =>
-    `<span class="emp-star-big" style="color:${i < e.ceoRating ? rClr : 'rgba(255,255,255,.15)'}">${i < e.ceoRating ? '★' : '★'}</span>`
+    `<span class="emp-star-big" style="color:${i < e.ceoRating ? rClr : 'rgba(255,255,255,.15)'}">★</span>`
   ).join('');
 
   const metrics = [
-    { icon:'🤝', label:'Лояльність',   val:e.loyalty   },
+    { icon:'🤝', label:'Лояльність',   val:e.loyalty    },
     { icon:'🚀', label:'Перспектива',  val:e.potential  },
     { icon:'⚡', label:'Ефективність', val:e.efficiency },
-    { icon:'🛡',  label:'Надійність',   val:e.reliability},
+    { icon:'🛡',  label:'Надійність',  val:e.reliability},
   ].map(m => {
     const mc = empMetricClr(m.val);
     return `<div class="emp-metric-row">
@@ -8259,18 +8351,36 @@ function closeEmpCard() {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEmpCard(); });
 
-// Make all .btc-name clickable
+// ── Make names clickable ──────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  // Branch team (.btc-name) — cursor only, NO underline
   document.querySelectorAll('.btc-name').forEach(el => {
     const name = el.textContent.trim();
     if (empDB[name]) {
       el.style.cursor = 'pointer';
-      el.style.textDecoration = 'underline dotted';
-      el.style.textUnderlineOffset = '3px';
+      el.addEventListener('click', () => openEmployeeCard(name));
+    }
+  });
+
+  // Top management (.mgmt-name)
+  document.querySelectorAll('.mgmt-name').forEach(el => {
+    const name = el.textContent.trim();
+    if (empDB[name]) {
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => openEmployeeCard(name));
+    }
+  });
+
+  // Central office (.office-name)
+  document.querySelectorAll('.office-name').forEach(el => {
+    const name = el.textContent.trim();
+    if (empDB[name]) {
+      el.style.cursor = 'pointer';
       el.addEventListener('click', () => openEmployeeCard(name));
     }
   });
 });
+</script>
 </script>
 
 </body>
