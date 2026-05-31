@@ -1883,7 +1883,44 @@
   }
   .aip-send:hover { opacity:.85; }
   .aip-send:disabled { opacity:.35; cursor:default; }
-  </style>
+  
+  /* ═══════════════════════════════════════════════════════
+     НАПІВПРОЗОРІ ФОНИ КАРТОК — скрізь просвічує фон дашборду
+     ═══════════════════════════════════════════════════════ */
+
+  /* Основні карточки — рівень bg3 */
+  .kpi-card,
+  .card,
+  .chart-card,
+  .stat-card,
+  .stat-mini,
+  .fil-card,
+  .fleet-card,
+  .fleet-sum-card,
+  .fsc,
+  .mgmt-card,
+  .office-card,
+  .branch-team-card,
+  .news-card,
+  .lib-book-row,
+  .pl-kpi,
+  .pl-wrap,
+  .pl-no-data,
+  .alert,
+  .ai-block { background: rgba(255,255,255,0.052) !important; }
+
+  /* Вкладені елементи — рівень bg2 (трохи темніші) */
+  .fil-metric,
+  .lib-col,
+  .chip,
+  .dyn-pill,
+  .filii-chip,
+  .lib-col-badge,
+  .fil-cars-badge { background: rgba(255,255,255,0.03) !important; }
+
+  /* Прогрес-баров не чіпаємо — вони функціональні */
+
+</style>
 </head>
 <body>
 
