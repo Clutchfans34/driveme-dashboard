@@ -2030,7 +2030,6 @@
   <div class="nav-tab">P&amp;L</div>
   <div class="nav-tab">Uklon</div>
   <div class="nav-tab">Аналітика</div>
-  <div class="nav-tab">Бібліотека</div>
   <button class="nav-tasks-btn" id="tasksBtn">ЗАДАЧІ</button>
 </nav>
 
@@ -2535,261 +2534,6 @@
 <!-- ═══════════════════════════════
      БІБЛІОТЕКА
 ═══════════════════════════════ -->
-<section class="tab-section" id="tab-library" style="display:none">
-<div style="padding:28px 32px;max-width:1440px;margin:0 auto;">
-<!-- HEADER -->
-  <div style="display:flex;align-items:center;gap:14px;margin-bottom:28px;">
-    <div style="width:44px;height:44px;background:rgba(99,102,241,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;">📚</div>
-    <div>
-      <div style="font-size:20px;font-weight:900;letter-spacing:-.3px;">Бібліотека знань</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Особистий розвиток · Бізнес · Корисна література</div>
-    </div>
-  </div>
-
-  <!-- ПОШУК -->
-  <div style="position:relative;margin-bottom:22px;">
-    <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.5;">🔍</span>
-    <input id="libSearch" type="text" placeholder="Пошук по назві, автору, опису…" oninput="libFilter(this.value)"
-      style="width:100%;box-sizing:border-box;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px 11px 40px;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;"
-      onfocus="this.style.borderColor='rgba(99,102,241,.6)'" onblur="this.style.borderColor='var(--border)'"/>
-    <button id="libSearchClear" onclick="libClear()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;line-height:1;">✕</button>
-  </div>
-  <div id="libNoResults" style="display:none;text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;">Нічого не знайдено 🔎</div>
-
-  <!-- 3 КОЛОНКИ -->
-  <div class="lib-3cols">
-
-    <!-- КОЛОНКА 1: ОСОБИСТИЙ РОЗВИТОК -->
-    <div class="lib-col">
-      <div class="lib-col-head">
-        <span class="lib-col-icon">🧠</span>
-        <span class="lib-col-title">Особистий розвиток</span>
-        <span class="lib-col-badge">8 книг</span>
-      </div>
-      <div class="lib-book-list">
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Атомні звички</div>
-            <div class="lib-book-author">Джеймс Клір · FB2 · 3.2 MB</div>
-            <div class="lib-book-desc">Система 1% щодня. Чотири закони зміни поведінки: очевидність, привабливість, простота, задоволення.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/atomic-habits-james-clear.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">К чорта все! Берись і роби!</div>
-            <div class="lib-book-author">Річард Бренсон · FB2 · 905 KB</div>
-            <div class="lib-book-desc">Підприємництво без страху. Нестандартні рішення і як побудувати Virgin з нуля. Кредо — брати від життя все.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/branson-screw-it-lets-do-it.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Драйв</div>
-            <div class="lib-book-author">Деніель Пінк · FB2 · 1.7 MB</div>
-            <div class="lib-book-desc">Що насправді мотивує: автономія, майстерність, мета. Чому бонуси руйнують внутрішню мотивацію.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/pink-drive-motivation.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Психологія впливу</div>
-            <div class="lib-book-author">Роберт Чалдіні · FB2 · 2.3 MB</div>
-            <div class="lib-book-desc">6 принципів переконання: взаємність, послідовність, соціальний доказ, авторитет, симпатія, дефіцит.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/cialdini-influence.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Магія ранку</div>
-            <div class="lib-book-author">Хел Елрод · FB2 · 759 KB</div>
-            <div class="lib-book-desc">Перший час дня визначає успіх. SAVERS: мовчання, афірмації, візуалізація, вправи, читання, нотатки.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/elrod-miracle-morning.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Важливі роки</div>
-            <div class="lib-book-author">Мег Джей · FB2 · 1.0 MB</div>
-            <div class="lib-book-desc">Десятиліття 20-30 років визначає долю. Чому не варто відкладати розвиток і як максимально використати цей час.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/meg-jay-defining-decade.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">The Power of Moments</div>
-            <div class="lib-book-author">Chip &amp; Dan Heath</div>
-            <div class="lib-book-desc">4 типи моментів що змінюють поведінку. Правило «Пік-Кінець». Онбординг водія як ритуал.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Thinking, Fast and Slow</div>
-            <div class="lib-book-author">Daniel Kahneman</div>
-            <div class="lib-book-desc">Система 1 і Система 2. Когнітивні пастки у прийнятті рішень. Упередження менеджера.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- КОЛОНКА 2: БІЗНЕС -->
-    <div class="lib-col">
-      <div class="lib-col-head">
-        <span class="lib-col-icon">💼</span>
-        <span class="lib-col-title">Бізнес-література</span>
-        <span class="lib-col-badge">12 книг</span>
-      </div>
-      <div class="lib-book-list">
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Культурний код</div>
-            <div class="lib-book-author">Деніел Койл · FB2 · 1.4 MB</div>
-            <div class="lib-book-desc">3 принципи виняткових команд: безпека, вразливість, спільна мета. Досвід Google, Pixar і спецназу.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/culture-code-daniel-coyle.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Ніяких правил. Культура Netflix</div>
-            <div class="lib-book-author">Рід Хастінгс, Ерін Мейєр · FB2 · 3.0 MB</div>
-            <div class="lib-book-desc">Свобода і відповідальність як культура. Як Netflix виріс з DVD-прокату в медіагіганта.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/no-rules-netflix-hastings.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">П'ять вад команди</div>
-            <div class="lib-book-author">Патрік Ленсіоні · FB2 · 741 KB</div>
-            <div class="lib-book-desc">Притча про лідерство. Відсутність довіри, страх конфлікту, безвідповідальність, уникнення підзвітності, байдужість до результатів.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/lencioni-five-dysfunctions.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Багатий тато, бідний тато</div>
-            <div class="lib-book-author">Роберт Кійосакі · FB2 · 1.2 MB</div>
-            <div class="lib-book-desc">Фінансова грамотність з нуля. Чому треба купувати активи, а не пасиви. Як змусити гроші працювати на себе.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/kiyosaki-rich-dad-poor-dad.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Чому не всі люблять ходити на роботу</div>
-            <div class="lib-book-author">Патрік Ленсіоні · FB2 · 699 KB</div>
-            <div class="lib-book-desc">Три причини незадоволеності: анонімність, нерелевантність, невимірюваність результату.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/lencioni-miserable-job.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Велика гра в бізнес</div>
-            <div class="lib-book-author">Джек Стек · FB2 · 2.5 MB</div>
-            <div class="lib-book-desc">Open-book management — управління як командна гра. Як зробити кожного співробітника власником.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/stack-great-game-business.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Смерть від нарад</div>
-            <div class="lib-book-author">Патрік Ленсіоні · FB2 · 1.0 MB</div>
-            <div class="lib-book-desc">Чотири типи зустрічей і як зробити їх результативними. Нарада — інструмент, а не втрата часу.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/lencioni-death-by-meeting.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Інноваційний менеджмент</div>
-            <div class="lib-book-author">Harvard Business Review · FB2 · 2.5 MB</div>
-            <div class="lib-book-desc">10 кращих статей HBR. Як впроваджувати інновації і вимірювати результат. Кейси GE, BMW, 3M.</div>
-          </div>
-          <a class="lib-dl-btn" href="https://clutchfans34.github.io/driveme-dashboard/books/hbr-innovation-management.fb2" download>↓ FB2</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Good to Great</div>
-            <div class="lib-book-author">Jim Collins</div>
-            <div class="lib-book-desc">Чому деякі компанії роблять стрибок. Flywheel ефект. Правильні люди в правильних місцях.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Traction</div>
-            <div class="lib-book-author">Gino Wickman</div>
-            <div class="lib-book-desc">EOS — операційна система для бізнесу. Rocks, Scorecard, Level 10 Meeting.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Scaling Up</div>
-            <div class="lib-book-author">Verne Harnish</div>
-            <div class="lib-book-desc">Масштабування бізнесу: 4 рішення — люди, стратегія, виконання, гроші.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">The Hard Thing About Hard Things</div>
-            <div class="lib-book-author">Ben Horowitz</div>
-            <div class="lib-book-desc">Правда про управління: звільнення, кризи, рішення без підказок. Для CEO без ілюзій.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- КОЛОНКА 3: КОРИСНА -->
-    <div class="lib-col">
-      <div class="lib-col-head">
-        <span class="lib-col-icon">📂</span>
-        <span class="lib-col-title">Корисна література</span>
-        <span class="lib-col-badge">Файли</span>
-      </div>
-      <div class="lib-book-list">
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Excel для бізнес-аналітики</div>
-            <div class="lib-book-author">PDF · 2.4 MB</div>
-            <div class="lib-book-desc">Практичний гайд по зведених таблицях, формулах і дашбордах у Excel.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Фінансова модель автопарку</div>
-            <div class="lib-book-author">XLSX · DriveMe Internal</div>
-            <div class="lib-book-desc">Шаблон P&amp;L, розрахунок ROI, unit economics — адаптований під DriveMe.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">KPI Dashboard — шаблон CEO</div>
-            <div class="lib-book-author">PDF · 1.1 MB</div>
-            <div class="lib-book-desc">Готовий шаблон для щомісячного звіту власнику: Revenue, ОП, Margin, Retention.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-        <div class="lib-book-row">
-          <div class="lib-book-info">
-            <div class="lib-book-title">Uklon — тарифна документація 2026</div>
-            <div class="lib-book-author">PDF · Uklon Partner</div>
-            <div class="lib-book-desc">Офіційні тарифи Бренду по містах, умови виплат, критерії кваліфікації авто.</div>
-          </div>
-          <a class="lib-dl-btn soon" href="#">Скоро</a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-</section>
-
-
 
 <!-- КОМАНДА TAB -->
 <section class="tab-section" id="tab-filii">
@@ -3645,7 +3389,7 @@
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;">
 
     <!-- Авто в СТО -->
-    <div style="background:var(--bg3);border:1px solid rgba(239,68,68,.25);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid rgba(239,68,68,.25);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:#ef4444;border-radius:3px 0 0 3px;"></div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Авто в СТО</div>
       <div style="display:flex;align-items:baseline;gap:8px;">
@@ -3657,7 +3401,7 @@
     </div>
 
     <!-- Авто в ДТП -->
-    <div style="background:var(--bg3);border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid rgba(245,158,11,.25);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:#f59e0b;border-radius:3px 0 0 3px;"></div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Авто в ДТП</div>
       <div style="display:flex;align-items:baseline;gap:8px;">
@@ -3669,7 +3413,7 @@
     </div>
 
     <!-- Слюсарний -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent);border-radius:3px 0 0 3px;"></div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Слюсарний ремонт</div>
       <div style="display:flex;align-items:baseline;gap:6px;">
@@ -3681,7 +3425,7 @@
     </div>
 
     <!-- Кузовний + Дебіторка -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;left:0;width:3px;height:100%;background:#6366f1;border-radius:3px 0 0 3px;"></div>
       <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Кузовний ремонт</div>
       <div style="display:flex;align-items:baseline;gap:6px;">
@@ -3698,7 +3442,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
 
     <!-- СТО ПО ФІЛІЯХ -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:20px;">
       <div style="font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">🔧</span> СТО — слюсарний ремонт по філіях
       </div>
@@ -3776,7 +3520,7 @@
     </div>
 
     <!-- ДТП ПО ФІЛІЯХ -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:20px;">
       <div style="font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">🚨</span> ДТП — кузовний ремонт по філіях
       </div>
@@ -3859,7 +3603,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
 
     <!-- ДИНАМІКА СТО/ДТП 3 МІСЯЦІ -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:20px;">
       <div style="font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">📈</span> Динаміка СТО + ДТП (лютий–квітень 2026)
       </div>
@@ -3929,12 +3673,12 @@
     </div>
 
     <!-- ВІДШКОДУВАННЯ ПОШКОДЖЕНЬ -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:14px;padding:20px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:14px;padding:20px;">
       <div style="font-size:14px;font-weight:800;margin-bottom:16px;display:flex;align-items:center;gap:8px;">
         <span style="font-size:16px;">💰</span> Відшкодування пошкоджень водіями
       </div>
       <!-- summary bar -->
-      <div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="background:rgba(255,255,255,0.052);border-radius:10px;padding:14px;margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
           <span style="font-size:11px;color:var(--muted);">Нараховано</span>
           <span style="font-size:12px;font-weight:800;">1 115 096 грн</span>
@@ -4076,7 +3820,7 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;">
 
     <!-- ВОРОНКА -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;">
       <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">📊 Воронка рекрутингу · Квітень 2026</div>
       <div style="display:flex;flex-direction:column;gap:0;">
 
@@ -4136,7 +3880,7 @@
     </div>
 
     <!-- КАНАЛИ -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
       <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:18px;">📣 Ефективність каналів · Квітень 2026</div>
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <thead>
@@ -4202,7 +3946,7 @@
   </div>
 
   <!-- ВОРОНКА ПО ФІЛІЯХ -->
-  <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;">
+  <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:24px;">
     <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:18px;">🏢 Воронка рекрутингу по філіях · Квітень 2026</div>
     <table style="width:100%;border-collapse:collapse;font-size:13px;">
       <thead>
@@ -4308,22 +4052,22 @@
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
 
     <!-- CAC TREND -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
       <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">📈 CAC — тренд (грн/водій)</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
         <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
           <span style="width:70px;color:var(--muted);">Берез.</span>
-          <div style="flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;"><div style="width:55%;height:100%;background:#f59e0b;border-radius:4px;"></div></div>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.052);border-radius:4px;overflow:hidden;"><div style="width:55%;height:100%;background:#f59e0b;border-radius:4px;"></div></div>
           <span style="width:60px;text-align:right;font-weight:700;">1 103</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
           <span style="width:70px;color:var(--muted);">Квіт.</span>
-          <div style="flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;"><div style="width:65%;height:100%;background:#ef4444;border-radius:4px;"></div></div>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.052);border-radius:4px;overflow:hidden;"><div style="width:65%;height:100%;background:#ef4444;border-radius:4px;"></div></div>
           <span style="width:60px;text-align:right;font-weight:700;color:#ef4444;">1 309</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;font-size:13px;">
           <span style="width:70px;color:var(--muted);">Ціль</span>
-          <div style="flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden;"><div style="width:25%;height:100%;background:#22c55e;border-radius:4px;"></div></div>
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.052);border-radius:4px;overflow:hidden;"><div style="width:25%;height:100%;background:#22c55e;border-radius:4px;"></div></div>
           <span style="width:60px;text-align:right;font-weight:700;color:#22c55e;">500</span>
         </div>
       </div>
@@ -4336,7 +4080,7 @@
     </div>
 
     <!-- ХОЛОДНИЙ ОБЗВОН -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
       <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">📞 Холодний обзвон · Квітень</div>
       <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
         <div style="display:flex;justify-content:space-between;"><span style="color:var(--muted);">Всього дзвінків</span><strong>3 297</strong></div>
@@ -4351,24 +4095,24 @@
     </div>
 
     <!-- ОНБОРДИНГ / LIFECYCLE -->
-    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+    <div style="background:rgba(255,255,255,0.052);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
       <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;">🔄 Lifecycle водія</div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <div>
           <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--muted);">День 0–7 (онбординг)</span><span style="color:#22c55e;font-weight:700;">94% активних</span></div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px;"><div style="width:94%;height:100%;background:#22c55e;border-radius:3px;"></div></div>
+          <div style="height:6px;background:rgba(255,255,255,0.052);border-radius:3px;"><div style="width:94%;height:100%;background:#22c55e;border-radius:3px;"></div></div>
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--muted);">День 8–14</span><span style="color:#22c55e;font-weight:700;">88%</span></div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px;"><div style="width:88%;height:100%;background:#22c55e;border-radius:3px;"></div></div>
+          <div style="height:6px;background:rgba(255,255,255,0.052);border-radius:3px;"><div style="width:88%;height:100%;background:#22c55e;border-radius:3px;"></div></div>
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--muted);">День 15–21</span><span style="color:#f59e0b;font-weight:700;">82%</span></div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px;"><div style="width:82%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
+          <div style="height:6px;background:rgba(255,255,255,0.052);border-radius:3px;"><div style="width:82%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px;"><span style="color:var(--muted);">День 22–30</span><span style="color:#f59e0b;font-weight:700;">78%</span></div>
-          <div style="height:6px;background:var(--bg3);border-radius:3px;"><div style="width:78%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
+          <div style="height:6px;background:rgba(255,255,255,0.052);border-radius:3px;"><div style="width:78%;height:100%;background:#f59e0b;border-radius:3px;"></div></div>
         </div>
       </div>
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);">
@@ -5280,7 +5024,7 @@
   };
 
   function goToBranch(branchKey, selMonth) {
-    const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics',];
     if (branchKey) {
       _branchKey = branchKey;
       const month = selMonth || 'apr';
@@ -5418,7 +5162,7 @@
 
   // Навігація до сторінки флоту філії або назад до Флоту
   function goToFleetCard(branchKey) {
-    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
+    const all = ['tab-news','tab-dashboard','tab-filii','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics',];
     if (branchKey) {
       const b = fleetBranches[branchKey];
       if (!b) return;
@@ -5838,9 +5582,8 @@
     'P&L':      'tab-pl',
     'Uklon':    'tab-uklon',
     'Аналітика':'tab-analytics',
-    'Бібліотека':'tab-library',
   };
-  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics','tab-library'];
+  const allSections = ['tab-news','tab-dashboard','tab-filii','tab-filii-detail','tab-team','tab-fleet','tab-fleet-detail','tab-sto','tab-drivers','tab-hr','tab-pl','tab-uklon','tab-analytics',];
 
   document.querySelectorAll('.nav-tab').forEach(t => {
     t.addEventListener('click', () => {
