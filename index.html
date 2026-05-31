@@ -7874,324 +7874,381 @@ ${pageCtx}
 
 
 <!-- ═══════════════════════════════════════════════════════
-     КАРТКА СПІВРОБІТНИКА — Employee Card Modal
-═══════════════════════════════════════════════════════ -->
+     КАРТКА СПІВРОБІТНИКА v2 — wide, no-scroll, 2-column
+     ═══════════════════════════════════════════════════════ -->
 <style>
 #empOverlay {
   display:none; position:fixed; inset:0; z-index:9000;
-  background:rgba(0,0,0,.65); backdrop-filter:blur(4px);
+  background:rgba(0,0,0,.7); backdrop-filter:blur(6px);
   align-items:center; justify-content:center;
 }
-#empOverlay.open { display:flex; animation:empFadeIn .2s ease; }
-@keyframes empFadeIn { from{opacity:0} to{opacity:1} }
+#empOverlay.open { display:flex; animation:empFadeIn .22s ease; }
+@keyframes empFadeIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+
 #empModal {
-  background:var(--bg2,#141e2e);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:20px;
-  width:460px; max-width:94vw;
-  max-height:88vh; overflow-y:auto;
-  box-shadow:0 24px 80px rgba(0,0,0,.6);
-  animation:empSlideUp .22s ease;
-  scrollbar-width:thin;
+  width:740px; max-width:calc(100vw - 32px);
+  background:#0d1b2a;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  display:flex; flex-direction:row;
+  overflow:hidden; position:relative;
+  box-shadow:0 28px 70px rgba(0,0,0,.6);
 }
-@keyframes empSlideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
-.emp-header {
-  position:relative; padding:28px 24px 20px;
-  display:flex; flex-direction:column; align-items:center; gap:10px;
-  border-radius:20px 20px 0 0;
-  text-align:center;
-}
+
+/* ── Close button ── */
 .emp-close {
   position:absolute; top:14px; right:14px;
-  background:rgba(255,255,255,.08); border:none; border-radius:8px;
-  color:#fff; font-size:15px; width:30px; height:30px;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.08); border:none;
+  color:rgba(255,255,255,.55); width:30px; height:30px;
+  border-radius:50%; cursor:pointer; font-size:13px; font-weight:700;
+  z-index:10; display:flex; align-items:center; justify-content:center;
+  transition:all .18s;
 }
-.emp-avatar {
-  width:80px; height:80px; border-radius:50%;
+.emp-close:hover { background:rgba(255,255,255,.18); color:#fff; }
+
+/* ── Left panel ── */
+.emp-left {
+  width:230px; flex-shrink:0;
+  background:rgba(255,255,255,.025);
+  border-right:1px solid rgba(255,255,255,.06);
+  padding:32px 20px 28px;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+}
+.emp-avatar-wrap {
+  position:relative; margin-bottom:8px;
+}
+.emp-avatar-img {
+  width:96px; height:96px; border-radius:50%;
+  object-fit:cover; display:block;
+}
+.emp-avatar-init {
+  width:96px; height:96px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;
-  font-size:26px; font-weight:900; color:#fff;
-  border:3px solid rgba(255,255,255,.2);
-  box-shadow:0 6px 24px rgba(0,0,0,.35);
-  letter-spacing:-1px; flex-shrink:0;
+  font-size:34px; font-weight:900; color:#fff;
+  letter-spacing:-1px;
 }
-.emp-photo {
-  width:80px; height:80px; border-radius:50%;
-  object-fit:cover; border:3px solid rgba(255,255,255,.2);
-  box-shadow:0 6px 24px rgba(0,0,0,.35);
+.emp-photo-ring {
+  position:absolute; inset:-3px; border-radius:50%;
+  border:3px solid transparent;
+  background:linear-gradient(135deg,var(--ec,#F07000),transparent) border-box;
+  -webkit-mask:linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:destination-out; mask-composite:exclude;
 }
-.emp-name { font-size:22px; font-weight:900; color:#fff; letter-spacing:-.3px; }
-.emp-pos  { font-size:12px; font-weight:700; color:rgba(255,255,255,.6); text-transform:uppercase; letter-spacing:.8px; }
-.emp-branch-badge {
-  padding:4px 14px; border-radius:20px; font-size:11px; font-weight:800;
-  border:1px solid currentColor; opacity:.9;
+.emp-l-name {
+  font-size:16px; font-weight:800; color:#fff;
+  text-align:center; line-height:1.3; margin-top:2px;
 }
-.emp-body { padding:0 20px 24px; }
-.emp-section { margin-bottom:18px; }
-.emp-section-title {
-  font-size:10px; font-weight:800; text-transform:uppercase;
-  letter-spacing:1px; color:var(--muted,#6b7280);
-  margin-bottom:10px; padding-bottom:6px;
-  border-bottom:1px solid rgba(255,255,255,.06);
+.emp-l-pos {
+  font-size:12px; color:rgba(255,255,255,.45);
+  text-align:center; line-height:1.4;
 }
-.emp-stats {
-  display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;
+.emp-l-branch {
+  font-size:11px; font-weight:700;
+  padding:3px 12px; border-radius:20px; border:1px solid;
+  margin:5px 0 10px;
 }
-.emp-stat {
-  background:var(--bg3,#1f2d3d); border:1px solid rgba(255,255,255,.06);
-  border-radius:12px; padding:11px 12px; text-align:center;
+.emp-l-divider {
+  width:100%; height:1px; background:rgba(255,255,255,.06); margin:4px 0 8px;
 }
-.emp-stat-val { font-size:18px; font-weight:900; line-height:1; margin-bottom:4px; }
-.emp-stat-lbl { font-size:10px; color:var(--muted,#6b7280); font-weight:600; }
-.emp-rating-row {
-  display:flex; align-items:center; justify-content:space-between;
-  background:var(--bg3,#1f2d3d); border:1px solid rgba(255,255,255,.06);
-  border-radius:12px; padding:12px 16px; margin-bottom:8px;
+.emp-l-info { width:100%; display:flex; flex-direction:column; gap:7px; }
+.emp-l-row {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; color:rgba(255,255,255,.55);
 }
-.emp-rating-label { font-size:12px; font-weight:700; color:var(--muted,#6b7280); }
-.emp-stars { display:flex; gap:3px; }
-.emp-star { font-size:16px; line-height:1; }
-.emp-info-row {
+.emp-l-row span:first-child { font-size:14px; width:18px; flex-shrink:0; }
+
+/* ── Right panel ── */
+.emp-right {
+  flex:1; padding:28px 26px 24px;
+  display:flex; flex-direction:column; gap:0;
+  overflow:hidden;
+}
+.emp-r-section-label {
+  font-size:10px; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:rgba(255,255,255,.3);
+  margin-bottom:10px;
+}
+.emp-r-divider {
+  height:1px; background:rgba(255,255,255,.06);
+  margin:16px 0;
+}
+
+/* ── CEO Rating ── */
+.emp-ceo-row {
+  display:flex; align-items:center; gap:14px;
+}
+.emp-stars-row {
+  display:flex; gap:3px;
+}
+.emp-star-big {
+  font-size:21px; line-height:1;
+  transition:color .15s;
+}
+.emp-ceo-num {
+  font-size:26px; font-weight:900; line-height:1;
+  letter-spacing:-1px;
+}
+
+/* ── Metrics ── */
+.emp-metrics-grid {
+  display:flex; flex-direction:column; gap:12px;
+}
+.emp-metric-row {
   display:flex; align-items:center; gap:10px;
-  padding:9px 14px; background:var(--bg3,#1f2d3d);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:10px; margin-bottom:6px;
 }
-.emp-info-icon { font-size:14px; flex-shrink:0; width:20px; text-align:center; }
-.emp-info-key { font-size:11px; color:var(--muted,#6b7280); font-weight:600; flex:1; }
-.emp-info-val { font-size:12px; font-weight:800; color:var(--text,#e2e8f0); }
-.emp-note {
-  background:rgba(240,112,0,.07); border:1px solid rgba(240,112,0,.2);
-  border-radius:12px; padding:12px 15px;
-  font-size:12px; color:var(--text,#e2e8f0); line-height:1.6; font-style:italic;
+.emp-m-icon { font-size:15px; width:20px; flex-shrink:0; }
+.emp-m-label {
+  font-size:13px; color:rgba(255,255,255,.7);
+  width:115px; flex-shrink:0;
 }
-.emp-note-head { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.8px; color:#F07000; margin-bottom:6px; }
+.emp-m-dots { display:flex; gap:5px; flex:1; align-items:center; }
+.emp-m-dot {
+  width:18px; height:18px; border-radius:50%;
+  transition:all .25s;
+  flex-shrink:0;
+}
+.emp-m-val {
+  font-size:14px; font-weight:800;
+  width:22px; text-align:right; flex-shrink:0;
+}
+
+/* ── CEO note ── */
+.emp-note-wrap {
+  margin-top:14px;
+  background:rgba(255,255,255,.04);
+  border-radius:12px; border:1px solid rgba(255,255,255,.06);
+  padding:12px 14px;
+  display:flex; gap:10px; align-items:flex-start;
+}
+.emp-note-ico { font-size:15px; flex-shrink:0; margin-top:1px; }
+.emp-note-body { font-size:12px; color:rgba(255,255,255,.6); line-height:1.55; font-style:italic; }
 </style>
 
 <div id="empOverlay" onclick="closeEmpCard()">
   <div id="empModal" onclick="event.stopPropagation()">
-    <div class="emp-header" id="empHeader">
-      <button class="emp-close" onclick="closeEmpCard()">✕</button>
-      <div id="empAvatarWrap"></div>
-      <div class="emp-name" id="empNameEl"></div>
-      <div class="emp-pos"  id="empPosEl"></div>
-      <div class="emp-branch-badge" id="empBranchEl"></div>
-    </div>
-    <div class="emp-body">
-      <div class="emp-section">
-        <div class="emp-section-title">📊 Показники</div>
-        <div class="emp-stats" id="empStats"></div>
-      </div>
-      <div class="emp-section">
-        <div class="emp-section-title">⭐ Оцінка від CEO</div>
-        <div id="empRating"></div>
-      </div>
-      <div class="emp-section">
-        <div class="emp-section-title">👤 Особиста інформація</div>
-        <div id="empInfo"></div>
-      </div>
-      <div class="emp-section" id="empNoteSection" style="display:none">
-        <div class="emp-note" id="empNote">
-          <div class="emp-note-head">💬 Нотатка CEO</div>
-          <div id="empNoteText"></div>
-        </div>
-      </div>
-    </div>
+    <button class="emp-close" onclick="closeEmpCard()">✕</button>
+    <div class="emp-left" id="empLeft"><!-- filled by JS --></div>
+    <div class="emp-right" id="empRight"><!-- filled by JS --></div>
   </div>
 </div>
 
 <script>
-// ── Employee Data ────────────────────────────────────────────────
+// ── Employee Data ─────────────────────────────────────────
+// loyalty, potential, efficiency, reliability — 1–10 (можна оновити)
 const empDB = {
-  'Билиба Роман':   { pos:'Керівник філії', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
-    bday:'15.03.1988', age:36, tenure:18, phone:'', tg:'',
-    kpiUtil:82.9, kpiDowntime:3.95, kpiRetention:0.74,
-    ceoRating:8, ceoNote:'Сильний операційний керівник. Тримає команду. Потребує роботи над Брендом.',
-    perf:'good' },
-  'Шеремет Євген':  { pos:'Заст. з ефективності', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
-    bday:'22.07.1991', age:33, tenure:14, phone:'', tg:'',
-    kpiUtil:82.9, kpiDowntime:3.95, kpiRetention:0.74,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Пугачова Анна':  { pos:'Рекрутер', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
-    bday:'08.11.1995', age:28, tenure:10, phone:'', tg:'',
-    kpiUtil:82.9, kpiDowntime:3.95, kpiRetention:0.74,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Батурін Сергій': { pos:'Заст. з тех. частини', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
-    bday:'', age:0, tenure:12, phone:'', tg:'',
-    kpiUtil:82.9, kpiDowntime:3.95, kpiRetention:0.74,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Бітюков Діма':   { pos:'Керівник філії', branch:'Дніпро WU', code:'ДП-2', color:'#3B82F6',
-    bday:'04.06.1985', age:39, tenure:22, phone:'', tg:'',
-    kpiUtil:76.0, kpiDowntime:7.32, kpiRetention:1.21,
-    ceoRating:8, ceoNote:'Досвідчений. Потребує уваги на простій.', perf:'good' },
-  'Гринченко Олег': { pos:'Заст. з ефективності', branch:'Дніпро WU', code:'ДП-2', color:'#3B82F6',
-    bday:'', age:0, tenure:16, phone:'', tg:'',
-    kpiUtil:76.0, kpiDowntime:7.32, kpiRetention:1.21,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Мусияка Іра':    { pos:'Рекрутер', branch:'Дніпро WU', code:'ДП-2', color:'#3B82F6',
-    bday:'', age:0, tenure:9, phone:'', tg:'',
-    kpiUtil:76.0, kpiDowntime:7.32, kpiRetention:1.21,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Безпалько Сергій':{ pos:'Заст. з тех. частини', branch:'Дніпро WU', code:'ДП-2', color:'#3B82F6',
-    bday:'', age:0, tenure:8, phone:'', tg:'',
-    kpiUtil:76.0, kpiDowntime:7.32, kpiRetention:1.21,
-    ceoRating:6, ceoNote:'', perf:'ok' },
-  'Дуплий Діма':    { pos:'Керівник філії', branch:'Запоріжжя', code:'ЗП', color:'#22c55e',
-    bday:'11.02.1987', age:37, tenure:20, phone:'', tg:'',
-    kpiUtil:75.1, kpiDowntime:11.51, kpiRetention:0.86,
-    ceoRating:6, ceoNote:'Проблема з простоєм (11.5%). Потребує уваги до рекрутингу.', perf:'warn' },
-  'Олефіренко Ярослав':{ pos:'Заст. з ефективності', branch:'Запоріжжя', code:'ЗП', color:'#22c55e',
-    bday:'', age:0, tenure:11, phone:'', tg:'',
-    kpiUtil:75.1, kpiDowntime:11.51, kpiRetention:0.86,
-    ceoRating:6, ceoNote:'', perf:'warn' },
-  'Медовкіна Альона':{ pos:'Рекрутер', branch:'Запоріжжя', code:'ЗП', color:'#22c55e',
-    bday:'', age:0, tenure:7, phone:'', tg:'',
-    kpiUtil:75.1, kpiDowntime:11.51, kpiRetention:0.86,
-    ceoRating:5, ceoNote:'CAC 4 633 грн — найвищий по мережі. Пріоритет.', perf:'warn' },
-  'Лисенко Владислав':{ pos:'Заст. з тех. частини', branch:'Запоріжжя', code:'ЗП', color:'#22c55e',
-    bday:'', age:0, tenure:8, phone:'', tg:'',
-    kpiUtil:75.1, kpiDowntime:11.51, kpiRetention:0.86,
-    ceoRating:6, ceoNote:'', perf:'ok' },
-  'Стьопін Роман':  { pos:'Керівник філії', branch:'Кривий Ріг', code:'КР', color:'#A855F7',
-    bday:'29.09.1986', age:37, tenure:24, phone:'', tg:'',
-    kpiUtil:80.97, kpiDowntime:2.97, kpiRetention:1.00,
-    ceoRating:9, ceoNote:'Один з найкращих керівників. LTV/CAC=82. Еталон по простою.', perf:'good' },
-  'Чорна Анна':     { pos:'Заст. з ефективності', branch:'Кривий Ріг', code:'КР', color:'#A855F7',
-    bday:'', age:0, tenure:18, phone:'', tg:'',
-    kpiUtil:80.97, kpiDowntime:2.97, kpiRetention:1.00,
-    ceoRating:8, ceoNote:'', perf:'good' },
-  'Бугайова Юля':   { pos:'Рекрутер', branch:'Кривий Ріг', code:'КР', color:'#A855F7',
-    bday:'', age:0, tenure:13, phone:'', tg:'',
-    kpiUtil:80.97, kpiDowntime:2.97, kpiRetention:1.00,
-    ceoRating:8, ceoNote:'', perf:'good' },
-  'Міхович Вадим':  { pos:'Заст. з тех. частини', branch:'Кривий Ріг', code:'КР', color:'#A855F7',
-    bday:'', age:0, tenure:10, phone:'', tg:'',
-    kpiUtil:80.97, kpiDowntime:2.97, kpiRetention:1.00,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Крат Олег':      { pos:'Керівник філії', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'17.05.1984', age:42, tenure:26, phone:'', tg:'',
-    kpiUtil:85.47, kpiDowntime:2.42, kpiRetention:1.41,
-    ceoRating:9, ceoNote:'Топ-результат по Бренду і завантаженості. ROI 96%. Лідер.', perf:'good' },
-  'Войтенко Влад':  { pos:'Заст. з ефективності', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'', age:0, tenure:20, phone:'', tg:'',
-    kpiUtil:85.47, kpiDowntime:2.42, kpiRetention:1.41,
-    ceoRating:8, ceoNote:'', perf:'good' },
-  'Усенко Вероніка':{ pos:'Рекрутер / HRG', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'', age:0, tenure:15, phone:'', tg:'',
-    kpiUtil:85.47, kpiDowntime:2.42, kpiRetention:1.41,
-    ceoRating:8, ceoNote:'', perf:'good' },
-  'Школьний Руслан':{ pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'', age:0, tenure:9, phone:'', tg:'',
-    kpiUtil:85.47, kpiDowntime:2.42, kpiRetention:1.41,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Біленко Ігор':   { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
-    bday:'', age:0, tenure:6, phone:'', tg:'',
-    kpiUtil:85.47, kpiDowntime:2.42, kpiRetention:1.41,
-    ceoRating:7, ceoNote:'', perf:'ok' },
-  'Кабанов Сергій': { pos:'Керівник філії', branch:'Вінниця', code:'ВН', color:'#EC4899',
-    bday:'03.01.1989', age:35, tenure:15, phone:'', tg:'',
-    kpiUtil:71.94, kpiDowntime:10.61, kpiRetention:0.94,
-    ceoRating:6, ceoNote:'Критичний простій 10.6%. Водій/авто=1.09 — ризик. Потребує підтримки.', perf:'warn' },
-  'Романча Євген':  { pos:'Заст. з ефективності', branch:'Вінниця', code:'ВН', color:'#EC4899',
-    bday:'', age:0, tenure:11, phone:'', tg:'',
-    kpiUtil:71.94, kpiDowntime:10.61, kpiRetention:0.94,
-    ceoRating:6, ceoNote:'', perf:'warn' },
+  'Билиба Роман':    { pos:'Керівник філії', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+    bday:'15.03.1988', age:36, tenure:18,
+    ceoRating:8, loyalty:8, potential:7, efficiency:9, reliability:8,
+    ceoNote:'Сильний операційний керівник. Фінрез стабільний, команда керована. Потенціал до зростання мережі.' },
+
+  'Шеремет Євген':   { pos:'Заст. з ефективності', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+    bday:'', age:0, tenure:12,
+    ceoRating:9, loyalty:9, potential:8, efficiency:9, reliability:9,
+    ceoNote:'Топ заст. у мережі. Аналітика та виконання — на рівні.' },
+
+  'Пугачова Анна':   { pos:'Рекрутер', branch:'Дніпро DM', code:'ДП-1', color:'#F07000',
+    bday:'', age:0, tenure:9,
+    ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Батурін Сергій':  { pos:'Керівник філії', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+    bday:'22.07.1985', age:39, tenure:24,
+    ceoRating:7, loyalty:7, potential:8, efficiency:7, reliability:7,
+    ceoNote:'Досвідчений. Потребує підтягнути маржу по ДП-2.' },
+
+  'Бітюков Діма':    { pos:'Заст. з ефективності', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+    bday:'', age:0, tenure:14,
+    ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Гринченко Олег':  { pos:'Заст. з тех. частини', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+    bday:'', age:0, tenure:10,
+    ceoRating:7, loyalty:7, potential:6, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Мусияка Іра':     { pos:'Рекрутер', branch:'Дніпро WU', code:'ДП-2', color:'#FF4500',
+    bday:'', age:0, tenure:8,
+    ceoRating:8, loyalty:9, potential:7, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Безпалько Сергій':{ pos:'Керівник філії', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
+    bday:'10.11.1990', age:33, tenure:20,
+    ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
+    ceoNote:'Стабільний. ROI/авто один з найвищих у мережі (122%).' },
+
+  'Дуплий Діма':     { pos:'Заст. з ефективності', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
+    bday:'', age:0, tenure:11,
+    ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Олефіренко Ярослав':{ pos:'Рекрутер', branch:'Запоріжжя', code:'ЗП', color:'#8B5CF6',
+    bday:'', age:0, tenure:7,
+    ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Медовкіна Альона':{ pos:'Керівник філії', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+    bday:'05.06.1992', age:31, tenure:16,
+    ceoRating:8, loyalty:8, potential:7, efficiency:8, reliability:8,
+    ceoNote:'Добрі результати попри складний регіон.' },
+
+  'Лисенко Владислав':{ pos:'Заст. з ефективності', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+    bday:'', age:0, tenure:10,
+    ceoRating:7, loyalty:7, potential:8, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Стьопін Роман':   { pos:'Заст. з тех. частини', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+    bday:'', age:0, tenure:13,
+    ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Чорна Анна':      { pos:'Рекрутер', branch:'Кривий Ріг', code:'КР', color:'#EF4444',
+    bday:'', age:0, tenure:6,
+    ceoRating:7, loyalty:8, potential:6, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Бугайова Юля':    { pos:'Керівник філії', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'28.02.1989', age:35, tenure:19,
+    ceoRating:7, loyalty:8, potential:7, efficiency:7, reliability:7,
+    ceoNote:'Полтава з потенціалом зростання. Retention покращується.' },
+
+  'Міхович Вадим':   { pos:'Заст. з ефективності', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:9,
+    ceoRating:8, loyalty:8, potential:7, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Крат Олег':       { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:8,
+    ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Войтенко Влад':   { pos:'Рекрутер', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:7,
+    ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Усенко Вероніка': { pos:'Рекрутер', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:6,
+    ceoRating:8, loyalty:9, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Школьний Руслан': { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:11,
+    ceoRating:8, loyalty:8, potential:8, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Біленко Ігор':    { pos:'Заст. з тех. частини', branch:'Полтава', code:'ПЛ', color:'#F59E0B',
+    bday:'', age:0, tenure:6,
+    ceoRating:7, loyalty:7, potential:7, efficiency:7, reliability:7,
+    ceoNote:'' },
+
+  'Кабанов Сергій':  { pos:'Керівник філії', branch:'Вінниця', code:'ВН', color:'#EC4899',
+    bday:'03.01.1989', age:35, tenure:15,
+    ceoRating:6, loyalty:5, potential:5, efficiency:6, reliability:6,
+    ceoNote:'Критичний простій 10.6%. Водій/авто=1.09 — ризик. Потребує підтримки.' },
+
+  'Романча Євген':   { pos:'Заст. з ефективності', branch:'Вінниця', code:'ВН', color:'#EC4899',
+    bday:'', age:0, tenure:11,
+    ceoRating:6, loyalty:6, potential:6, efficiency:6, reliability:6,
+    ceoNote:'' },
+
   'Гонтарук Ангеліна':{ pos:'Рекрутер', branch:'Вінниця', code:'ВН', color:'#EC4899',
-    bday:'', age:0, tenure:8, phone:'', tg:'',
-    kpiUtil:71.94, kpiDowntime:10.61, kpiRetention:0.94,
-    ceoRating:6, ceoNote:'', perf:'warn' },
-  'Мількевич Вадим':{ pos:'Керівник філії', branch:'Львів', code:'ЛВ', color:'#06B6D4',
-    bday:'20.08.1990', age:34, tenure:8, phone:'', tg:'',
-    kpiUtil:88.66, kpiDowntime:8.21, kpiRetention:1.68,
-    ceoRating:10, ceoNote:'Найкращий фінрез/авто по мережі (37 697 грн). Margin 27.8%. Абсолютний лідер.', perf:'good' },
-  'Бабій Святослав':{ pos:'Заст. з ефективності', branch:'Львів', code:'ЛВ', color:'#06B6D4',
-    bday:'', age:0, tenure:6, phone:'', tg:'',
-    kpiUtil:88.66, kpiDowntime:8.21, kpiRetention:1.68,
-    ceoRating:8, ceoNote:'', perf:'good' },
-  'Грицан Соломія': { pos:'Рекрутер', branch:'Львів', code:'ЛВ', color:'#06B6D4',
-    bday:'', age:0, tenure:5, phone:'', tg:'',
-    kpiUtil:88.66, kpiDowntime:8.21, kpiRetention:1.68,
-    ceoRating:8, ceoNote:'Retention 1.68 — найкраще в компанії.', perf:'good' },
+    bday:'', age:0, tenure:8,
+    ceoRating:6, loyalty:7, potential:6, efficiency:6, reliability:6,
+    ceoNote:'' },
+
+  'Мількевич Вадим': { pos:'Керівник філії', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+    bday:'20.08.1990', age:34, tenure:8,
+    ceoRating:10, loyalty:10, potential:10, efficiency:10, reliability:10,
+    ceoNote:'Найкращий фінрез/авто по мережі (37 697 грн). Margin 27.8%. Абсолютний лідер.' },
+
+  'Бабій Святослав': { pos:'Заст. з ефективності', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+    bday:'', age:0, tenure:6,
+    ceoRating:8, loyalty:8, potential:9, efficiency:8, reliability:8,
+    ceoNote:'' },
+
+  'Грицан Соломія':  { pos:'Рекрутер', branch:'Львів', code:'ЛВ', color:'#06B6D4',
+    bday:'', age:0, tenure:5,
+    ceoRating:8, loyalty:9, potential:8, efficiency:8, reliability:9,
+    ceoNote:'Retention 1.68 — найкраще в компанії.' },
 };
 
+// ── Helpers ───────────────────────────────────────────────
+function empDots(val, color) {
+  val = Math.min(10, Math.max(0, val||0));
+  return Array.from({length:10}, (_, i) => {
+    const on = i < val;
+    return `<span class="emp-m-dot" style="${on
+      ? `background:${color};box-shadow:0 0 5px ${color}66`
+      : 'background:rgba(255,255,255,0.08)'}"></span>`;
+  }).join('');
+}
+
+function empMetricClr(v) {
+  return v >= 8 ? '#22c55e' : v >= 6 ? '#f59e0b' : '#ef4444';
+}
+
+// ── Open / Close ──────────────────────────────────────────
 function openEmployeeCard(name) {
   const e = empDB[name];
   if (!e) return;
+  const c = e.color;
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2);
 
-  // Header color
-  const hdr = document.getElementById('empHeader');
-  hdr.style.background = `linear-gradient(135deg, ${e.color}22 0%, ${e.color}08 100%)`;
-  hdr.style.borderBottom = `1px solid ${e.color}33`;
-
-  // Avatar
-  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2);
-  document.getElementById('empAvatarWrap').innerHTML =
-    `<div class="emp-avatar" style="background:linear-gradient(135deg,${e.color},${e.color}88)">${initials}</div>`;
-
-  document.getElementById('empNameEl').textContent = name;
-  document.getElementById('empPosEl').textContent = e.pos;
-  const br = document.getElementById('empBranchEl');
-  br.textContent = `${e.branch} · ${e.code}`;
-  br.style.color = e.color;
-  br.style.borderColor = e.color + '55';
-  br.style.background = e.color + '15';
-
-  // Stats
-  const perfColors = { good:'#22c55e', ok:'#f59e0b', warn:'#ef4444' };
-  const pc = perfColors[e.perf] || '#6b7280';
-  const downtimeClr = e.kpiDowntime < 4 ? '#22c55e' : e.kpiDowntime < 8 ? '#f59e0b' : '#ef4444';
-  const utilClr = e.kpiUtil >= 85 ? '#22c55e' : e.kpiUtil >= 75 ? '#f59e0b' : '#ef4444';
-  const retClr = e.kpiRetention >= 1.2 ? '#22c55e' : e.kpiRetention >= 0.9 ? '#f59e0b' : '#ef4444';
-  document.getElementById('empStats').innerHTML = `
-    <div class="emp-stat">
-      <div class="emp-stat-val" style="color:${utilClr}">${e.kpiUtil.toFixed(1)}%</div>
-      <div class="emp-stat-lbl">Завантаж.</div>
-    </div>
-    <div class="emp-stat">
-      <div class="emp-stat-val" style="color:${downtimeClr}">${e.kpiDowntime.toFixed(1)}%</div>
-      <div class="emp-stat-lbl">Простій</div>
-    </div>
-    <div class="emp-stat">
-      <div class="emp-stat-val" style="color:${retClr}">${e.kpiRetention.toFixed(2)}</div>
-      <div class="emp-stat-lbl">Retention</div>
-    </div>`;
-
-  // CEO Rating
-  const stars = Array.from({length:10},(_,i)=>
-    `<span class="emp-star">${i < e.ceoRating ? '★' : '☆'}</span>`).join('');
-  const ratingClr = e.ceoRating >= 8 ? '#22c55e' : e.ceoRating >= 6 ? '#f59e0b' : '#ef4444';
-  document.getElementById('empRating').innerHTML = `
-    <div class="emp-rating-row">
-      <span class="emp-rating-label">Оцінка CEO</span>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="emp-stars" style="color:${ratingClr}">${stars}</div>
-        <span style="font-size:18px;font-weight:900;color:${ratingClr}">${e.ceoRating}/10</span>
-      </div>
-    </div>`;
-
-  // Info rows
+  // ── LEFT PANEL ──
   const infoRows = [
-    e.bday ? ['🎂', 'День народження', e.bday] : null,
-    e.age  ? ['🎂', 'Вік', e.age + ' років'] : null,
-    ['📅', 'В компанії', e.tenure + ' міс.'],
-    ['🏢', 'Філія', `${e.branch} (${e.code})`],
-    ['💼', 'Посада', e.pos],
-  ].filter(Boolean);
-  document.getElementById('empInfo').innerHTML = infoRows.map(([icon,key,val])=>`
-    <div class="emp-info-row">
-      <span class="emp-info-icon">${icon}</span>
-      <span class="emp-info-key">${key}</span>
-      <span class="emp-info-val">${val}</span>
-    </div>`).join('');
+    e.bday  ? `<div class="emp-l-row"><span>🎂</span><span>${e.bday}${e.age ? ' · ' + e.age + ' р.' : ''}</span></div>` : '',
+    `<div class="emp-l-row"><span>📅</span><span>${e.tenure} міс. в компанії</span></div>`,
+    `<div class="emp-l-row"><span>🏢</span><span>${e.branch}</span></div>`,
+  ].filter(Boolean).join('');
 
-  // Note
-  const noteSection = document.getElementById('empNoteSection');
-  if (e.ceoNote) {
-    noteSection.style.display = 'block';
-    document.getElementById('empNoteText').textContent = e.ceoNote;
-  } else {
-    noteSection.style.display = 'none';
-  }
+  document.getElementById('empLeft').innerHTML = `
+    <div class="emp-avatar-wrap">
+      <div class="emp-avatar-init" style="background:linear-gradient(135deg,${c},${c}77)">${initials}</div>
+      <div class="emp-photo-ring" style="--ec:${c}"></div>
+    </div>
+    <div class="emp-l-name">${name}</div>
+    <div class="emp-l-pos">${e.pos}</div>
+    <div class="emp-l-branch" style="color:${c};border-color:${c}44;background:${c}12">${e.branch} · ${e.code}</div>
+    <div class="emp-l-divider"></div>
+    <div class="emp-l-info">${infoRows}</div>`;
+
+  // ── RIGHT PANEL ──
+  const rClr = empMetricClr(e.ceoRating);
+  const stars = Array.from({length:10}, (_, i) =>
+    `<span class="emp-star-big" style="color:${i < e.ceoRating ? rClr : 'rgba(255,255,255,.15)'}">${i < e.ceoRating ? '★' : '★'}</span>`
+  ).join('');
+
+  const metrics = [
+    { icon:'🤝', label:'Лояльність',   val:e.loyalty   },
+    { icon:'🚀', label:'Перспектива',  val:e.potential  },
+    { icon:'⚡', label:'Ефективність', val:e.efficiency },
+    { icon:'🛡',  label:'Надійність',   val:e.reliability},
+  ].map(m => {
+    const mc = empMetricClr(m.val);
+    return `<div class="emp-metric-row">
+      <span class="emp-m-icon">${m.icon}</span>
+      <span class="emp-m-label">${m.label}</span>
+      <div class="emp-m-dots">${empDots(m.val, mc)}</div>
+      <span class="emp-m-val" style="color:${mc}">${m.val}</span>
+    </div>`;
+  }).join('');
+
+  const noteHTML = e.ceoNote ? `
+    <div class="emp-note-wrap">
+      <span class="emp-note-ico">💬</span>
+      <span class="emp-note-body">${e.ceoNote}</span>
+    </div>` : '';
+
+  document.getElementById('empRight').innerHTML = `
+    <div class="emp-r-section-label">Оцінка CEO</div>
+    <div class="emp-ceo-row">
+      <div class="emp-stars-row">${stars}</div>
+      <span class="emp-ceo-num" style="color:${rClr}">${e.ceoRating}/10</span>
+    </div>
+    <div class="emp-r-divider"></div>
+    <div class="emp-r-section-label">Особисті показники</div>
+    <div class="emp-metrics-grid">${metrics}</div>
+    ${noteHTML}`;
 
   document.getElementById('empOverlay').classList.add('open');
 }
@@ -8200,7 +8257,6 @@ function closeEmpCard() {
   document.getElementById('empOverlay').classList.remove('open');
 }
 
-// ESC key
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEmpCard(); });
 
 // Make all .btc-name clickable
