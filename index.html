@@ -5308,13 +5308,13 @@
     });
     const btns = document.getElementById('dashMonthBtns');
     if (y === 2026) {
-      // Restore 2026 state
+      // 2026: April + May have real data
       btns.innerHTML = `
         <button class="pl-mon-btn disabled" data-month="1">Січень</button>
         <button class="pl-mon-btn disabled" data-month="2">Лютий</button>
         <button class="pl-mon-btn disabled" data-month="3">Березень</button>
-        <button class="pl-mon-btn active"   data-month="4" onclick="switchMonth(4)">Квітень</button>
-        <button class="pl-mon-btn current"  data-month="5" onclick="switchMonth(5)">Травень ●</button>
+        <button class="pl-mon-btn"         data-month="4" onclick="switchMonthHistory(4,2026)">Квітень</button>
+        <button class="pl-mon-btn current"  data-month="5" onclick="switchMonthHistory(5,2026)">Травень ●</button>
         <button class="pl-mon-btn disabled" data-month="6">Червень</button>
         <button class="pl-mon-btn disabled" data-month="7">Липень</button>
         <button class="pl-mon-btn disabled" data-month="8">Серпень</button>
@@ -5322,7 +5322,7 @@
         <button class="pl-mon-btn disabled" data-month="10">Жовтень</button>
         <button class="pl-mon-btn disabled" data-month="11">Листопад</button>
         <button class="pl-mon-btn disabled" data-month="12">Грудень</button>`;
-      switchMonth(4);
+      switchMonthHistory(5, 2026);
     } else if (y === 2025) {
       // 2025: April–December have data in ДИНАМІКА
       const months = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
@@ -5435,7 +5435,8 @@
   function switchMonthHistory(month, year) {
     // Hardcoded data (Apr 2025=idx0 … Apr 2026=idx12)
     const H = {
-      val: {
+      // ── 2025: Apr(0)…Dec(8) ────────────────────────────
+      val25: {
         'ДП-1':[4205435,4355684,4585325,4831860,5287676,4665687,4958277,4921245,5347779],
         'ДП-2':[6053299,5912808,6043441,6448233,7174985,6701833,7313384,6968503,7246796],
         'ЗП':  [3025351,3338908,3278112,3396204,3425905,3339977,3587042,3484797,3780720],
@@ -5444,7 +5445,7 @@
         'ВН':  [1881240,2023892,1849087,2006683,2124335,1901919,1882835,1822337,1855929],
         'ЛВ':  [null,null,null,null,null,null,null,402667,1691900]
       },
-      brand: {
+      brand25: {
         'ДП-1':[181658,180822,181428,157000,190000,150000,371500,273000,306000],
         'ДП-2':[284850,274476,272545,238000,277000,253000,536000,426000,433000],
         'ЗП':  [218519,152006,161036,155083,148765,146294,307971,280434,290500],
@@ -5453,7 +5454,7 @@
         'ВН':  [158000,167500,131500,137500,169000,119000,159500,144000,157500],
         'ЛВ':  [null,null,null,null,null,null,null,45125,357411]
       },
-      finrez: {
+      finrez25: {
         'ДП-1':[19331,20655,22981,19442,17106,20340,16917,25685,27700],
         'ДП-2':[15934,15934,23822,21894,24901,16559,27289,24300,24269],
         'ЗП':  [18278,17661,19895,14533,13926,20082,18881,13052,23666],
@@ -5462,7 +5463,7 @@
         'ВН':  [21910,21910,16383,13009,19203,14196,20396,14945, 8000],
         'ЛВ':  [null,null,null,null,null,null,null,null,7340]
       },
-      util: {
+      util25: {
         'ДП-1':[82.17,82.19,82.29,79.84,82.67,79.08,78.49,81.28,80.30],
         'ДП-2':[75.62,70.24,78.89,77.49,82.37,83.47,84.03,79.19,75.00],
         'ЗП':  [79.51,81.52,78.25,77.77,79.03,79.06,76.91,72.58,68.77],
@@ -5471,7 +5472,7 @@
         'ВН':  [74.14,78.56,71.83,73.20,78.31,76.17,76.45,74.39,67.10],
         'ЛВ':  [null,null,null,null,null,null,null,95.09,85.40]
       },
-      dtp: {
+      dtp25: {
         'ДП-1':[2,1,6,5,7,6,2,4,11],
         'ДП-2':[2,6,10,10,7,10,6,6,9],
         'ЗП':  [3,3,4,5,2,2,6,3,7],
@@ -5480,7 +5481,7 @@
         'ВН':  [3,2,1,1,6,1,2,2,2],
         'ЛВ':  [null,null,null,null,null,null,null,1,3]
       },
-      slusar: {
+      slusar25: {
         'ДП-1':[435692,568812,435311,566134,456000,646000,648000,559000,450000],
         'ДП-2':[573601,700246,497000,908890,710000,788000,862000,905000,854000],
         'ЗП':  [289092,500139,348273,449222,449226,543000,631000,587000,577000],
@@ -5489,7 +5490,7 @@
         'ВН':  [ 72522, 80800, 84212,104584, 97761,237600,126600,224200,172000],
         'ЛВ':  [null,null,null,null,null,null,null,291000,307000]
       },
-      kuzov: {
+      kuzov25: {
         'ДП-1':[ 53777,119810, 56172, 82702,207649, 82481,309025, 48601,104816],
         'ДП-2':[229528,222676,162933,160979,184077,262708,210610,195486,193443],
         'ЗП':  [ 38411, 35576, 27514, 89094, 89094, 19100,198183,162150, 76266],
@@ -5497,16 +5498,83 @@
         'ПЛ':  [ 59029, 66794,  7000,234771, 45196, 44151, 89486, 99562, 67849],
         'ВН':  [     0, 31800, 12455, 18700, 95734, 67665, 15670, 45699, 72110],
         'ЛВ':  [null,null,null,null,null,null,null,0,10747]
+      },
+      // ── 2026: Квіт(0) Трав(1) ──────────────────────────
+      val26: {
+        'ДП-1':[5590406, 5895239],
+        'ДП-2':[7468478, 7692495],
+        'ЗП':  [4274125, 4684162],
+        'КР':  [4496125, 4465550],
+        'ПЛ':  [5671237, 5700032],
+        'ВН':  [2034333, 2338950],
+        'ЛВ':  [4817764, 4967068]
+      },
+      brand26: {
+        'ДП-1':[147000, 143000],
+        'ДП-2':[205000, 190000],
+        'ЗП':  [156627, 146000],
+        'КР':  [123000, 123000],
+        'ПЛ':  [329000, 294000],
+        'ВН':  [109500, 130000],
+        'ЛВ':  [564620, 378000]
+      },
+      finrez26: {
+        'ДП-1':[20191, 25000],
+        'ДП-2':[20548, 25000],
+        'ЗП':  [12219, 16000],
+        'КР':  [12331, 15000],
+        'ПЛ':  [18355, 16000],
+        'ВН':  [14495, 26000],
+        'ЛВ':  [37697, 30000]
+      },
+      util26: {
+        'ДП-1':[82.89, 82.09],
+        'ДП-2':[76.01, 76.01],
+        'ЗП':  [75.08, 77.01],
+        'КР':  [80.97, 78.77],
+        'ПЛ':  [85.47, 81.70],
+        'ВН':  [71.94, 76.13],
+        'ЛВ':  [88.66, 88.39]
+      },
+      dtp26: {
+        'ДП-1':[14, 3],
+        'ДП-2':[12, 7],
+        'ЗП':  [ 9, 3],
+        'КР':  [ 3, 3],
+        'ПЛ':  [ 1, 3],
+        'ВН':  [ 3, 2],
+        'ЛВ':  [ 4, 1]
+      },
+      slusar26: {
+        'ДП-1':[961994, 426000],
+        'ДП-2':[1040978, 548000],
+        'ЗП':  [745866, 352000],
+        'КР':  [594447, 428000],
+        'ПЛ':  [627835, 626000],
+        'ВН':  [372421,  70000],
+        'ЛВ':  [278975,  42000]
+      },
+      kuzov26: {
+        'ДП-1':[226948,  61000],
+        'ДП-2':[164899, 142000],
+        'ЗП':  [142109,  61000],
+        'КР':  [161162,  61000],
+        'ПЛ':  [ 56506,  61000],
+        'ВН':  [ 29643,  41000],
+        'ЛВ':  [133409,  20000]
       }
     };
     const cars = {'ДП-1':49,'ДП-2':71,'ЗП':43,'КР':50,'ПЛ':64,'ВН':30,'ЛВ':41};
     const branches = ['ДП-1','ДП-2','ЗП','КР','ПЛ','ВН','ЛВ'];
-    // month → index in arrays above (Apr2025=0 … Dec2025=8)
     const idx2025 = {4:0,5:1,6:2,7:3,8:4,9:5,10:6,11:7,12:8};
-    const mName = {4:'Квітень',5:'Травень',6:'Червень',7:'Липень',8:'Серпень',
-                   9:'Вересень',10:'Жовтень',11:'Листопад',12:'Грудень'};
+    const idx2026 = {4:0,5:1};
+    const mName = {1:'Січень',2:'Лютий',3:'Березень',4:'Квітень',5:'Травень',6:'Червень',
+                   7:'Липень',8:'Серпень',9:'Вересень',10:'Жовтень',11:'Листопад',12:'Грудень'};
 
-    const idx = year === 2025 ? idx2025[month] : undefined;
+    const is26 = year === 2026;
+    const is25 = year === 2025;
+    const idx  = is25 ? idx2025[month] : is26 ? idx2026[month] : undefined;
+    const suffix = is26 ? '26' : '25';
     const label = (mName[month] || month) + ' ' + year;
 
     // Active state on month buttons
@@ -5525,15 +5593,15 @@
 
     let totalVal=0,totalBrand=0,totalOP=0,totalCars=0,wtUtil=0,totalDtp=0,totalSlusar=0,totalKuzov=0;
     branches.forEach(b => {
-      const v = H.val[b][idx]; if (v === null || v === undefined) return;
+      const v = H['val'+suffix][b][idx]; if (v === null || v === undefined) return;
       const c = cars[b];
       totalVal += v;
-      const br = H.brand[b][idx];   if (br  !== null) totalBrand  += br;
-      const fr = H.finrez[b][idx];  if (fr  !== null) { totalOP += fr * c; totalCars += c; }
-      const ut = H.util[b][idx];    if (ut  !== null) wtUtil += ut * c;
-      const dt = H.dtp[b][idx];     if (dt  !== null) totalDtp += dt;
-      const sl = H.slusar[b][idx];  if (sl  !== null) totalSlusar += sl;
-      const kz = H.kuzov[b][idx];   if (kz  !== null) totalKuzov += kz;
+      const br = H['brand'+suffix][b][idx];   if (br  !== null) totalBrand  += br;
+      const fr = H['finrez'+suffix][b][idx];  if (fr  !== null) { totalOP += fr * c; totalCars += c; }
+      const ut = H['util'+suffix][b][idx];    if (ut  !== null) wtUtil += ut * c;
+      const dt = H['dtp'+suffix][b][idx];     if (dt  !== null) totalDtp += dt;
+      const sl = H['slusar'+suffix][b][idx];  if (sl  !== null) totalSlusar += sl;
+      const kz = H['kuzov'+suffix][b][idx];   if (kz  !== null) totalKuzov += kz;
     });
     const avgUtil = totalCars > 0 ? wtUtil / totalCars : 0;
     const fmtM = n => (n/1000000).toFixed(2);
@@ -5566,7 +5634,8 @@
   window.switchMonthHistory = switchMonthHistory;
   window.switchMonth = switchMonth;
 
-  // Init: April is default (confirmed static data). Live badge hidden.
+  // Init: load May 2026 (current month) data
+  switchMonthHistory(5, 2026);
   document.getElementById('dash-live-badge').style.display = 'none';
 
   // Nav tabs with section switching
